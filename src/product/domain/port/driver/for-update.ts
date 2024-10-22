@@ -1,5 +1,5 @@
 import { createProduct } from "../../entity/entityInterfaceProduct";
 
 export interface Update {
-  updateProduct: (id: string, product: createProduct) => Promise<Error | 'success'>;
+  update_Product: (id: string, product: createProduct) => Promise<Error | 'success'>;
 }

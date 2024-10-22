@@ -1,18 +1,18 @@
 import { Delete } from '@/product/domain/port/driver/for-delete';
-import { DeleteProductService } from '@/product/domain/adapter/driven/deleteDriven';
-import { FindProductService } from '@/product/domain/adapter/driven/findDriven';
+import { deleteProductdriven } from '@/product/domain/port/driven/for-deleteProductdriven';
+import { findProductdriven } from '@/product/domain/port/driven/for-findProductdriven';
 
 export class DeleteProduct implements Delete {
   constructor(
-    private readonly service: DeleteProductService,
-    private readonly findService: FindProductService,
+    private readonly service: deleteProductdriven,
+    private readonly findService: findProductdriven,
   ) {}
-  async deleteProductId(id: string): Promise<Error | 'success'> {
-    const findProduct = await this.findService.findProductById(id);
+  async delete_ProductId(id: string): Promise<Error | 'success'> {
+    const findProduct = await this.findService.find_Product_Id(id);
     if (findProduct.id === undefined) {
       throw new Error('producto no encontrado');
     }
-    await this.service.deleteProductId(id);
+    await this.service.delete_ProductId(id);
     return 'success';
   }
 }

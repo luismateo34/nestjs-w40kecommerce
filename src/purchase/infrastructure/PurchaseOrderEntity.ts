@@ -1,4 +1,8 @@
+import { ClientEntity } from '@/client/infrastructure/ClientEntity';
+import { ProductEntity } from '@/product/infrastructure/ProductEntity';
 import { OrderPurchase } from '@/purchase/domain/entity/entityInterfaceOrder';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import {
   Column,
   CreateDateColumn,
@@ -6,10 +10,9 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  Repository,
   UpdateDateColumn,
 } from 'typeorm';
-import { ProductEntity } from './ProductEntity';
-import { ClienEntity } from './ClientEntity';
 
 @Entity({ name: 'order' })
 export class OrderEntity implements OrderPurchase {
@@ -29,11 +32,21 @@ export class OrderEntity implements OrderPurchase {
   products: string[];
   @Column()
   date: Date;
-  @OneToMany(() => ClienEntity, (item) => item.purchase_order)
+  @OneToMany(() => ClientEntity, (item) => item.purchase_order)
   // name, lastname
   client: [string, string];
   @Column()
   amount: number;
   @Column()
   envoy: boolean;
+}
+@Injectable()
+export class InjectOrder {
+  constructor(
+    @InjectRepository(OrderEntity)
+    private adminInject: Repository<OrderEntity>,
+  ) {
+    this.order = this.adminInject;
+  }
+  readonly order: Repository<OrderEntity>;
 }

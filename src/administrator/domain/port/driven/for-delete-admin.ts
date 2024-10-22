@@ -1,3 +1,3 @@
 export interface ForDeleteAdmin {
-  deleteAdmin(lastname: string, name: string): Promise<void>;
+  delete_Admin(lastname: string, name: string): Promise<void>;
 }

@@ -1,11 +1,11 @@
 export interface updateClientDriver {
-  UpdateClientName(name: string, lastname: string): Promise<Error | 'success'>;
-  UpdateClientEmail(
+  Update_Client_Name(name: string, lastname: string): Promise<Error | 'success'>;
+  Update_Client_Email(
     name: string,
     lastname: string,
     email: string,
   ): Promise<Error | 'success'>;
-  UpdateClientPassword(
+  Update_Client_Password(
     name: string,
     lastname: string,
     password: string,

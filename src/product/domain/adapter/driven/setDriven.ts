@@ -1,22 +1,20 @@
 import { stockProductdriven } from '@/product/domain/port/driven/for-setProductdriven';
-import { ProductEntity } from '@/typeorm/ProductEntity';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectProduct } from '@/product/infrastructure/ProductEntity';
 
-@Injectable()
-export class SetProductService implements stockProductdriven {
-  constructor(
-    @InjectRepository(ProductEntity)
-    private service: Repository<ProductEntity>,
-  ) {}
-  async setDiscountProduct(id: string, discount: number): Promise<void> {
-    await this.service.update({ id: id }, { percentaje_discount: discount });
+class SetProductService implements stockProductdriven {
+  constructor(private method: InjectProduct) {}
+  async set_Discount_Product(id: string, discount: number): Promise<void> {
+    await this.method.service.update(
+      { id: id },
+      { percentaje_discount: discount },
+    );
   }
-  async setPriceProduct(id: string, price: number): Promise<void> {
-    await this.service.update({ id: id }, { price: price });
+  async set_Price_Product(id: string, price: number): Promise<void> {
+    await this.method.service.update({ id: id }, { price: price });
   }
-  async setStockProduct(id: string, stock: number): Promise<void> {
-    await this.service.update({ id: id }, { stock: stock });
+  async set_Stock_Product(id: string, stock: number): Promise<void> {
+    await this.method.service.update({ id: id }, { stock: stock });
   }
 }
+let inj: InjectProduct;
+export const Setter = new SetProductService(inj);

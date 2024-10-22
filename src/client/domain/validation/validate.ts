@@ -1,7 +1,9 @@
 import { client } from '../entity/entityInterfaceClient';
-import { IsEmail, Min, IsNotEmpty, IsString, IsArray } from 'class-validator';
+import { IsEmail, Min, IsNotEmpty, IsString } from 'class-validator';
 
-export class clinetDTO implements client {
+type clientType = Omit<client, 'purchase_order' | 'purchase_product'>;
+
+export class clientDTO implements clientType {
   @IsNotEmpty()
   @Min(3)
   name: string;
@@ -18,11 +20,4 @@ export class clinetDTO implements client {
   @IsNotEmpty()
   @IsString()
   password: string;
-  @IsNotEmpty()
-  @IsArray()
-  purchase_order: string[];
-
-  @IsNotEmpty()
-  @IsArray()
-  purchase_product: string[];
 }

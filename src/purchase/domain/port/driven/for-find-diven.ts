@@ -1,6 +1,10 @@
 import { usecases } from '@/purchase/domain/usecase/usecases';
 
-export type finfType = Pick<
+export type findType = Pick<
   usecases,
-  'findByclient' | 'findByDate' | 'findById' | 'findByclientandId'
+  | 'find_Client'
+  | 'find_Orders_Date'
+  | 'find_Id'
+  | 'find_client_Id'
+  | 'find_Orders_Month'
 >;

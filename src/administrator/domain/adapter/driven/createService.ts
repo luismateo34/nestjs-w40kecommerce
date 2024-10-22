@@ -1,19 +1,12 @@
-import { Injectable } from '@nestjs/common';
 import { hash } from 'bcrypt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { AdminEntity } from '@/typeorm/adminEntity';
 import { admin } from '@/administrator/domain/entity/entityAdminInterface';
 import { ForCreateAdmin } from '../../port/driven/for-create-admin';
+import { AdminInject } from '@/administrator/infrastructure/adminEntity';
 
-@Injectable()
-export class CreateAndUpdate implements ForCreateAdmin {
-  constructor(
-    @InjectRepository(AdminEntity)
-    private admin: Repository<AdminEntity>,
-  ) {}
+class CreateAdmin implements ForCreateAdmin {
+  constructor(private service: AdminInject) {}
   private saltround: 8;
-  async createAdmin(user: admin) {
+  async create_Admin(user: admin) {
     const saveUser = {} as admin;
     saveUser.email = user.email;
     saveUser.permissions = user.permissions;
@@ -21,6 +14,9 @@ export class CreateAndUpdate implements ForCreateAdmin {
     saveUser.lastname = user.lastname;
     saveUser.phone = user.phone;
     saveUser.password = await hash(user.password, this.saltround);
-    await this.admin.save(saveUser);
+    await this.service.admin.save(saveUser);
   }
 }
+
+let inj: AdminInject;
+export const Create = new CreateAdmin(inj);

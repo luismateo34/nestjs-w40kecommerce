@@ -1,60 +1,53 @@
-import { Injectable } from '@nestjs/common';
 import { hash } from 'bcrypt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { AdminEntity } from '@/typeorm/adminEntity';
 import { permissions } from '@/administrator/domain/entity/entityAdminInterface';
 import { ForUpdateAdmin } from '../../port/driven/for-update-admin';
+import { AdminInject } from '@/administrator/infrastructure/adminEntity';
 
-@Injectable()
-export class UpdateService implements ForUpdateAdmin {
-  constructor(
-    @InjectRepository(AdminEntity)
-    private admin: Repository<AdminEntity>,
-  ) {}
-  async updateEmail(
+class UpdateService implements ForUpdateAdmin {
+  constructor(private service: AdminInject) {}
+  async update_Email(
     email: string,
     lastname: string,
     name: string,
   ): Promise<void> {
-    await this.admin.update(
+    await this.service.admin.update(
       { name: name, lastname: lastname },
       {
         email: email,
       },
     );
   }
-  async updatePassword(
+  async update_Password(
     lastname: string,
     name: string,
     password: string,
   ): Promise<void> {
     const passwordHash = await hash(password, 8);
-    await this.admin.update(
+    await this.service.admin.update(
       { name: name, lastname: lastname },
       {
         password: passwordHash,
       },
     );
   }
-  async updatePhone(
+  async update_Phone(
     lastname: string,
     name: string,
     phone: number,
   ): Promise<void> {
-    await this.admin.update(
+    await this.service.admin.update(
       { name: name, lastname: lastname },
       {
         phone: phone,
       },
     );
   }
-  async updatePermissions(
+  async update_Permissions(
     lastname: string,
     name: string,
     permissions: permissions,
   ): Promise<void> {
-    await this.admin.update(
+    await this.service.admin.update(
       { name: name, lastname: lastname },
       {
         permissions: permissions,
@@ -62,3 +55,6 @@ export class UpdateService implements ForUpdateAdmin {
     );
   }
 }
+
+let inj: AdminInject;
+export const Update = new UpdateService(inj);

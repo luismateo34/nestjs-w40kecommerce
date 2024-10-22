@@ -1,11 +1,11 @@
 import { validate } from 'class-validator';
 import { NameandLastname } from '@/administrator/domain/validate/admin';
 import { ForDeleteAdmin } from '../../port/driver/for-delete-and-validate';
-import { DeleteAdmin } from '../driven';
+import { ForDeleteAdmin as deleteAdmin } from '@/administrator/domain/port/driven/for-delete-admin';
 
 export class Delete implements ForDeleteAdmin {
-  constructor(private readonly deletefn: DeleteAdmin) {}
-  async deleteAdmin(
+  constructor(private deletefn: deleteAdmin) {}
+  async delete_Admin(
     lastname: string,
     name: string,
   ): Promise<Error | 'success'> {
@@ -16,7 +16,7 @@ export class Delete implements ForDeleteAdmin {
     if (error.length > 0) {
       throw new Error('datos invalidos');
     }
-    await this.deletefn.deleteAdmin(name, lastname);
+    await this.deletefn.delete_Admin(name, lastname);
     return 'success';
   }
 }

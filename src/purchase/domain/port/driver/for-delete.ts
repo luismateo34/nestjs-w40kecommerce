@@ -1,3 +1,3 @@
 export interface DeleteOrder {
-  deleteOrder(id: string): Promise<Error | 'success'>;
+  delete_Order(id: string): Promise<Error | 'success'>;
 }

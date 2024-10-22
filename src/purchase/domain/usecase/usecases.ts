@@ -2,12 +2,17 @@ import { OrderPurchase } from '../entity/entityInterfaceOrder';
 export type orderCreate = Omit<OrderPurchase, 'id' | 'updatedAt' | 'createdAt'>;
 
 export interface usecases {
-  findByclient(name: string): Promise<OrderPurchase[]>;
-  findByDate(date: Date): Promise<OrderPurchase[]>;
-  findById(id: string): Promise<OrderPurchase>;
-  findByclientandId(name: string, id: string): Promise<OrderPurchase>;
+  find_Client(name: string): Promise<OrderPurchase[]>;
+  find_Orders_Date(
+    year: number,
+    month: number,
+    day: number,
+  ): Promise<OrderPurchase[]>;
+  find_Orders_Month(year: number, month: number): Promise<OrderPurchase[]>;
+  find_Id(id: string): Promise<OrderPurchase>;
+  find_client_Id(name: string, id: string): Promise<OrderPurchase>;
   create(order: orderCreate): Promise<void>;
   update(order: orderCreate): Promise<void>;
-  updateEnvoy(id: string): Promise<void>;
-  deleteOrder(id: string): Promise<void>;
+  update_Envoy(id: string): Promise<void>;
+  delete_Order(id: string): Promise<void>;
 }

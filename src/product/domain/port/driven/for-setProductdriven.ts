@@ -2,5 +2,5 @@ import { usecases } from '@/product/domain/usecases/usecases';
 
 export type stockProductdriven = Pick<
   usecases,
-  'setStockProduct' | 'setDiscountProduct' | 'setPriceProduct'
+  'set_Stock_Product' | 'set_Discount_Product' | 'set_Price_Product'
 >;

@@ -1,16 +1,16 @@
 import { productget, createProduct } from '../entity/entityInterfaceProduct';
 export interface usecases {
-  findProductById: (id: string) => Promise<productget>;
-  findProductByName: (name: string) => Promise<productget>;
-  findStockByproductName: (name: string) => Promise<number>;
-  findStockByproductId: (id: string) => Promise<number>;
-  findProductsbyCategory: (category_product: string) => Promise<productget[]>;
-  createProduct: (product: createProduct) => Promise<void>;
-  updateProduct: (id: string, product: createProduct) => Promise<void>;
-  deleteProductId: (id: string) => Promise<void>;
-  findProductsByFranchise: (franchise: string) => Promise<productget[]>;
-  findProductsByGender: (gender: string) => Promise<productget[]>;
-  setStockProduct: (id: string, stock: number) => Promise<void>;
-  setDiscountProduct: (id: string, discount: number) => Promise<void>;
-  setPriceProduct: (id: string, price: number) => Promise<void>;
+  find_Product_Id: (id: string) => Promise<productget>;
+  find_Product_Name: (name: string) => Promise<productget>;
+  find_Stock_product_Name: (name: string) => Promise<number>;
+  find_Stock_productId: (id: string) => Promise<number>;
+  find_Products_Category: (category_product: string) => Promise<productget[]>;
+  create_Product: (product: createProduct) => Promise<void>;
+  update_Product: (id: string, product: createProduct) => Promise<void>;
+  delete_ProductId: (id: string) => Promise<void>;
+  find_Products_Franchise: (franchise: string) => Promise<productget[]>;
+  find_Products_Gender: (gender: string) => Promise<productget[]>;
+  set_Stock_Product: (id: string, stock: number) => Promise<void>;
+  set_Discount_Product: (id: string, discount: number) => Promise<void>;
+  set_Price_Product: (id: string, price: number) => Promise<void>;
 }

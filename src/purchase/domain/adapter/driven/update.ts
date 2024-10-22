@@ -1,20 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { OrderEntity } from '@/typeorm/PurchaseOrderEntity';
 import { updateType } from '../../port/driven/for-update-driven';
 import { orderCreate } from '@/purchase/domain/usecase/usecases';
+import { InjectOrder } from '@/purchase/infrastructure/PurchaseOrderEntity';
 
-@Injectable()
-export class UpdateOrder implements updateType {
-  constructor(
-    @InjectRepository(OrderEntity)
-    private order: Repository<OrderEntity>,
-  ) {}
+class UpdateOrder implements updateType {
+  constructor(private method: InjectOrder) {}
   async update(order: orderCreate): Promise<void> {
-    await this.order.save(order);
+    await this.method.order.save(order);
   }
-  async updateEnvoy(id: string): Promise<void> {
-    await this.order.update({ id: id }, { envoy: true });
+  async update_Envoy(id: string): Promise<void> {
+    await this.method.order.update({ id: id }, { envoy: true });
   }
 }
+let inject: InjectOrder;
+export const Update = new UpdateOrder(inject);

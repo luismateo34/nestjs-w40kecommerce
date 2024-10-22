@@ -1,16 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { OrderEntity } from '@/typeorm/PurchaseOrderEntity';
 import { deleteType } from '../../port/driven/for-delete-driven';
+import { InjectOrder } from '@/purchase/infrastructure/PurchaseOrderEntity';
 
-@Injectable()
-export class DeleteOrder implements deleteType {
-  constructor(
-    @InjectRepository(OrderEntity)
-    private order: Repository<OrderEntity>,
-  ) {}
-  async deleteOrder(id: string): Promise<void> {
-    await this.order.delete({ id: id });
+class DeleteOrder implements deleteType {
+  constructor(private method: InjectOrder) {}
+  async delete_Order(id: string): Promise<void> {
+    await this.method.order.delete({ id: id });
   }
 }
+let inject: InjectOrder;
+export const Delete = new DeleteOrder(inject);

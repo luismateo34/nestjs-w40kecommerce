@@ -1,17 +1,12 @@
 import { updateClientdriven } from '@/product/domain/port/driven/for-updateProductdriven';
-import { ProductEntity } from '@/typeorm/ProductEntity';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { createProduct } from '../../entity/entityInterfaceProduct';
+import { InjectProduct } from '@/product/infrastructure/ProductEntity';
 
-@Injectable()
-export class UpdateProductService implements updateClientdriven {
-  constructor(
-    @InjectRepository(ProductEntity)
-    private service: Repository<ProductEntity>,
-  ) {}
-  async updateProduct(id: string, product: createProduct): Promise<void> {
-    await this.service.update({ id: id }, product);
+class UpdateProductService implements updateClientdriven {
+  constructor(private method: InjectProduct) {}
+  async update_Product(id: string, product: createProduct): Promise<void> {
+    await this.method.service.update({ id: id }, product);
   }
 }
+let inj: InjectProduct;
+export const Update = new UpdateProductService(inj);

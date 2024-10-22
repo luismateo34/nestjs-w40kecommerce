@@ -1,17 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { OrderEntity } from '@/typeorm/PurchaseOrderEntity';
 import { orderCreate } from '@/purchase/domain/usecase/usecases';
 import { createType } from '../../port/driven/for-create-driven';
+import { InjectOrder } from '@/purchase/infrastructure/PurchaseOrderEntity';
 
-@Injectable()
-export class CreateOrder implements createType {
-  constructor(
-    @InjectRepository(OrderEntity)
-    private order: Repository<OrderEntity>,
-  ) {}
+class CreateOrder implements createType {
+  constructor(private method: InjectOrder) {}
   async create(order: orderCreate): Promise<void> {
-    await this.order.save(order);
+    await this.method.order.save(order);
   }
 }
+
+let inject: InjectOrder;
+export const Create = new CreateOrder(inject);

@@ -1,22 +1,21 @@
 import {
   Entity,
   Column,
-  ManyToOne,
-  JoinColumn,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  Repository,
 } from 'typeorm';
 import {
   AdminInterface,
   permissions,
 } from '@/administrator/domain/entity/entityAdminInterface';
-import { Repleace } from './RepleaceEntity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 
 @Entity({ name: 'admin' })
 export class AdminEntity implements AdminInterface {
-  @ManyToOne(() => Repleace, (item) => item.admin)
-  @JoinColumn({ name: 'name' })
+  @Column()
   name: string;
   @Column()
   email: string;
@@ -41,3 +40,14 @@ export class AdminEntity implements AdminInterface {
   @Column({ type: 'enum', enum: permissions, default: permissions.ADMIN })
   permissions: permissions;
 }
+@Injectable()
+export class AdminInject {
+  constructor(
+    @InjectRepository(AdminEntity)
+    private adminInject: Repository<AdminEntity>,
+  ) {
+    this.admin = this.adminInject;
+  }
+  readonly admin: Repository<AdminEntity>;
+}
+

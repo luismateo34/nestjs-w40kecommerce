@@ -1,9 +1,9 @@
 import { AdminInterface } from '@/administrator/domain/entity/entityAdminInterface';
-import { AdminEntity } from '@/typeorm/adminEntity';
+import { AdminEntity } from '@/administrator/infrastructure/adminEntity';
 
 export interface ForFindAdmin {
-  findAll(): Promise<AdminInterface[]>;
-  findByNameandLastname(name: string, lastname: string): Promise<AdminEntity>;
-  findByEmail(email: string): Promise<AdminEntity>;
-  findPassword(name: string, lastname: string): Promise<string>;
+  find_All(): Promise<AdminInterface[]>;
+  find_Name_Lastname(name: string, lastname: string): Promise<AdminEntity>;
+  find_Email(email: string): Promise<AdminEntity>;
+  find_Password(name: string, lastname: string): Promise<string>;
 }

@@ -1,22 +1,22 @@
 import { UpdateOrder } from '@/purchase/domain/port/driver/for-update';
-import { UpdateOrder as Update } from '@/purchase/domain/adapter/driven/update';
 import { totalDto } from '@/purchase/domain/validation/validate';
 import { orderCreate } from '@/purchase/domain/usecase/usecases';
-import { FindService } from '@/purchase/domain/adapter/driven/find';
 import { validate } from 'class-validator';
+import { updateType } from '@/purchase/domain/port/driven/for-update-driven';
+import { findType } from '@/purchase/domain/port/driven/for-find-diven';
 
 export class UpdateOrderImpl implements UpdateOrder {
   constructor(
-    private readonly method: Update,
-    private readonly service: FindService,
+    private readonly method: updateType,
+    private readonly service: findType,
   ) {}
 
-  async updateEnvoy(id: string): Promise<Error | 'success'> {
-    const order = await this.service.findById(id);
+  async update_Envoy(id: string): Promise<Error | 'success'> {
+    const order = await this.service.find_Id(id);
     if (order.id === undefined) {
       throw new Error('Not found');
     }
-    await this.method.updateEnvoy(order.id);
+    await this.method.update_Envoy(order.id);
     return 'success';
   }
 

@@ -1,14 +1,11 @@
-import { client } from '../../entity/entityInterfaceClient';
-
 export interface getClientDriver {
-  GetClientAll(name: string, lastname: string): Promise<client | Error>;
-  GetClientProductPurchase(
+  Get_Client_Product_Purchase(
     name: string,
     lastname: string,
   ): Promise<string[] | Error>;
-  GetClientOrderPurchase(
+  Get_Client_Order_Purchase(
     name: string,
     lastname: string,
   ): Promise<string[] | Error>;
-  GetClientPassword(name: string, lastname: string): Promise<string | Error>;
+  Get_Client_Password(name: string, lastname: string): Promise<string | Error>;
 }

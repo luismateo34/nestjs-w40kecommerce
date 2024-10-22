@@ -1,3 +1,3 @@
 export interface Delete {
-  deleteProductId: (id: string) => Promise<Error | 'success'>;
+  delete_ProductId: (id: string) => Promise<Error | 'success'>;
 }

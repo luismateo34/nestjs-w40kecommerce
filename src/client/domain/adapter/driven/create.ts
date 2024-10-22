@@ -1,17 +1,10 @@
 import { createType } from '@/client/domain/port/driven/for-createClient-driven';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { ClienEntity } from '@/typeorm/ClientEntity';
 import { hash } from 'bcrypt';
-import { Injectable } from '@nestjs/common';
+import { InjectClient } from '@/client/infrastructure/ClientEntity';
 
-@Injectable()
-export class CreateAndUpdateClient implements createType {
-  constructor(
-    @InjectRepository(ClienEntity)
-    private client: Repository<ClienEntity>,
-  ) {}
-  async CreateClient(
+class CreateClient implements createType {
+  constructor(private client: InjectClient) {}
+  async Create_Client(
     name: string,
     lastname: string,
     password: string,
@@ -23,6 +16,9 @@ export class CreateAndUpdateClient implements createType {
       lastname: lastname,
       password: await hash(password, 8),
     };
-    await this.client.save(client);
+    await this.client.admin.save(client);
   }
 }
+
+let inj: InjectClient;
+export const Create = new CreateClient(inj);

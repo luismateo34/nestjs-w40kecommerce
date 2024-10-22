@@ -1,4 +1,5 @@
-export { CreateAndUpdate } from './createService';
-export { UpdateService } from './updateService';
-export { FindService } from './findService';
-export { DeleteAdmin } from './deleteService';
+export { Create } from './createService';
+export { Update } from './updateService';
+export { Find } from './findService';
+export { DeleteService } from './deleteService';
+export { findPermision } from './FindPermisonService';

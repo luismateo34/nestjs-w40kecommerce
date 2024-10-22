@@ -2,17 +2,17 @@ import {
   Column,
   Entity,
   DeleteDateColumn,
-  ManyToOne,
-  JoinColumn,
   ManyToMany,
   JoinTable,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  Repository,
 } from 'typeorm';
 import { product } from '@/product/domain/entity/entityInterfaceProduct';
-import { OrderEntity } from './PurchaseOrderEntity';
-import { Repleace } from './RepleaceEntity';
+import { OrderEntity } from '@/purchase/infrastructure/PurchaseOrderEntity';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Entity({ name: 'products' })
 export class ProductEntity implements product {
@@ -35,8 +35,7 @@ export class ProductEntity implements product {
   @JoinTable({ name: 'order_product' })
   order_product: string[];
 
-  @ManyToOne(() => Repleace, (item) => item.product)
-  @JoinColumn({ name: 'name' })
+  @Column()
   name: string;
 
   @Column()
@@ -62,4 +61,14 @@ export class ProductEntity implements product {
 
   @Column({ nullable: true })
   franchise: string;
+}
+@Injectable()
+export class InjectProduct {
+  constructor(
+    @InjectRepository(ProductEntity)
+    private adminInject: Repository<ProductEntity>,
+  ) {
+    this.service = this.adminInject;
+  }
+  readonly service: Repository<ProductEntity>;
 }

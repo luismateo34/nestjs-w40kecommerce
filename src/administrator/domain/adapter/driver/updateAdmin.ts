@@ -7,12 +7,12 @@ import {
 } from '@/administrator/domain/validate/admin';
 import { validate } from 'class-validator';
 import { permissions } from '@/administrator/domain/entity/entityAdminInterface';
-import { UpdateService } from '../driven';
 import { ForUpdateAdmin } from '../../port/driver/for-update-admin';
+import { ForUpdateAdmin as UpdateService } from '@/administrator/domain/port/driven/for-update-admin';
 
 export class Update implements ForUpdateAdmin {
   constructor(private service: UpdateService) {}
-  async updateEmail(
+  async update_Email(
     email: string,
     lastname: string,
     name: string,
@@ -30,10 +30,10 @@ export class Update implements ForUpdateAdmin {
     if (errMail.length > 0) {
       throw new Error('mail invalido');
     }
-    await this.service.updateEmail(email, lastname, name);
+    await this.service.update_Email(email, lastname, name);
     return 'success';
   }
-  async updatePassword(
+  async update_Password(
     lastname: string,
     name: string,
     password: string,
@@ -51,10 +51,10 @@ export class Update implements ForUpdateAdmin {
     if (errPass.length > 0) {
       throw new Error('invalid password');
     }
-    await this.service.updatePassword(lastname, name, password);
+    await this.service.update_Password(lastname, name, password);
     return 'success';
   }
-  async updatePermissions(
+  async update_Permissions(
     lastname: string,
     name: string,
     permissions: permissions,
@@ -72,10 +72,10 @@ export class Update implements ForUpdateAdmin {
     if (respErr.length > 0) {
       throw new Error('permiso inexistente');
     }
-    await this.service.updatePermissions(lastname, name, permissions);
+    await this.service.update_Permissions(lastname, name, permissions);
     return 'success';
   }
-  async updatePhone(
+  async update_Phone(
     lastname: string,
     name: string,
     phone: number,
@@ -93,7 +93,7 @@ export class Update implements ForUpdateAdmin {
     if (phoneErr.length > 0) {
       throw new Error('telefono invalido');
     }
-    await this.service.updatePhone(lastname, name, phone);
+    await this.service.update_Phone(lastname, name, phone);
     return 'success';
   }
 }

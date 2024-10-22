@@ -1,16 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { AdminEntity } from '@/typeorm/adminEntity';
 import { ForDeleteAdmin } from '../../port/driven/for-delete-admin';
+import { AdminInject } from '@/administrator/infrastructure/adminEntity';
 
-@Injectable()
-export class DeleteAdmin implements ForDeleteAdmin {
-  constructor(
-    @InjectRepository(AdminEntity)
-    private admin: Repository<AdminEntity>,
-  ) {}
-  async deleteAdmin(name: string, lastname: string): Promise<void> {
-    await this.admin.delete({ name: name, lastname: lastname });
+class Delete implements ForDeleteAdmin {
+  constructor(private service: AdminInject) {}
+  async delete_Admin(name: string, lastname: string): Promise<void> {
+    await this.service.admin.delete({ name: name, lastname: lastname });
   }
 }
+let inj: AdminInject;
+export const DeleteService = new Delete(inj);

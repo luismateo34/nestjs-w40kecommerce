@@ -5,13 +5,13 @@ import {
   permissions,
 } from '@/administrator/domain/entity/entityAdminInterface';
 import { CreateandValidate } from '../../port/driver/for-create-and-validate';
-import { CreateAndUpdate } from '../driven';
-import { FindPermisionbyName } from '../driven/FindPermisonService';
+import { ForCreateAdmin } from '@/administrator/domain/port/driven/for-create-admin';
+import { FindPermision } from '@/administrator/domain/port/driven/for-find-permision';
 
 export class CreateAdministrator implements CreateandValidate {
   constructor(
-    private readonly service: CreateAndUpdate,
-    private readonly permission: FindPermisionbyName,
+    private service: ForCreateAdmin,
+    private permission: FindPermision,
   ) {}
   private dto = new AdminDto();
 
@@ -26,7 +26,7 @@ export class CreateAdministrator implements CreateandValidate {
     if (errorsearch.length > 0) {
       throw new Error('datos no validos');
     }
-    const permission = await this.permission.getPermision(
+    const permission = await this.permission.get_Permision(
       user.name,
       user.lastname,
     );
@@ -34,7 +34,7 @@ export class CreateAdministrator implements CreateandValidate {
       throw new Error(' no tiene permisos ');
     }
 
-    await this.service.createAdmin(user);
+    await this.service.create_Admin(user);
     return 'success';
   }
 }

@@ -3,7 +3,9 @@ export interface OrderPurchase {
   date: Date;
   // name, lastname
   client: [string, string];
+  // monto de pago
   amount: number;
+  // envio
   envoy: boolean;
   id: string;
   createdAt: Date;

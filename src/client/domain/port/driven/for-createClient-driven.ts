@@ -1,3 +1,3 @@
 import { usecase } from '@/client/domain/usecase/usecase';
 
-export type createType = Pick<usecase, 'CreateClient'>;
+export type createType = Pick<usecase, 'Create_Client'>;

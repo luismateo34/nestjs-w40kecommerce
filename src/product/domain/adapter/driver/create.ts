@@ -1,12 +1,12 @@
 import { create } from '@/product/domain/port/driver/for-create';
-import { CreateProductService } from '@/product/domain/adapter/driven/createDriven';
 import { ProductDto } from '@/product/domain/validate/validate';
-import { createProduct } from '../../entity/entityInterfaceProduct';
+import { createProduct as Product } from '../../entity/entityInterfaceProduct';
 import { validate } from 'class-validator';
+import { createProductdriven } from '@/product/domain/port/driven/for-createProductdriven';
 
 export class CreateProduct implements create {
-  constructor(private readonly service: CreateProductService) {}
-  async createProduct(product: createProduct): Promise<Error | 'success'> {
+  constructor(private readonly service: createProductdriven) {}
+  async create_Product(product: Product): Promise<Error | 'success'> {
     const dto = new ProductDto();
     dto.category_product = product.category_product;
     dto.order_product = product.order_product;
@@ -21,7 +21,7 @@ export class CreateProduct implements create {
     if (err.length > 0) {
       throw new Error('datos no validos');
     }
-    await this.service.createProduct(product);
+    await this.service.create_Product(product);
     return 'success';
   }
 }
