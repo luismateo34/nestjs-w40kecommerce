@@ -7,10 +7,7 @@ export class SetProduct implements Set {
     private readonly service: setterdriven,
     private readonly findService: findProductdriven,
   ) {}
-  async set_Discount_Product(
-    id: string,
-    discount: number,
-  ): Promise<Error | 'success'> {
+  async set_Discount_Product(id: string, discount: number): Promise<'success'> {
     const findProduct = await this.findService.find_Product_Id(id);
     if (findProduct.id === undefined) {
       throw new Error('producto no encontrado');
@@ -18,10 +15,7 @@ export class SetProduct implements Set {
     await this.service.set_Discount_Product(findProduct.id, discount);
     return 'success';
   }
-  async set_Price_Product(
-    id: string,
-    price: number,
-  ): Promise<Error | 'success'> {
+  async set_Price_Product(id: string, price: number): Promise<'success'> {
     const findProduct = await this.findService.find_Product_Id(id);
     if (findProduct.id === undefined) {
       throw new Error('producto no encontrado');
@@ -29,10 +23,7 @@ export class SetProduct implements Set {
     await this.service.set_Price_Product(findProduct.id, price);
     return 'success';
   }
-  async set_Stock_Product(
-    id: string,
-    stock: number,
-  ): Promise<Error | 'success'> {
+  async set_Stock_Product(id: string, stock: number): Promise<'success'> {
     const findProduct = await this.findService.find_Product_Id(id);
     if (findProduct.id === undefined) {
       throw new Error('producto no encontrado');

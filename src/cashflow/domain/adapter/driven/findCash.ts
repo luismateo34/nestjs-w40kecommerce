@@ -1,9 +1,9 @@
-import { findmethod } from '@/cashflow/domain/port/driven/for-findCash-driven';
-import { InjectCash } from '@/cashflow/infrastructure/CashEntity';
+import { findmethod } from 'src/cashflow/domain/port/driven/for-findCash-driven';
+import { InjectCash } from 'src/cashflow/infrastructure/Cash.entity';
 import { Between } from 'typeorm';
 
 class FindCash implements findmethod {
-  constructor(private service: InjectCash) {}
+  constructor(private service = InjectCash) {}
   async find_Balance_day(
     year: number,
     month: number,
@@ -26,8 +26,8 @@ class FindCash implements findmethod {
       },
     });
     const balance = resp
-      .map((el) => el.monthly_balance[1])
-      .reduce((acc, current) => acc + current, 0);
+      .map((el) => el.monthly_balance)
+      .sort((a, b) => b - a)[0];
     const ArrResp: [Date, number] = [new Date(year, month, 1), balance];
     return ArrResp;
   }
@@ -90,5 +90,4 @@ class FindCash implements findmethod {
   }
 }
 
-let inj: InjectCash;
-export const FindCashmethod = new FindCash(inj);
+export const FindCashmethod = new FindCash();

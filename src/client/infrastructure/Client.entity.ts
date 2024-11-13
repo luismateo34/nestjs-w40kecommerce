@@ -1,9 +1,9 @@
-import { client } from '@/client/domain/entity/entityInterfaceClient';
-import { Base } from '@/config/base';
-import { OrderEntity } from '@/purchase/infrastructure/PurchaseOrderEntity';
+import { Base } from '../../config/base';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Column, Entity, JoinColumn, ManyToOne, Repository } from 'typeorm';
+import { client } from '../domain/entity/entityInterfaceClient';
+import { OrderEntity } from '../../purchase/infrastructure/PurchaseOrder.entity';
 
 @Entity({ name: 'client' })
 export class ClientEntity extends Base implements client {
@@ -24,7 +24,7 @@ export class ClientEntity extends Base implements client {
   purchase_order: string[];
 }
 @Injectable()
-export class InjectClient {
+export class Client {
   constructor(
     @InjectRepository(ClientEntity)
     private adminInject: Repository<ClientEntity>,
@@ -33,4 +33,11 @@ export class InjectClient {
   }
   readonly admin: Repository<ClientEntity>;
 }
+let inj: Client;
 
+class provider {
+  constructor(readonly service: Client) {}
+  readonly admin = this.service.admin;
+}
+
+export const InjectClient = new provider(inj);

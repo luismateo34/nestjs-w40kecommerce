@@ -4,5 +4,5 @@ export interface createClientDriver {
     lastname: string,
     password: string,
     email: string,
-  ): Promise<Error | 'success'>;
+  ): Promise<'success'>;
 }

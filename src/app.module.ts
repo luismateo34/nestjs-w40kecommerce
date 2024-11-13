@@ -2,21 +2,17 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { resolve } from 'node:path';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmoptions } from 'src/database/typeorm';
+import { AuthModule } from 'src/administrator/infrastructure/framework/auth.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 4080,
-      username: 'userdatabase',
-      password: 'databasepassword',
-      database: 'batabaseNest',
-      entities: [resolve(__dirname + './../**/*.entity{.ts,.js}')],
-      migrations: [resolve(__dirname + './../../migrations/*{.ts,.js}')],
-      synchronize: false,
+    TypeOrmModule.forRoot({ ...TypeOrmoptions }),
+    ConfigModule.forRoot({
+      envFilePath: '../.env',
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

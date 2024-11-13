@@ -3,11 +3,11 @@ import { OrderPurchase } from '../../entity/entityInterfaceOrder';
 import {
   InjectOrder,
   OrderEntity,
-} from '@/purchase/infrastructure/PurchaseOrderEntity';
+} from 'src/purchase/infrastructure/PurchaseOrder.entity';
 import { Between } from 'typeorm';
 
 class FindService implements findType {
-  constructor(private method: InjectOrder) {}
+  constructor(private method = InjectOrder) {}
   async find_Client(name: string): Promise<OrderEntity[]> {
     const resp = await this.method.order.find({ where: { client: name } });
     return resp;
@@ -52,5 +52,4 @@ class FindService implements findType {
     return search;
   }
 }
-let inject: InjectOrder;
-export const Find = new FindService(inject);
+export const Find = new FindService();

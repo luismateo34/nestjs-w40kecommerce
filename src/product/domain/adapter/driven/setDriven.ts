@@ -1,8 +1,8 @@
-import { stockProductdriven } from '@/product/domain/port/driven/for-setProductdriven';
-import { InjectProduct } from '@/product/infrastructure/ProductEntity';
+import { stockProductdriven } from 'src/product/domain/port/driven/for-setProductdriven';
+import { InjectProduct } from 'src/product/infrastructure/Product.entity';
 
 class SetProductService implements stockProductdriven {
-  constructor(private method: InjectProduct) {}
+  constructor(private method = InjectProduct) {}
   async set_Discount_Product(id: string, discount: number): Promise<void> {
     await this.method.service.update(
       { id: id },
@@ -16,5 +16,4 @@ class SetProductService implements stockProductdriven {
     await this.method.service.update({ id: id }, { stock: stock });
   }
 }
-let inj: InjectProduct;
-export const Setter = new SetProductService(inj);
+export const Setter = new SetProductService();

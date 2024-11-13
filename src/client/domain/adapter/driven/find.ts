@@ -1,9 +1,9 @@
-import { getclient } from '@/client/domain/port/driven/for-getClient-driven';
+import { getclient } from 'src/client/domain/port/driven/for-getClient-driven';
 import { client } from '../../entity/entityInterfaceClient';
-import { InjectClient } from '@/client/infrastructure/ClientEntity';
+import { InjectClient } from 'src/client/infrastructure/Client.entity';
 
 class ForGetClient implements getclient {
-  constructor(private client: InjectClient) {}
+  constructor(private client = InjectClient) {}
 
   async Get_Client(name: string, lastname: string): Promise<client> {
     return await this.client.admin.findOneBy({
@@ -32,5 +32,4 @@ class ForGetClient implements getclient {
   }
 }
 
-let inj: InjectClient;
-export const Find = new ForGetClient(inj);
+export const Find = new ForGetClient();

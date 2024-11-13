@@ -5,12 +5,12 @@ import {
   Find,
   Update,
   findPermision,
-} from '@/administrator/domain/adapter/driven';
+} from 'src/administrator/domain/adapter/driven';
 /* -- driver adapter--*/
-import { FindAdmin } from '@/administrator/domain/adapter/driver/FindAdmin';
-import { Delete } from '@/administrator/domain/adapter/driver/deleteAdmin';
-import { CreateAdministrator } from '@/administrator/domain/adapter/driver/createAdmin';
-import { Update as Updatedriver } from '@/administrator/domain/adapter/driver/updateAdmin';
+import { FindAdmin } from 'src/administrator/domain/adapter/driver/FindAdmin';
+import { Delete } from 'src/administrator/domain/adapter/driver/deleteAdmin';
+import { CreateAdministrator } from 'src/administrator/domain/adapter/driver/createAdmin';
+import { Update as Updatedriver } from 'src/administrator/domain/adapter/driver/updateAdmin';
 /* ---*/
 
 export const find = new FindAdmin(Find);

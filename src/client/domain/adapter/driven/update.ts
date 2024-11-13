@@ -1,9 +1,9 @@
-import { updateType } from '@/client/domain/port/driven/for-updateClient-driven';
+import { updateType } from 'src/client/domain/port/driven/for-updateClient-driven';
 import { hash } from 'bcrypt';
-import { InjectClient } from '@/client/infrastructure/ClientEntity';
+import { InjectClient } from 'src/client/infrastructure/Client.entity';
 
 class UpdateClient implements updateType {
-  constructor(private client: InjectClient) {}
+  constructor(private client = InjectClient) {}
   async Update_Client_Email(
     name: string,
     lastname: string,
@@ -31,6 +31,4 @@ class UpdateClient implements updateType {
     );
   }
 }
-
-let inj: InjectClient;
-export const Update = new UpdateClient(inj);
+export const Update = new UpdateClient();

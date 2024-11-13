@@ -1,10 +1,10 @@
 import { hash } from 'bcrypt';
-import { permissions } from '@/administrator/domain/entity/entityAdminInterface';
+import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
 import { ForUpdateAdmin } from '../../port/driven/for-update-admin';
-import { AdminInject } from '@/administrator/infrastructure/adminEntity';
+import { AdminInject } from 'src/administrator/infrastructure/admin.entity';
 
 class UpdateService implements ForUpdateAdmin {
-  constructor(private service: AdminInject) {}
+  constructor(private service = AdminInject) {}
   async update_Email(
     email: string,
     lastname: string,
@@ -56,5 +56,4 @@ class UpdateService implements ForUpdateAdmin {
   }
 }
 
-let inj: AdminInject;
-export const Update = new UpdateService(inj);
+export const Update = new UpdateService();

@@ -1,12 +1,12 @@
-import { AdminDto } from '@/administrator/domain/validate/admin';
+import { AdminDto } from 'src/administrator/domain/validate/admin';
 import { validate as validateAction } from 'class-validator';
 import {
   admin,
   permissions,
-} from '@/administrator/domain/entity/entityAdminInterface';
+} from 'src/administrator/domain/entity/entityAdminInterface';
 import { CreateandValidate } from '../../port/driver/for-create-and-validate';
-import { ForCreateAdmin } from '@/administrator/domain/port/driven/for-create-admin';
-import { FindPermision } from '@/administrator/domain/port/driven/for-find-permision';
+import { ForCreateAdmin } from 'src/administrator/domain/port/driven/for-create-admin';
+import { FindPermision } from 'src/administrator/domain/port/driven/for-find-permision';
 
 export class CreateAdministrator implements CreateandValidate {
   constructor(
@@ -15,7 +15,7 @@ export class CreateAdministrator implements CreateandValidate {
   ) {}
   private dto = new AdminDto();
 
-  async validate(user: admin): Promise<Error | 'success'> {
+  async createAdmin(user: admin): Promise<'success'> {
     this.dto.name = user.name;
     this.dto.lastname = user.lastname;
     this.dto.email = user.email;

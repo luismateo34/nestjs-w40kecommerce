@@ -10,7 +10,7 @@ export class CreateClientDriver implements createClientDriver {
     lastname: string,
     password: string,
     email: string,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const dto = new clientDTO();
     dto.email = email;
     dto.password = password;

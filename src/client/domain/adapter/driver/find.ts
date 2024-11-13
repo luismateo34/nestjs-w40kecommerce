@@ -3,10 +3,7 @@ import { getclient } from '@/client/domain/port/driven/for-getClient-driven';
 
 export class Find implements getClientDriver {
   constructor(private method: getclient) {}
-  async Get_Client_Password(
-    name: string,
-    lastname: string,
-  ): Promise<string | Error> {
+  async Get_Client_Password(name: string, lastname: string): Promise<string> {
     const resp = await this.method.Get_Client(name, lastname);
     if (resp.password === undefined) {
       throw new Error('no se encontro');
@@ -16,7 +13,7 @@ export class Find implements getClientDriver {
   async Get_Client_Product_Purchase(
     name: string,
     lastname: string,
-  ): Promise<string[] | Error> {
+  ): Promise<string[]> {
     const resp = await this.method.Get_Client_Order_Purchase(name, lastname);
     if (resp.length === 0) {
       throw new Error('no se encontro');
@@ -26,7 +23,7 @@ export class Find implements getClientDriver {
   async Get_Client_Order_Purchase(
     name: string,
     lastname: string,
-  ): Promise<string[] | Error> {
+  ): Promise<string[]> {
     const resp = await this.method.Get_Client_Order_Purchase(name, lastname);
     if (resp.length === 0) {
       throw new Error();

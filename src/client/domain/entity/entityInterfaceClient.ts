@@ -3,5 +3,5 @@ export interface client {
   lastname: string;
   password: string;
   email: string;
-  purchase_order: string[];
+  purchase_order: string[] | null;
 }

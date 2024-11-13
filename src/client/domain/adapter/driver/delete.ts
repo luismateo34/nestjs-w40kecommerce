@@ -10,7 +10,7 @@ export class Delete implements deleteClientDriver {
   async Delete_Client(
     name: string,
     lastname: string,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const findClient = await this.getclient.Get_Client(name, lastname);
     if (findClient.name === undefined) {
       throw new Error('operacion no realizada, usuario ninexistente');

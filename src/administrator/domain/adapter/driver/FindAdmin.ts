@@ -1,9 +1,9 @@
-import { AdminInterface } from '@/administrator/domain/entity/entityAdminInterface';
+import { AdminInterface } from 'src/administrator/domain/entity/entityAdminInterface';
 import { validate } from 'class-validator';
-import { Email, NameandLastname } from '@/administrator/domain/validate/admin';
+import { Email, NameandLastname } from 'src/administrator/domain/validate/admin';
 import { ForFindAdmin } from '../../port/driver/for-find-admin';
-import { AdminEntity } from '@/administrator/infrastructure/adminEntity';
-import { ForFindAdmin as findService } from '@/administrator/domain/port/driven/for-find-admin';
+import { AdminEntity } from 'src/administrator/infrastructure/adminEntity';
+import { ForFindAdmin as findService } from 'src/administrator/domain/port/driven/for-find-admin';
 
 export class FindAdmin implements ForFindAdmin {
   constructor(private find: findService) {}
@@ -11,7 +11,7 @@ export class FindAdmin implements ForFindAdmin {
     return await this.find.find_All();
   }
 
-  async find_Email(email: string): Promise<AdminEntity | Error> {
+  async find_Email(email: string): Promise<AdminEntity> {
     const mailDto = new Email();
     mailDto.email = email;
     const errorsearch = await validate(mailDto);
@@ -23,7 +23,7 @@ export class FindAdmin implements ForFindAdmin {
   async find_Name_Lastname(
     name: string,
     lastname: string,
-  ): Promise<AdminEntity | Error> {
+  ): Promise<AdminEntity> {
     const dto = new NameandLastname();
     dto.lastname = lastname;
     dto.name = name;
@@ -31,10 +31,11 @@ export class FindAdmin implements ForFindAdmin {
     if (error.length > 0) {
       throw new Error('datos invalidos');
     }
-    return await this.find.find_Name_Lastname(name, lastname);
+    const resp = await this.find.find_Name_Lastname(name, lastname);
+    return resp;
   }
 
-  async find_Password(name: string, lastname: string): Promise<string | Error> {
+  async find_Password(name: string, lastname: string): Promise<string> {
     const dto = new NameandLastname();
     dto.lastname = lastname;
     dto.name = name;

@@ -9,7 +9,7 @@ export class Find implements FindCash {
     year: number,
     month: number,
     day: number,
-  ): Promise<[Date, number] | Error> {
+  ): Promise<[Date, number]> {
     const dto = new Dataday();
     dto.day = day;
     dto.month = month;
@@ -25,7 +25,7 @@ export class Find implements FindCash {
   async find_Expense_Month(
     year: number,
     month: number,
-  ): Promise<[Date, number] | Error> {
+  ): Promise<[Date, number]> {
     if (
       year.toString().length !== 4 &&
       month.toString().length === 0 &&
@@ -40,7 +40,7 @@ export class Find implements FindCash {
     year: number,
     month: number,
     day: number,
-  ): Promise<[Date, number] | Error> {
+  ): Promise<[Date, number]> {
     const dto = new Dataday();
     dto.day = day;
     dto.month = month;
@@ -55,7 +55,7 @@ export class Find implements FindCash {
   async find_Revenue_Month(
     year: number,
     month: number,
-  ): Promise<[Date, number] | Error> {
+  ): Promise<[Date, number]> {
     if (
       year.toString().length !== 4 &&
       month.toString().length === 0 &&
@@ -71,7 +71,7 @@ export class Find implements FindCash {
     year: number,
     month: number,
     day: number,
-  ): Promise<[Date, number] | Error> {
+  ): Promise<[Date, number]> {
     const dto = new Dataday();
     dto.day = day;
     dto.month = month;

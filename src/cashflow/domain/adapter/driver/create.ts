@@ -9,7 +9,7 @@ export class CreateCash implements Create {
     year: number,
     month: number,
     day: number,
-  ): Promise<Error | 'success'> {
+  ): Promise< 'success'> {
     const dto = new Dataday();
     dto.day = day;
     dto.month = month;

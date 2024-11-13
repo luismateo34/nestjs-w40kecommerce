@@ -1,6 +1,7 @@
 export enum permissions {
   SUPERADMIN = 'superadmin',
   ADMIN = 'admin',
+  NOADMIN = 'noadmin',
 }
 
 export interface AdminInterface {

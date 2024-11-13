@@ -7,7 +7,7 @@ export class Delete implements DeleteOrder {
     private readonly FindService: findType,
     private readonly deleteService: deleteType,
   ) {}
-  async delete_Order(id: string): Promise<Error | 'success'> {
+  async delete_Order(id: string): Promise<'success'> {
     const order = await this.FindService.find_Id(id);
     if (order.id === undefined) {
       throw new Error('Order not found');

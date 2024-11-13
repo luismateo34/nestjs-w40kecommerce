@@ -2,10 +2,10 @@ import { ForFindAdmin } from '../../port/driven/for-find-admin';
 import {
   AdminEntity,
   AdminInject,
-} from '@/administrator/infrastructure/adminEntity';
+} from 'src/administrator/infrastructure/admin.entity';
 
 class FindService implements ForFindAdmin {
-  constructor(private service: AdminInject) {}
+  constructor(private service = AdminInject) {}
   async find_All() {
     return await this.service.admin.find();
   }
@@ -13,10 +13,11 @@ class FindService implements ForFindAdmin {
     name: string,
     lastname: string,
   ): Promise<AdminEntity> {
-    return await this.service.admin.findOneBy({
+    const resp = await this.service.admin.findOneBy({
       name: name,
       lastname: lastname,
     });
+    return resp;
   }
 
   async find_Email(email: string): Promise<AdminEntity> {
@@ -31,5 +32,4 @@ class FindService implements ForFindAdmin {
   }
 }
 
-let inj: AdminInject;
-export const Find = new FindService(inj);
+export const Find = new FindService();

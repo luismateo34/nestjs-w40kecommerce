@@ -1,6 +1,3 @@
-import { ClientEntity } from '@/client/infrastructure/ClientEntity';
-import { ProductEntity } from '@/product/infrastructure/ProductEntity';
-import { OrderPurchase } from '@/purchase/domain/entity/entityInterfaceOrder';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -13,6 +10,9 @@ import {
   Repository,
   UpdateDateColumn,
 } from 'typeorm';
+import { OrderPurchase } from '../domain/entity/entityInterfaceOrder';
+import { ProductEntity } from '../../product/infrastructure/Product.entity';
+import { ClientEntity } from '../../client/infrastructure/Client.entity';
 
 @Entity({ name: 'order' })
 export class OrderEntity implements OrderPurchase {
@@ -33,15 +33,14 @@ export class OrderEntity implements OrderPurchase {
   @Column()
   date: Date;
   @OneToMany(() => ClientEntity, (item) => item.purchase_order)
-  // name, lastname
-  client: [string, string];
+  client: string[];
   @Column()
   amount: number;
   @Column()
   envoy: boolean;
 }
 @Injectable()
-export class InjectOrder {
+export class Order {
   constructor(
     @InjectRepository(OrderEntity)
     private adminInject: Repository<OrderEntity>,
@@ -50,3 +49,11 @@ export class InjectOrder {
   }
   readonly order: Repository<OrderEntity>;
 }
+let inj: Order;
+
+class provider {
+  constructor(readonly method: Order) {}
+  readonly order = this.method.order;
+}
+
+export const InjectOrder = new provider(inj);

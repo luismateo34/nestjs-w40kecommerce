@@ -11,7 +11,7 @@ export class Update implements updateClientDriver {
     name: string,
     lastname: string,
     email: string,
-  ): Promise<Error | 'success'> {
+  ): Promise< 'success'> {
     const find = await this.getclient.Get_Client(name, lastname);
     if (find.name === undefined) {
       throw new Error('error no se encontro el cliente');
@@ -22,7 +22,7 @@ export class Update implements updateClientDriver {
   async Update_Client_Name(
     name: string,
     lastname: string,
-  ): Promise<Error | 'success'> {
+  ): Promise< 'success'> {
     const find = await this.getclient.Get_Client(name, lastname);
     if (find.name === undefined) {
       throw new Error('error no se encontro el cliente');
@@ -34,7 +34,7 @@ export class Update implements updateClientDriver {
     name: string,
     lastname: string,
     password: string,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const find = await this.getclient.Get_Client(name, lastname);
     if (find.name === undefined) {
       throw new Error('error no se encontro el cliente');

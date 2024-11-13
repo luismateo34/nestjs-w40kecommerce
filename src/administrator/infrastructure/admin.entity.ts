@@ -6,12 +6,12 @@ import {
   UpdateDateColumn,
   Repository,
 } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from '@nestjs/common';
 import {
   AdminInterface,
   permissions,
-} from '@/administrator/domain/entity/entityAdminInterface';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable } from '@nestjs/common';
+} from '../domain/entity/entityAdminInterface';
 
 @Entity({ name: 'admin' })
 export class AdminEntity implements AdminInterface {
@@ -40,8 +40,9 @@ export class AdminEntity implements AdminInterface {
   @Column({ type: 'enum', enum: permissions, default: permissions.ADMIN })
   permissions: permissions;
 }
+
 @Injectable()
-export class AdminInject {
+export class Admin {
   constructor(
     @InjectRepository(AdminEntity)
     private adminInject: Repository<AdminEntity>,
@@ -51,3 +52,11 @@ export class AdminInject {
   readonly admin: Repository<AdminEntity>;
 }
 
+let inj: Admin;
+
+class provider {
+  constructor(readonly service: Admin) {}
+  readonly admin = this.service.admin;
+}
+
+export const AdminInject = new provider(inj);

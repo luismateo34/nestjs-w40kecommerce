@@ -70,5 +70,4 @@ export class Password {
   @IsString()
   @Min(8)
   password: string;
-  password: string;
 }

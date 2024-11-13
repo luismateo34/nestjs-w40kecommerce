@@ -1,10 +1,10 @@
-import { updateMethod } from '@/cashflow/domain/port/driven/for-updateCash-driven';
+import { updateMethod } from 'src/cashflow/domain/port/driven/for-updateCash-driven';
 import {
   method_update_Balance_Day,
   method_update_Balance_Month,
   method_expense,
   method_revenue,
-} from '@/cashflow/domain/adapter/driven/updateMethod';
+} from 'src/cashflow/domain/adapter/driven/updateMethod';
 
 class Update implements updateMethod {
   async update_Balance_Day(

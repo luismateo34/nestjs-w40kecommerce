@@ -1,10 +1,10 @@
 import { hash } from 'bcrypt';
-import { admin } from '@/administrator/domain/entity/entityAdminInterface';
+import { admin } from 'src/administrator/domain/entity/entityAdminInterface';
 import { ForCreateAdmin } from '../../port/driven/for-create-admin';
-import { AdminInject } from '@/administrator/infrastructure/adminEntity';
+import { AdminInject } from 'src/administrator/infrastructure/admin.entity';
 
 class CreateAdmin implements ForCreateAdmin {
-  constructor(private service: AdminInject) {}
+  constructor(private service = AdminInject) {}
   private saltround: 8;
   async create_Admin(user: admin) {
     const saveUser = {} as admin;
@@ -18,5 +18,4 @@ class CreateAdmin implements ForCreateAdmin {
   }
 }
 
-let inj: AdminInject;
-export const Create = new CreateAdmin(inj);
+export const Create = new CreateAdmin();

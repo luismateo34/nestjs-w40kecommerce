@@ -1,4 +1,4 @@
-import { permissions } from '@/administrator/domain/entity/entityAdminInterface';
+import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
 
 export interface ForUpdateAdmin {
   update_Email(email: string, lastname: string, name: string): Promise<void>;

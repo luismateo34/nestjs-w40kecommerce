@@ -8,10 +8,7 @@ export class UpdateProduct implements Update {
     private readonly service: updateClientdriven,
     private readonly findService: findProductdriven,
   ) {}
-  async update_Product(
-    id: string,
-    product: createProduct,
-  ): Promise<Error | 'success'> {
+  async update_Product(id: string, product: createProduct): Promise<'success'> {
     const find = await this.findService.find_Product_Id(id);
     if (find.id === undefined) {
       throw new Error('no se encontro el producto');

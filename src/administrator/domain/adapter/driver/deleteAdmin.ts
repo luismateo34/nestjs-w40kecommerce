@@ -1,14 +1,14 @@
 import { validate } from 'class-validator';
-import { NameandLastname } from '@/administrator/domain/validate/admin';
+import { NameandLastname } from 'src/administrator/domain/validate/admin';
 import { ForDeleteAdmin } from '../../port/driver/for-delete-and-validate';
-import { ForDeleteAdmin as deleteAdmin } from '@/administrator/domain/port/driven/for-delete-admin';
+import { ForDeleteAdmin as deleteAdmin } from 'src/administrator/domain/port/driven/for-delete-admin';
 
 export class Delete implements ForDeleteAdmin {
   constructor(private deletefn: deleteAdmin) {}
   async delete_Admin(
     lastname: string,
     name: string,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const dto = new NameandLastname();
     dto.lastname = lastname;
     dto.name = name;

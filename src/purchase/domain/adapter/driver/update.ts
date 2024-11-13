@@ -11,7 +11,7 @@ export class UpdateOrderImpl implements UpdateOrder {
     private readonly service: findType,
   ) {}
 
-  async update_Envoy(id: string): Promise<Error | 'success'> {
+  async update_Envoy(id: string): Promise<'success'> {
     const order = await this.service.find_Id(id);
     if (order.id === undefined) {
       throw new Error('Not found');
@@ -20,7 +20,7 @@ export class UpdateOrderImpl implements UpdateOrder {
     return 'success';
   }
 
-  async update(order: orderCreate): Promise<Error | 'success'> {
+  async update(order: orderCreate): Promise<'success'> {
     const dto = new totalDto();
     dto.amount = order.amount;
     dto.envoy = order.envoy;
@@ -29,7 +29,7 @@ export class UpdateOrderImpl implements UpdateOrder {
     dto.products = order.products;
     const errorSerch = await validate(dto);
     if (errorSerch.length > 0) {
-      return new Error('Error validation');
+      throw new Error('Error validation');
     }
     await this.method.update(dto);
     return 'success';

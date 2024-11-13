@@ -1,5 +1,5 @@
-import { updateMethod } from '@/cashflow/domain/port/driven/for-updateCash-driven';
-import { InjectCash } from '@/cashflow/infrastructure/CashEntity';
+import { updateMethod } from 'src/cashflow/domain/port/driven/for-updateCash-driven';
+import { InjectCash } from 'src/cashflow/infrastructure/Cash.entity';
 import { Between } from 'typeorm';
 
 type methodType = Pick<
@@ -8,7 +8,7 @@ type methodType = Pick<
 >;
 
 class Method implements methodType {
-  constructor(private service: InjectCash) {}
+  constructor(private service = InjectCash) {}
   async update_Revenue_Day(
     year: number,
     month: number,
@@ -43,5 +43,4 @@ class Method implements methodType {
   }
 }
 
-let inj: InjectCash;
-export const method_revenue = new Method(inj);
+export const method_revenue = new Method();

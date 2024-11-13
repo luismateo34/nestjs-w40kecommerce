@@ -9,10 +9,10 @@ import {
   UpdateDateColumn,
   Repository,
 } from 'typeorm';
-import { product } from '@/product/domain/entity/entityInterfaceProduct';
-import { OrderEntity } from '@/purchase/infrastructure/PurchaseOrderEntity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { product } from '../domain/entity/entityInterfaceProduct';
+import { OrderEntity } from '../../purchase/infrastructure/PurchaseOrder.entity';
 
 @Entity({ name: 'products' })
 export class ProductEntity implements product {
@@ -63,7 +63,7 @@ export class ProductEntity implements product {
   franchise: string;
 }
 @Injectable()
-export class InjectProduct {
+export class Product {
   constructor(
     @InjectRepository(ProductEntity)
     private adminInject: Repository<ProductEntity>,
@@ -72,3 +72,11 @@ export class InjectProduct {
   }
   readonly service: Repository<ProductEntity>;
 }
+let inj: Product;
+
+class provider {
+  constructor(readonly method: Product) {}
+  readonly service = this.method.service;
+}
+
+export const InjectProduct = new provider(inj);

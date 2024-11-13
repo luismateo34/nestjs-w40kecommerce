@@ -9,7 +9,7 @@ export class Update implements updateDriver {
     year: number,
     month: number,
     day: number,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const dto = new Dataday();
     dto.day = day;
     dto.month = month;
@@ -26,7 +26,7 @@ export class Update implements updateDriver {
     year: number,
     month: number,
     day: number,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const dto = new Dataday();
     dto.day = day;
     dto.month = month;
@@ -44,7 +44,7 @@ export class Update implements updateDriver {
     month: number,
     day: number,
     expenses: number,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const dto = new Dataday();
     dto.day = day;
     dto.month = month;
@@ -64,7 +64,7 @@ export class Update implements updateDriver {
     year: number,
     month: number,
     day: number,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const dto = new Dataday();
     dto.day = day;
     dto.month = month;
@@ -82,7 +82,7 @@ export class Update implements updateDriver {
     month: number,
     day: number,
     revenue: number,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const dto = new Dataday();
     dto.day = day;
     dto.month = month;
@@ -102,7 +102,7 @@ export class Update implements updateDriver {
     year: number,
     month: number,
     day: number,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const dto = new Dataday();
     dto.day = day;
     dto.month = month;

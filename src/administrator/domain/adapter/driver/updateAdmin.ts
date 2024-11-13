@@ -4,11 +4,11 @@ import {
   Password,
   Phone,
   Permissions as permissionsDto,
-} from '@/administrator/domain/validate/admin';
+} from 'src/administrator/domain/validate/admin';
 import { validate } from 'class-validator';
-import { permissions } from '@/administrator/domain/entity/entityAdminInterface';
+import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
 import { ForUpdateAdmin } from '../../port/driver/for-update-admin';
-import { ForUpdateAdmin as UpdateService } from '@/administrator/domain/port/driven/for-update-admin';
+import { ForUpdateAdmin as UpdateService } from 'src/administrator/domain/port/driven/for-update-admin';
 
 export class Update implements ForUpdateAdmin {
   constructor(private service: UpdateService) {}
@@ -16,7 +16,7 @@ export class Update implements ForUpdateAdmin {
     email: string,
     lastname: string,
     name: string,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const dto = new NameandLastname();
     const emailDto = new Email();
     dto.lastname = lastname;
@@ -37,7 +37,7 @@ export class Update implements ForUpdateAdmin {
     lastname: string,
     name: string,
     password: string,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const dto = new NameandLastname();
     dto.lastname = lastname;
     dto.name = name;
@@ -58,7 +58,7 @@ export class Update implements ForUpdateAdmin {
     lastname: string,
     name: string,
     permissions: permissions,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const dto = new NameandLastname();
     dto.lastname = lastname;
     dto.name = name;
@@ -79,7 +79,7 @@ export class Update implements ForUpdateAdmin {
     lastname: string,
     name: string,
     phone: number,
-  ): Promise<Error | 'success'> {
+  ): Promise<'success'> {
     const dto = new NameandLastname();
     dto.lastname = lastname;
     dto.name = name;

@@ -1,12 +1,12 @@
-import { updateMethod } from '@/cashflow/domain/port/driven/for-updateCash-driven';
-import { InjectCash } from '@/cashflow/infrastructure/CashEntity';
-import { FindOrder } from '@/purchase/domain/adapter/driver';
+import { updateMethod } from 'src/cashflow/domain/port/driven/for-updateCash-driven';
+import { InjectCash } from 'src/cashflow/infrastructure/Cash.entity';
+import { FindOrder } from 'src/purchase/domain/adapter/driver';
 
 type updateType = Pick<updateMethod, 'update_Balance_Day'>;
 
 class Update implements updateType {
   constructor(
-    private service: InjectCash,
+    private service = InjectCash,
     private order = FindOrder,
   ) {}
   async update_Balance_Day(
@@ -26,5 +26,4 @@ class Update implements updateType {
   }
 }
 
-let inj: InjectCash;
-export const method_update_Balance_Day = new Update(inj, FindOrder);
+export const method_update_Balance_Day = new Update();

@@ -1,11 +1,10 @@
 import { deleteType } from '../../port/driven/for-delete-driven';
-import { InjectOrder } from '@/purchase/infrastructure/PurchaseOrderEntity';
+import { InjectOrder } from 'src/purchase/infrastructure/PurchaseOrder.entity';
 
 class DeleteOrder implements deleteType {
-  constructor(private method: InjectOrder) {}
+  constructor(private method = InjectOrder) {}
   async delete_Order(id: string): Promise<void> {
     await this.method.order.delete({ id: id });
   }
 }
-let inject: InjectOrder;
-export const Delete = new DeleteOrder(inject);
+export const Delete = new DeleteOrder();

@@ -2,7 +2,7 @@ export interface OrderPurchase {
   products: string[];
   date: Date;
   // name, lastname
-  client: [string, string];
+  client:  string [];
   // monto de pago
   amount: number;
   // envio

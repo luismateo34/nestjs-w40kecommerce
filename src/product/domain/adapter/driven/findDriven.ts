@@ -1,9 +1,9 @@
-import { findProductdriven } from '@/product/domain/port/driven/for-findProductdriven';
+import { findProductdriven } from 'src/product/domain/port/driven/for-findProductdriven';
 import { productget } from '../../entity/entityInterfaceProduct';
-import { InjectProduct } from '@/product/infrastructure/ProductEntity';
+import { InjectProduct } from 'src/product/infrastructure/Product.entity';
 
 class FindProduct implements findProductdriven {
-  constructor(private method: InjectProduct) {}
+  constructor(private method = InjectProduct) {}
   async find_Product_Id(id: string): Promise<productget> {
     return await this.method.service.findOneBy({ id: id });
   }
@@ -32,5 +32,4 @@ class FindProduct implements findProductdriven {
     return resp.stock;
   }
 }
-let inj: InjectProduct;
-export const Find = new FindProduct(inj);
+export const Find = new FindProduct();

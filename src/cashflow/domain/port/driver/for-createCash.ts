@@ -3,5 +3,5 @@ export interface Create {
     year: number,
     month: number,
     day: number,
-  ): Promise<Error | 'success'>;
-  }
+  ): Promise<'success'>;
+}
