@@ -1,9 +1,9 @@
 import { createCash as createcashdriver } from 'src/cashflow/domain/port/driven/for-create-cashflow-driven';
-import { InjectCash } from 'src/cashflow/infrastructure/Cash.entity';
-import { cash } from 'src/cashflow/domain/entity/entityInterfaceCashfolw';
+import { cash } from 'src/cashflow/domain/entity/entityInterfaceCashflow';
+import { ormcashflow } from 'src/cashflow/domain/entity/ormCashflow';
 
-class Create implements createcashdriver {
-  constructor(private service = InjectCash) {}
+export class createCashDriven implements createcashdriver {
+  constructor(private service: ormcashflow) {}
   async create_Cash_Order_day(
     year: number,
     month: number,
@@ -19,8 +19,6 @@ class Create implements createcashdriver {
       monthly_expenses: null,
       monthly_revenue: null,
     };
-    await this.service.cash.save(obj);
+    await this.service.create_Cash_Order(obj);
   }
 }
-
-export const createCash = new Create();

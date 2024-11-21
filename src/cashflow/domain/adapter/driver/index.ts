@@ -1,16 +1,11 @@
 /*--import driven--*/
-import {
-  createCash as create,
-  FindCashmethod,
-  updateCashmethod,
+export {
+  createCashDriven,
+  FindCashmethodDriven,
+  updateCashmethodDriven,
 } from '@/cashflow/domain/adapter/driven';
 //
 /*-- driver import---*/
-import { CreateCash } from './create';
-import { Find } from './find';
-import { Update } from './update';
-/*--exports--*/
-//
-export const CreateMethod = new CreateCash(create);
-export const FindMethod = new Find(FindCashmethod);
-export const UpdateMethod = new Update(updateCashmethod);
+export { CreateCash } from './create';
+export { Find } from './find';
+export { Update } from './update';

@@ -1,21 +1,16 @@
 import { hash } from 'bcrypt';
 import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
 import { ForUpdateAdmin } from '../../port/driven/for-update-admin';
-import { AdminInject } from 'src/administrator/infrastructure/admin.entity';
+import { adminOrm } from 'src/administrator/domain/entity/orm_method.interface';
 
-class UpdateService implements ForUpdateAdmin {
-  constructor(private service = AdminInject) {}
+export class DrivenUpdate implements ForUpdateAdmin {
+  constructor(protected service: adminOrm) {}
   async update_Email(
     email: string,
     lastname: string,
     name: string,
   ): Promise<void> {
-    await this.service.admin.update(
-      { name: name, lastname: lastname },
-      {
-        email: email,
-      },
-    );
+    await this.service.update_Email(email, lastname, name);
   }
   async update_Password(
     lastname: string,
@@ -23,37 +18,20 @@ class UpdateService implements ForUpdateAdmin {
     password: string,
   ): Promise<void> {
     const passwordHash = await hash(password, 8);
-    await this.service.admin.update(
-      { name: name, lastname: lastname },
-      {
-        password: passwordHash,
-      },
-    );
+    await this.service.update_Password(lastname, name, passwordHash);
   }
   async update_Phone(
     lastname: string,
     name: string,
     phone: number,
   ): Promise<void> {
-    await this.service.admin.update(
-      { name: name, lastname: lastname },
-      {
-        phone: phone,
-      },
-    );
+    await this.service.update_Phone(lastname, name, phone);
   }
   async update_Permissions(
     lastname: string,
     name: string,
     permissions: permissions,
   ): Promise<void> {
-    await this.service.admin.update(
-      { name: name, lastname: lastname },
-      {
-        permissions: permissions,
-      },
-    );
+    await this.service.update_Permissions(lastname, name, permissions);
   }
 }
-
-export const Update = new UpdateService();

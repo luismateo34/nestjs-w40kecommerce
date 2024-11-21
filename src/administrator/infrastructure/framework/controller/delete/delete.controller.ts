@@ -1,28 +1,39 @@
 import {
   Controller,
   Body,
-  Delete,
+  Delete as DeleteMethod,
   ValidationPipe,
   UseGuards,
   UsePipes,
   HttpException,
   HttpStatus,
+  Inject,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../guard/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
 import { routes, subroutes } from 'src/administrator/application/router/router';
-import { Delete as DeleteMethod } from 'src/administrator/application/usecase';
+import { Delete as DeleteCase } from 'src/administrator/application/usecase';
 import { DeleteDto } from 'src/administrator/application/validation/delete';
+import { Roles } from 'src/administrator/infrastructure/framework/decorator/roleDecorator';
+import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
+import { RoleGuard } from 'src/administrator/infrastructure/framework/guard/role/role.guard';
 
+// borrar administrador
 @Controller(routes.admin)
 export class DeleteController {
-  @UseGuards(JwtAuthGuard)
+  constructor(@Inject('Delete') private readonly deleteMethod: DeleteCase) {}
+
+  @Roles(permissions.SUPERADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
-  @Delete(subroutes.delete)
+  @DeleteMethod(subroutes.delete)
   async delete(@Body() deleteDto: DeleteDto) {
-    const resp = await DeleteMethod.delete(deleteDto.name, deleteDto.lastname);
-    if (resp instanceof Error) {
-      throw new HttpException(`${resp.message}`, HttpStatus.NOT_ACCEPTABLE);
+    try {
+      await this.deleteMethod.delete_Admin(deleteDto.name, deleteDto.lastname);
+    } catch (e) {
+      if (e instanceof Error && e.message.length !== 0) {
+        throw new HttpException(`${e.message}`, HttpStatus.NOT_ACCEPTABLE);
+      }
+      throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    throw new HttpException(`${resp}`, HttpStatus.ACCEPTED);
   }
 }

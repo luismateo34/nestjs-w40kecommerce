@@ -7,7 +7,7 @@ export class DeleteProduct implements Delete {
     private readonly service: deleteProductdriven,
     private readonly findService: findProductdriven,
   ) {}
-  async delete_ProductId(id: string): Promise< 'success'> {
+  async delete_ProductId(id: string): Promise<'success'> {
     const findProduct = await this.findService.find_Product_Id(id);
     if (findProduct.id === undefined) {
       throw new Error('producto no encontrado');

@@ -1,18 +1,19 @@
-import { UpdateMethod } from 'src/administrator/domain/adapter/driver';
 import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
-import { Update } from 'src/administrator/application/usecase/response';
+import { Update as updateResponse } from 'src/administrator/application/usecase/response';
+import { DrivenUpdate, Update } from 'src/administrator/domain/adapter/driver';
+import { adminOrm } from 'src/administrator/domain/entity/orm_method.interface';
 
 export class UpadatePermissions {
-  static async update_Permisions(
+  private method: Update;
+  constructor(readonly service: adminOrm) {
+    this.method = new Update(new DrivenUpdate(service));
+  }
+  async update_Permisions(
     permissions: permissions,
     lastname: string,
     name: string,
-  ): Promise<Update> {
-    try {
-      await UpdateMethod.update_Permissions(lastname, name, permissions);
-      return Update.SUCCESS;
-    } catch {
-      return Update.ERROR;
-    }
+  ): Promise<updateResponse> {
+    await this.method.update_Permissions(lastname, name, permissions);
+    return updateResponse.SUCCESS;
   }
 }

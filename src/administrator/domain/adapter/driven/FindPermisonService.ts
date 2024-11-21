@@ -1,14 +1,11 @@
 import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
 import { FindPermision } from '../../port/driven/for-find-permision';
-import { AdminInject } from 'src/administrator/infrastructure/admin.entity';
+import { adminOrm } from 'src/administrator/domain/entity/orm_method.interface';
 
-class FindPermisionbyName implements FindPermision {
-  constructor(private service = AdminInject) {}
+export class DrivenfindPermision implements FindPermision {
+  constructor(private service: adminOrm) {}
   async get_Permision(name: string, lastname: string): Promise<permissions> {
-    const adminData = await this.service.admin.findOne({
-      where: { name: name, lastname: lastname },
-    });
+    const adminData = await this.service.findOne(name, lastname);
     return adminData.permissions;
   }
 }
-export const findPermision = new FindPermisionbyName();

@@ -6,7 +6,7 @@ import { createProductdriven } from '@/product/domain/port/driven/for-createProd
 
 export class CreateProduct implements create {
   constructor(private readonly service: createProductdriven) {}
-  async create_Product(product: Product): Promise< 'success'> {
+  async create_Product(product: Product): Promise<'success'> {
     const dto = new ProductDto();
     dto.category_product = product.category_product;
     dto.order_product = product.order_product;

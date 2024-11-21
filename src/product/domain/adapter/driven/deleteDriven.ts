@@ -1,10 +1,9 @@
 import { deleteProductdriven } from 'src/product/domain/port/driven/for-deleteProductdriven';
-import { InjectProduct } from 'src/product/infrastructure/Product.entity';
+import { ormProduct } from 'src/product/domain/entity/ormProduct';
 
-class DeleteProductService implements deleteProductdriven {
-  constructor(private method = InjectProduct) {}
+export class DeleteDriven implements deleteProductdriven {
+  constructor(private method: ormProduct) {}
   async delete_ProductId(id: string): Promise<void> {
-    await this.method.service.delete({ id: id });
+    await this.method.delete(id)
   }
 }
-export const Delete = new DeleteProductService();

@@ -1,4 +1,5 @@
 import {
+  Inject,
   Injectable,
   Request,
   Response,
@@ -19,14 +20,14 @@ import { JwtMethod } from 'src/administrator/infrastructure/framework/service/jw
 @Injectable()
 export class RefreshMethod {
   constructor(
-    private usersService = Login,
+    @Inject('Login') private readonly login: Login,
     private jwtService: JwtService,
     private configService: ConfigService,
     private jwtMethod: JwtMethod,
   ) {}
 
   private async validateUser(token: PayloadJwt): Promise<PayloadJwt> {
-    const user = await this.usersService.loginToken(token);
+    const user = await this.login.loginToken(token);
     if (user.id === undefined || user.id.length === 0) {
       throw new Error();
     }
@@ -76,7 +77,7 @@ export class RefreshMethod {
       const validate = await this.validateUser(admin);
       const jwt = await this.refreshtoken(validate);
       const criptedCookie = cipher.encrypted(jwt.refresh_token);
-      this.jwtMethod.Refresh(res, admin);
+      this.jwtMethod.Refresh_token_create(res, admin);
       res
         .cookie(token.refresh_token, criptedCookie, {
           httpOnly: true,

@@ -1,10 +1,9 @@
 import { ForDeleteAdmin } from '../../port/driven/for-delete-admin';
-import { AdminInject } from 'src/administrator/infrastructure/admin.entity';
+import { adminOrm } from 'src/administrator/domain/entity/orm_method.interface';
 
-class Delete implements ForDeleteAdmin {
-  constructor(private service = AdminInject) {}
+export class DrivenDelete implements ForDeleteAdmin {
+  constructor(private service: adminOrm) {}
   async delete_Admin(name: string, lastname: string): Promise<void> {
-    await this.service.admin.delete({ name: name, lastname: lastname });
+    await this.service.delete(name, lastname);
   }
 }
-export const DeleteService = new Delete();

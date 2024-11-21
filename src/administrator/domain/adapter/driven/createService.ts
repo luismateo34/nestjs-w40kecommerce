@@ -1,12 +1,12 @@
 import { hash } from 'bcrypt';
 import { admin } from 'src/administrator/domain/entity/entityAdminInterface';
 import { ForCreateAdmin } from '../../port/driven/for-create-admin';
-import { AdminInject } from 'src/administrator/infrastructure/admin.entity';
+import { adminOrm } from 'src/administrator/domain/entity/orm_method.interface';
 
-class CreateAdmin implements ForCreateAdmin {
-  constructor(private service = AdminInject) {}
+export class DrivenCreate implements ForCreateAdmin {
+  constructor(private service: adminOrm) {}
   private saltround: 8;
-  async create_Admin(user: admin) {
+  async create_Admin(user: admin): Promise<void> {
     const saveUser = {} as admin;
     saveUser.email = user.email;
     saveUser.permissions = user.permissions;
@@ -14,8 +14,6 @@ class CreateAdmin implements ForCreateAdmin {
     saveUser.lastname = user.lastname;
     saveUser.phone = user.phone;
     saveUser.password = await hash(user.password, this.saltround);
-    await this.service.admin.save(saveUser);
+    await this.service.save(saveUser);
   }
 }
-
-export const Create = new CreateAdmin();

@@ -20,7 +20,7 @@ export class totalDto implements validate {
   @ArrayNotEmpty()
   @ArrayMaxSize(2)
   @ArrayMinSize(2)
-  client: [string, string];
+  client:string[];
   @IsNotEmpty()
   @IsDate()
   date: Date;

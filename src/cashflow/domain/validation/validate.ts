@@ -6,7 +6,7 @@ import {
   Min,
   Max,
 } from 'class-validator';
-import { cash } from '../entity/entityInterfaceCashfolw';
+import { cash } from '../entity/entityInterfaceCashflow';
 
 export class Dto implements cash {
   @IsNotEmpty()
@@ -23,7 +23,7 @@ export class Dto implements cash {
 
   @IsNotEmpty()
   @IsArray()
-  monthly_balance: [Date, number];
+  monthly_balance: number;
 
   @IsNotEmpty()
   @IsArray()
@@ -52,4 +52,15 @@ export class Dataday {
   @Max(2)
   @IsNumber()
   day: number;
+}
+export class Datamonth {
+  @IsNotEmpty()
+  @Min(4)
+  @IsNumber()
+  year: number;
+
+  @IsNotEmpty()
+  @Max(2)
+  @IsNumber()
+  month: number;
 }

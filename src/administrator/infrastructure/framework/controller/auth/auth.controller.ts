@@ -1,7 +1,6 @@
 import {
   Controller,
   Post,
-  Delete,
   Response,
   HttpCode,
   HttpStatus,
@@ -18,6 +17,7 @@ import { LocalAuthGuard } from 'src/administrator/infrastructure/framework/guard
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
 import { JwtMethod } from 'src/administrator/infrastructure/framework/service/jwt/jwt.service';
 import { RefreshMethod } from 'src/administrator/infrastructure/framework/service/refresh/refresh.service';
+import { refreshGuard } from 'src/administrator/infrastructure/framework/guard/refresh/refresh.guard';
 
 @Controller(routes.admin)
 export class AuthController {
@@ -37,7 +37,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete(subroutes.logaut)
+  @Post(subroutes.logaut)
   async logout(@Response() res: ResponseExpress) {
     res
       .json({
@@ -48,8 +48,8 @@ export class AuthController {
       .redirect('/api');
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Delete(subroutes.refresh)
+  @UseGuards(refreshGuard)
+  @Post(subroutes.refresh)
   async refresh(
     @Response() res: ResponseExpress,
     @Request() req: RequestExpress,

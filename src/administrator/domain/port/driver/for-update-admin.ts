@@ -1,4 +1,4 @@
-import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
+import { permisionString } from 'src/administrator/domain/entity/entityAdminInterface';
 
 export interface ForUpdateAdmin {
   update_Email(
@@ -19,6 +19,6 @@ export interface ForUpdateAdmin {
   update_Permissions(
     lastname: string,
     name: string,
-    permissions: permissions,
+    permissions: permisionString,
   ): Promise<'success'>;
 }

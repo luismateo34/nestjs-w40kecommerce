@@ -1,23 +1,23 @@
-import { find } from 'src/administrator/domain/adapter/driver';
-import { ErrorServer } from 'src/administrator/application/usecase/response';
+import { FindAdmin, DrivenFind } from 'src/administrator/domain/adapter/driver';
+import { adminOrm } from 'src/administrator/domain/entity/orm_method.interface';
 
 export class AllAdmin {
-  static async All() {
-    try {
-      const userFind = await find.find_All();
+  private method: FindAdmin;
+  constructor(readonly service: adminOrm) {
+    this.method = new FindAdmin(new DrivenFind(service));
+  }
+  async All() {
+    const userFind = await this.method.find_All();
 
-      const arr = userFind.map((el) => {
-        return {
-          name: el.name,
-          lastname: el.lastname,
-          email: el.email,
-          id: el.id,
-          permission: el.permissions,
-        };
-      });
-      return arr;
-    } catch {
-      return ErrorServer.ERROR_SERVER;
-    }
+    const arr = userFind.map((el) => {
+      return {
+        name: el.name,
+        lastname: el.lastname,
+        email: el.email,
+        id: el.id,
+        permission: el.permissions,
+      };
+    });
+    return arr;
   }
 }

@@ -1,6 +1,6 @@
-import { createClientDriver } from '@/client/domain/port/driver/for-create';
-import { createType } from '@/client/domain/port/driven/for-createClient-driven';
-import { clientDTO } from '@/client/domain/validation/validate';
+import { createClientDriver } from 'src/client/domain/port/driver/for-create';
+import { createType } from 'src/client/domain/port/driven/for-createClient-driven';
+import { clientDTO } from 'src/client/domain/validation/validate';
 import { validate } from 'class-validator';
 
 export class CreateClientDriver implements createClientDriver {

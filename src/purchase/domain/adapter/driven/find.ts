@@ -1,15 +1,11 @@
 import { findType } from '../../port/driven/for-find-diven';
 import { OrderPurchase } from '../../entity/entityInterfaceOrder';
-import {
-  InjectOrder,
-  OrderEntity,
-} from 'src/purchase/infrastructure/PurchaseOrder.entity';
-import { Between } from 'typeorm';
+import { ormPurchase } from 'src/purchase/domain/entity/ormPurchase';
 
-class FindService implements findType {
-  constructor(private method = InjectOrder) {}
-  async find_Client(name: string): Promise<OrderEntity[]> {
-    const resp = await this.method.order.find({ where: { client: name } });
+export class Find implements findType {
+  constructor(private method: ormPurchase) {}
+  async find_Client(name: string): Promise<OrderPurchase[]> {
+    const resp = await this.method.find_by_client_name(name);
     return resp;
   }
   async find_Orders_Date(
@@ -18,14 +14,10 @@ class FindService implements findType {
     day: number,
   ): Promise<OrderPurchase[]> {
     const nextday = day + 1;
-    const resp = await this.method.order.find({
-      where: {
-        date: Between(
-          new Date(year, month, day, 0),
-          new Date(year, month, nextday, 0),
-        ),
-      },
-    });
+    const resp = await this.method.find_orders_by_day(
+      new Date(year, month, day, 0),
+      new Date(year, month, nextday, 0),
+    );
     return resp;
   }
   async find_Orders_Month(
@@ -33,16 +25,15 @@ class FindService implements findType {
     month: number,
   ): Promise<OrderPurchase[]> {
     const monthNext = month + 1;
-    const resp = await this.method.order.find({
-      where: {
-        date: Between(new Date(year, month, 1), new Date(year, monthNext, 1)),
-      },
-    });
+    const resp = await this.method.find_orders_by_month(
+      new Date(year, month, 1, 0),
+      new Date(year, monthNext, 1, 0),
+    );
     return resp;
   }
 
-  async find_Id(id: string): Promise<OrderEntity> {
-    const resp = await this.method.order.findOneBy({ id: id });
+  async find_Id(id: string): Promise<OrderPurchase> {
+    const resp = await this.method.find_Id(id);
     return resp;
   }
 
@@ -52,4 +43,3 @@ class FindService implements findType {
     return search;
   }
 }
-export const Find = new FindService();

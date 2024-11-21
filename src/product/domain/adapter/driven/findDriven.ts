@@ -1,35 +1,30 @@
 import { findProductdriven } from 'src/product/domain/port/driven/for-findProductdriven';
 import { productget } from '../../entity/entityInterfaceProduct';
-import { InjectProduct } from 'src/product/infrastructure/Product.entity';
+import { ormProduct } from 'src/product/domain/entity/ormProduct';
 
-class FindProduct implements findProductdriven {
-  constructor(private method = InjectProduct) {}
+export class FindDriven implements findProductdriven {
+  constructor(private method: ormProduct) {}
   async find_Product_Id(id: string): Promise<productget> {
-    return await this.method.service.findOneBy({ id: id });
+    return await this.method.find_Product_by_Id(id);
   }
   async find_Product_Name(name: string): Promise<productget> {
-    return await this.method.service.findOneBy({ name: name });
+    return await this.method.find_Product_Name(name);
   }
   async find_Products_Category(
     category_product: string,
   ): Promise<productget[]> {
-    return await this.method.service.find({
-      where: { category_product: category_product },
-    });
+    return await this.method.find_Products_Category(category_product);
   }
   async find_Products_Franchise(franchise: string): Promise<productget[]> {
-    return await this.method.service.find({ where: { franchise: franchise } });
+    return await this.method.find_Products_Franchise(franchise);
   }
   async find_Products_Gender(gender: string): Promise<productget[]> {
-    return await this.method.service.find({ where: { gender: gender } });
+    return await this.method.find_Products_Gender(gender);
   }
   async find_Stock_productId(id: string): Promise<number> {
-    const resp = await this.method.service.findOneBy({ id: id });
-    return resp.stock;
+    return await this.method.find_Stock_productId(id);
   }
   async find_Stock_product_Name(name: string): Promise<number> {
-    const resp = await this.method.service.findOneBy({ name: name });
-    return resp.stock;
+    return await this.method.find_Stock_product_Name(name);
   }
 }
-export const Find = new FindProduct();

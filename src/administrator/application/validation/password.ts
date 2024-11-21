@@ -14,4 +14,4 @@ export class PasswordDto implements Payload {
   @IsString()
   @Min(8)
   password: string;
-  }
+}

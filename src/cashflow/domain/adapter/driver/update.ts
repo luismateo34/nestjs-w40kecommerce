@@ -1,6 +1,6 @@
 import { updateDriver } from '@/cashflow/domain/port/driver/for-updateCash';
 import { updateMethod } from '@/cashflow/domain/port/driven/for-updateCash-driven';
-import { Dataday } from '@/cashflow/domain/validation/validate';
+import { Dataday, Datamonth } from '@/cashflow/domain/validation/validate';
 import { validate } from 'class-validator';
 
 export class Update implements updateDriver {
@@ -22,21 +22,16 @@ export class Update implements updateDriver {
     this.service.update_Balance_Day(year, month, day);
     return 'success';
   }
-  async update_Balance_Month(
-    year: number,
-    month: number,
-    day: number,
-  ): Promise<'success'> {
-    const dto = new Dataday();
-    dto.day = day;
-    dto.month = month;
+  async update_Balance_Month(year: number, month: number): Promise<'success'> {
+    const dto = new Datamonth();
     dto.year = year;
+    dto.month = month;
 
     const errorsearch = await validate(dto);
     if (errorsearch.length > 0) {
       throw new Error('fechas no validas');
     }
-    this.service.update_Balance_Month(year, month, day);
+    this.service.update_Balance_Month(year, month);
     return 'success';
   }
   async update_Expense_Day(
@@ -60,13 +55,8 @@ export class Update implements updateDriver {
     this.service.update_Expense_Day(year, month, day, expenses);
     return 'success';
   }
-  async update_Expense_Month(
-    year: number,
-    month: number,
-    day: number,
-  ): Promise<'success'> {
-    const dto = new Dataday();
-    dto.day = day;
+  async update_Expense_Month(year: number, month: number): Promise<'success'> {
+    const dto = new Datamonth();
     dto.month = month;
     dto.year = year;
 
@@ -74,7 +64,7 @@ export class Update implements updateDriver {
     if (errorsearch.length > 0) {
       throw new Error('fechas no validas');
     }
-    this.service.update_Expense_Month(year, month, day);
+    this.service.update_Expense_Month(year, month);
     return 'success';
   }
   async update_Revenue_Day(
@@ -98,13 +88,8 @@ export class Update implements updateDriver {
     await this.service.update_Revenue_Day(year, month, day, revenue);
     return 'success';
   }
-  async update_Revenue_Month(
-    year: number,
-    month: number,
-    day: number,
-  ): Promise<'success'> {
-    const dto = new Dataday();
-    dto.day = day;
+  async update_Revenue_Month(year: number, month: number): Promise<'success'> {
+    const dto = new Datamonth();
     dto.month = month;
     dto.year = year;
 
@@ -112,7 +97,7 @@ export class Update implements updateDriver {
     if (errorsearch.length > 0) {
       throw new Error('fechas no validas');
     }
-    await this.service.update_Revenue_Month(year, month, day);
+    await this.service.update_Revenue_Month(year, month);
     return 'success';
   }
 }

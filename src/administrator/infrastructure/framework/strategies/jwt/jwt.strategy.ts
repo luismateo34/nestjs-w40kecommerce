@@ -1,6 +1,6 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
@@ -11,7 +11,7 @@ import { cipher } from 'src/administrator/application/encripted/encripted';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     configService: ConfigService,
-    private logginJwt = Login,
+    @Inject('Login') private logginJwt: Login,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([

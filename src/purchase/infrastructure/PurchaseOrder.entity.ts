@@ -1,5 +1,3 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import {
   Column,
   CreateDateColumn,
@@ -7,7 +5,6 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
-  Repository,
   UpdateDateColumn,
 } from 'typeorm';
 import { OrderPurchase } from '../domain/entity/entityInterfaceOrder';
@@ -39,21 +36,3 @@ export class OrderEntity implements OrderPurchase {
   @Column()
   envoy: boolean;
 }
-@Injectable()
-export class Order {
-  constructor(
-    @InjectRepository(OrderEntity)
-    private adminInject: Repository<OrderEntity>,
-  ) {
-    this.order = this.adminInject;
-  }
-  readonly order: Repository<OrderEntity>;
-}
-let inj: Order;
-
-class provider {
-  constructor(readonly method: Order) {}
-  readonly order = this.method.order;
-}
-
-export const InjectOrder = new provider(inj);

@@ -1,5 +1,5 @@
-export { Create } from './createDriven';
-export { Setter } from './setDriven';
-export { Update } from './updateDriven';
-export { Delete } from './deleteDriven';
-export { Find } from './findDriven';
+export { CreateDriven } from './createDriven';
+export { SetterDriven } from './setDriven';
+export { UpdateDriven } from './updateDriven';
+export { DeleteDriven } from './deleteDriven';
+export { FindDriven } from './findDriven';

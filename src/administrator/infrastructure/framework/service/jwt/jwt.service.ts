@@ -1,4 +1,5 @@
 import {
+  Inject,
   Injectable,
   Request,
   Response,
@@ -18,7 +19,7 @@ import { cipher } from 'src/administrator/application/encripted/encripted';
 @Injectable()
 export class JwtMethod {
   constructor(
-    private usersService = Login,
+    @Inject('Login') private readonly usersService: Login,
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}
@@ -65,7 +66,10 @@ export class JwtMethod {
       throw new UnauthorizedException();
     }
   }
-  async Refresh(@Response() res: ResponseExpress, admin: PayloadJwt) {
+  async Refresh_token_create(
+    @Response() res: ResponseExpress,
+    admin: PayloadJwt,
+  ) {
     try {
       const validate = await this.validateUser(admin);
       const jwt = await this.methodJwt(validate);

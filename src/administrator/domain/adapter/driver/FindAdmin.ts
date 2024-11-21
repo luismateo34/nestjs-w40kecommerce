@@ -1,8 +1,10 @@
 import { AdminInterface } from 'src/administrator/domain/entity/entityAdminInterface';
 import { validate } from 'class-validator';
-import { Email, NameandLastname } from 'src/administrator/domain/validate/admin';
+import {
+  Email,
+  NameandLastname,
+} from 'src/administrator/domain/validate/admin';
 import { ForFindAdmin } from '../../port/driver/for-find-admin';
-import { AdminEntity } from 'src/administrator/infrastructure/adminEntity';
 import { ForFindAdmin as findService } from 'src/administrator/domain/port/driven/for-find-admin';
 
 export class FindAdmin implements ForFindAdmin {
@@ -11,7 +13,7 @@ export class FindAdmin implements ForFindAdmin {
     return await this.find.find_All();
   }
 
-  async find_Email(email: string): Promise<AdminEntity> {
+  async find_Email(email: string): Promise<AdminInterface> {
     const mailDto = new Email();
     mailDto.email = email;
     const errorsearch = await validate(mailDto);
@@ -23,7 +25,7 @@ export class FindAdmin implements ForFindAdmin {
   async find_Name_Lastname(
     name: string,
     lastname: string,
-  ): Promise<AdminEntity> {
+  ): Promise<AdminInterface> {
     const dto = new NameandLastname();
     dto.lastname = lastname;
     dto.name = name;

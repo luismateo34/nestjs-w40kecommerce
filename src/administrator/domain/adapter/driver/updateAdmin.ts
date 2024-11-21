@@ -11,7 +11,7 @@ import { ForUpdateAdmin } from '../../port/driver/for-update-admin';
 import { ForUpdateAdmin as UpdateService } from 'src/administrator/domain/port/driven/for-update-admin';
 
 export class Update implements ForUpdateAdmin {
-  constructor(private service: UpdateService) {}
+  constructor( protected service: UpdateService) {}
   async update_Email(
     email: string,
     lastname: string,

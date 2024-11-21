@@ -7,10 +7,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  Repository,
 } from 'typeorm';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { product } from '../domain/entity/entityInterfaceProduct';
 import { OrderEntity } from '../../purchase/infrastructure/PurchaseOrder.entity';
 
@@ -62,21 +59,3 @@ export class ProductEntity implements product {
   @Column({ nullable: true })
   franchise: string;
 }
-@Injectable()
-export class Product {
-  constructor(
-    @InjectRepository(ProductEntity)
-    private adminInject: Repository<ProductEntity>,
-  ) {
-    this.service = this.adminInject;
-  }
-  readonly service: Repository<ProductEntity>;
-}
-let inj: Product;
-
-class provider {
-  constructor(readonly method: Product) {}
-  readonly service = this.method.service;
-}
-
-export const InjectProduct = new provider(inj);

@@ -1,11 +1,10 @@
 import { updateClientdriven } from 'src/product/domain/port/driven/for-updateProductdriven';
 import { createProduct } from '../../entity/entityInterfaceProduct';
-import { InjectProduct } from 'src/product/infrastructure/Product.entity';
+import { ormProduct } from 'src/product/domain/entity/ormProduct';
 
-class UpdateProductService implements updateClientdriven {
-  constructor(private method = InjectProduct) {}
+export class UpdateDriven implements updateClientdriven {
+  constructor(private method: ormProduct) {}
   async update_Product(id: string, product: createProduct): Promise<void> {
-    await this.method.service.update({ id: id }, product);
+    await this.method.update_Product(id, product);
   }
 }
-export const Update = new UpdateProductService();

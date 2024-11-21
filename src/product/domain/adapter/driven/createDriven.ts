@@ -1,11 +1,10 @@
 import { createProductdriven } from 'src/product/domain/port/driven/for-createProductdriven';
-import { createProduct } from '../../entity/entityInterfaceProduct';
-import { InjectProduct } from 'src/product/infrastructure/Product.entity';
+import { createProduct } from 'src/product/domain/entity/entityInterfaceProduct';
+import { ormProduct } from 'src/product/domain/entity/ormProduct';
 
-class CreateProductService implements createProductdriven {
-  constructor(private serviceInject = InjectProduct) {}
-  async create_Product(product: createProduct): Promise<void> {
-    this.serviceInject.service.create(product);
+export class CreateDriven implements createProductdriven {
+  constructor(private serviceInject: ormProduct) {}
+  async create_Product(Product: createProduct): Promise<void> {
+    this.serviceInject.create(Product);
   }
 }
-export const Create = new CreateProductService();

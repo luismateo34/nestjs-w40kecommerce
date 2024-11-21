@@ -2,7 +2,6 @@ export interface updateDriver {
   update_Balance_Month(
     year: number,
     month: number,
-    day: number,
   ): Promise<'success'>;
   update_Balance_Day(
     year: number,
@@ -24,11 +23,9 @@ export interface updateDriver {
   update_Revenue_Month(
     year: number,
     month: number,
-    day: number,
   ): Promise<'success'>;
   update_Expense_Month(
     year: number,
     month: number,
-    day: number,
   ): Promise<'success'>;
 }

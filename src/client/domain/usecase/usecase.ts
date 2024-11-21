@@ -27,5 +27,5 @@ export interface usecase {
     password: string,
   ): Promise<void>;
   //delete
-  Delete_Client(name: string, lastname: string): Promise<void>;
+  Delete_Client(name: string, lastname: string, password: string): Promise<void>;
 }

@@ -1,9 +1,9 @@
 import { createType } from 'src/client/domain/port/driven/for-createClient-driven';
 import { hash } from 'bcrypt';
-import { InjectClient } from 'src/client/infrastructure/Client.entity';
+import { ormclient } from 'src/client/domain/entity/ormclient';
 
-class CreateClient implements createType {
-  constructor(private client = InjectClient) {}
+export class CreateDriven implements createType {
+  constructor(private client: ormclient) {}
   async Create_Client(
     name: string,
     lastname: string,
@@ -16,8 +16,11 @@ class CreateClient implements createType {
       lastname: lastname,
       password: await hash(password, 8),
     };
-    await this.client.admin.save(client);
+    await this.client.save(
+      client.email,
+      client.name,
+      client.lastname,
+      client.password,
+    );
   }
 }
-
-export const Create = new CreateClient();

@@ -1,4 +1,5 @@
 import { productget, createProduct } from '../entity/entityInterfaceProduct';
+
 export interface usecases {
   find_Product_Id: (id: string) => Promise<productget>;
   find_Product_Name: (name: string) => Promise<productget>;
