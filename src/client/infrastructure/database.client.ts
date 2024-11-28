@@ -54,4 +54,7 @@ export class Client implements ormclient {
   async get_by_name_lastname(name: string, lastname: string): Promise<client> {
     return await this.adminInject.findOneBy({ name: name, lastname: lastname });
   }
+  async get_by_id(id: string): Promise<client> {
+    return await this.adminInject.findOneBy({ id: id });
+  }
 }

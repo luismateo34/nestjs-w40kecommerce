@@ -1,17 +1,24 @@
 export enum routes {
   admin = 'administrator',
   find = 'find',
+  update = 'update',
+  delete = 'delete',
+  create = 'create',
+  auth = 'auth',
 }
-export enum subroutes {
+export enum auth {
   login = 'login',
   refresh = 'refresh',
   logaut = 'logout',
-  create = 'create',
-  delete = 'delete',
-  update = 'update',
 }
 export enum routFind {
   all = 'all',
   byName = 'byName',
   byEmail = 'byEmail',
+}
+export enum updateEnum {
+  phone = 'phone',
+  permission = 'permission',
+  password = 'password',
+  email = 'email',
 }

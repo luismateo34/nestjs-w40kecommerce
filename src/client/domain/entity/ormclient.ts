@@ -9,6 +9,7 @@ export interface ormclient {
   ) => Promise<void>;
   delete: (name: string, lastname: string) => Promise<void>;
   get_by_name_lastname: (name: string, lastname: string) => Promise<client>;
+  get_by_id: (id: string) => Promise<client>;
   Update_Client_Email(
     name: string,
     lastname: string,

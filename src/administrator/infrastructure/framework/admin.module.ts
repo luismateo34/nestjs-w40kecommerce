@@ -1,17 +1,26 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
+/*controller*/
 import { AuthController } from './controller/auth/auth.controller';
 import { DeleteController } from './controller/delete/delete.controller';
 import { CreateController } from './controller/create/create.controller';
 import { UpdateController } from './controller/update/update.controller';
+import { FindController } from 'src/administrator/infrastructure/framework/controller/find/find.controller';
+/*service*/
 import { AuthService } from './service/local/local.service';
 import { JwtMethod } from './service/jwt/jwt.service';
+import { RefreshMethod } from 'src/administrator/infrastructure/framework/service/refresh/refresh.service';
+/*strategies*/
 import { LocalStrategy } from './strategies/local/local.strategy';
 import { JwtStrategy } from './strategies/jwt/jwt.strategy';
+/*guard*/
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
-import { TypeOrmModule } from '@nestjs/typeorm';
+/*entity*/
 import { AdminEntity } from 'src/administrator/infrastructure/admin.entity';
+/*database*/
 import { AdminDatabase } from 'src/administrator/infrastructure/admin.database';
+/*usecases*/
 import {
   AdminByEmail,
   AdminByName,
@@ -25,12 +34,7 @@ import {
   UpadatePermissions,
   UpadatePhone,
 } from 'src/administrator/application/usecase';
-import {
-  CreateAdministrator,
-  DrivenCreate,
-  DrivenfindPermision,
-} from 'src/administrator/domain/adapter/driver';
-import { FindController } from 'src/administrator/infrastructure/framework/controller/find/find.controller';
+/*----*/
 
 @Module({
   controllers: [
@@ -52,6 +56,7 @@ import { FindController } from 'src/administrator/infrastructure/framework/contr
     LocalStrategy,
     JwtMethod,
     JwtStrategy,
+    RefreshMethod,
     {
       provide: 'adminOrm',
       useClass: AdminDatabase,
@@ -88,14 +93,7 @@ import { FindController } from 'src/administrator/infrastructure/framework/contr
     },
     {
       provide: 'Register',
-      useFactory: (repository: AdminDatabase) =>
-        new Register(
-          repository,
-          new CreateAdministrator(
-            new DrivenCreate(repository),
-            new DrivenfindPermision(repository),
-          ),
-        ),
+      useFactory: (repository: AdminDatabase) => new Register(repository),
       inject: ['adminOrm'],
     },
     {
@@ -121,6 +119,6 @@ import { FindController } from 'src/administrator/infrastructure/framework/contr
       inject: ['adminOrm'],
     },
   ],
-  exports: [JwtAuthGuard, AdminDatabase],
+  exports: [JwtAuthGuard, AdminDatabase, JwtStrategy],
 })
-export class AuthModule {}
+export class AdminModule {}

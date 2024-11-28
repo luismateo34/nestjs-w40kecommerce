@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Inject,
   Query,
+  Res,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
 import { routes, routFind } from 'src/administrator/application/router/router';
@@ -14,8 +15,9 @@ import {
   AdminByName,
   AllAdmin,
 } from 'src/administrator/application/usecase';
+import { type Response as ExpRes } from 'express';
 
-@Controller(`${routes.admin}/${routes.find}`)
+@Controller(routes.find)
 export class FindController {
   constructor(
     @Inject('AdminByEmail') private readonly adminByEmail: AdminByEmail,
@@ -28,6 +30,7 @@ export class FindController {
   async find_Name_Lastname(
     @Query('name') name: string,
     @Query('lastname') lastname: string,
+    @Res() res: ExpRes,
   ) {
     if (name === undefined || name.length === 0) {
       throw new HttpException(
@@ -42,8 +45,8 @@ export class FindController {
       );
     }
     try {
-      const res = await this.adminByName.findBy_name_lastname(name, lastname);
-      return res;
+      const obj = await this.adminByName.findBy_name_lastname(name, lastname);
+      res.status(HttpStatus.ACCEPTED).json(obj);
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {
         throw new HttpException(
@@ -57,7 +60,7 @@ export class FindController {
   }
   @UseGuards(JwtAuthGuard)
   @Get(routFind.byEmail)
-  async find_Email(@Query('email') email: string) {
+  async find_Email(@Query('email') email: string, @Res() res: ExpRes) {
     if (email === undefined || email.length === 0) {
       throw new HttpException(
         'error: name is required',
@@ -65,8 +68,8 @@ export class FindController {
       );
     }
     try {
-      const res = await this.adminByEmail.ByEmail(email);
-      return res;
+      const obj = await this.adminByEmail.ByEmail(email);
+      return res.status(HttpStatus.OK).json(obj);
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {
         throw new HttpException(
@@ -80,10 +83,10 @@ export class FindController {
   }
   @UseGuards(JwtAuthGuard)
   @Get(routFind.all)
-  async find_All() {
+  async find_All(@Res() res: ExpRes) {
     try {
-      const res = await this.allAdmin.All();
-      return res;
+      const obj = await this.allAdmin.All();
+      return res.status(HttpStatus.OK).json(obj);
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {
         throw new HttpException(

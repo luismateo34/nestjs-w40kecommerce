@@ -1,5 +1,8 @@
-import { CreateDriven, CreateProduct } from 'src/product/domain/adapter/driver';
-import { create } from 'src/product/domain/port/driver/for-create';
+import {
+  CreateDriven,
+  CreateProduct,
+} from 'src/product/domain/adapter/driving';
+import { create } from 'src/product/domain/port/driving/for-create';
 import { ormProduct } from 'src/product/domain/entity/ormProduct';
 import { createProduct } from '@/product/domain/entity/entityInterfaceProduct';
 

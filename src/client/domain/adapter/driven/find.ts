@@ -8,6 +8,9 @@ export class FindDriven implements getclient {
   async Get_Client(name: string, lastname: string): Promise<client> {
     return await this.client.get_by_name_lastname(name, lastname);
   }
+  async Get_Client_by_Id(id: string): Promise<client> {
+    return await this.client.get_by_id(id);
+  }
 
   async Get_Client_Order_Purchase(
     name: string,
@@ -16,9 +19,5 @@ export class FindDriven implements getclient {
     const res = await this.client.get_by_name_lastname(name, lastname);
     const order = res.purchase_order;
     return order;
-  }
-  async Get_Client_Password(name: string, lastname: string): Promise<string> {
-    const resp = await this.client.get_by_name_lastname(name, lastname);
-    return resp.password;
   }
 }

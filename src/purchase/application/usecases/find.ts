@@ -1,33 +1,44 @@
-import { OrderPurchase } from '@/purchase/domain/entity/entityInterfaceOrder';
-import { findDriven, findDriver } from 'src/purchase/domain/adapter/driver';
+import { OrderPurchase } from 'src/purchase/domain/entity/entityInterfaceOrder';
+import { findDriven, findDriver } from 'src/purchase/domain/adapter/driving';
 import { ormPurchase } from 'src/purchase/domain/entity/ormPurchase';
-import { find } from 'src/purchase/domain/port/driver/for-find';
+import {
+  NumberMonth,
+  string_month_spanish,
+} from 'src/cashflow/application/month/month';
+import { dateFind } from 'src/purchase/application/interface/FindType';
 
-export class FindMethod implements find {
+export class FindMethod implements dateFind {
   private service: findDriver;
   constructor(readonly database: ormPurchase) {
     this.service = new findDriver(new findDriven(database));
   }
+  /*----*/
   async find_Client(name: string): Promise<OrderPurchase[]> {
     return await this.service.find_Client(name);
   }
+  /*----*/
   async find_Id(id: string): Promise<OrderPurchase> {
     return await this.service.find_Id(id);
   }
+  /*----*/
   async find_Id_Client(id: string, name: string): Promise<OrderPurchase> {
     return await this.service.find_Id_Client(id, name);
   }
+  /*----*/
   async find_Orders_Date(
-    year: number,
-    month: number,
     day: number,
-  ): Promise<OrderPurchase[]> {
-    return await this.service.find_Orders_Date(year, month, day);
-  }
-  async find_Orders_Month(
     year: number,
-    month: number,
+    month: string_month_spanish,
   ): Promise<OrderPurchase[]> {
-    return await this.service.find_Orders_Month(year, month);
+    const monthNum = NumberMonth(month);
+    return await this.service.find_Orders_Date(year, monthNum, day);
+  }
+  /*----*/
+  async find_Orders_Month(
+    month: string_month_spanish,
+    year: number,
+  ): Promise<OrderPurchase[]> {
+    const monthNum = NumberMonth(month);
+    return await this.service.find_Orders_Month(year, monthNum);
   }
 }

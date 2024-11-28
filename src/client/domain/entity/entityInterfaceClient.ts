@@ -4,4 +4,7 @@ export interface client {
   password: string;
   email: string;
   purchase_order: string[] | null;
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

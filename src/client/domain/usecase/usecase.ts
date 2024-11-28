@@ -7,7 +7,7 @@ export interface usecase {
     lastname: string,
   ): Promise<string[]>;
   Get_Client_Order_Purchase(name: string, lastname: string): Promise<string[]>;
-  Get_Client_Password(name: string, lastname: string): Promise<string>;
+  Get_Client_by_Id(id: string): Promise<client>;
   Create_Client(
     name: string,
     lastname: string,
@@ -27,5 +27,9 @@ export interface usecase {
     password: string,
   ): Promise<void>;
   //delete
-  Delete_Client(name: string, lastname: string, password: string): Promise<void>;
+  Delete_Client(
+    name: string,
+    lastname: string,
+    password: string,
+  ): Promise<void>;
 }

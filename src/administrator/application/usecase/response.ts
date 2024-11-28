@@ -6,9 +6,7 @@ export enum responsefind {
 }
 
 export enum register {
-  SUCCESS = 'REGISTRO EXITOSO',
-  ERROR = 'ERROR AL REGISTRAR',
-  NOT_FOUND = 'USUARIO NO ENCONTRADO',
+  ERRORDATA = 'ERROR AL REGISTRAR, FALTA ALGUN DATO',
   EXIST = 'USUARIO YA EXISTE',
 }
 

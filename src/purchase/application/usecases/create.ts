@@ -1,14 +1,16 @@
 import { orderCreate } from '@/purchase/domain/usecase/usecases';
-import { createDriven, CreateDriver } from 'src/purchase/domain/adapter/driver';
+import { createDriven, CreateDriver } from 'src/purchase/domain/adapter/driving';
 import { ormPurchase } from 'src/purchase/domain/entity/ormPurchase';
-import { CreateOrder } from 'src/purchase/domain/port/driver/for-create';
+import { OrderWithoutDate } from 'src/purchase/application/validate/order';
 
-export class createMethod implements CreateOrder {
+export class createMethod {
   private service: CreateDriver;
   constructor(readonly database: ormPurchase) {
     this.service = new CreateDriver(new createDriven(database));
   }
-  async create(orderType: orderCreate): Promise<'success'> {
-    return await this.service.create(orderType);
+  async create(orderType: OrderWithoutDate): Promise<'success'> {
+    const dayDate = new Date();
+    const order: orderCreate = { ...orderType, date: dayDate, envoy: false };
+    return await this.service.create(order);
   }
 }

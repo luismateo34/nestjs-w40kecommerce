@@ -14,6 +14,7 @@ export class Order implements ormPurchase {
   async delete(id: string): Promise<void> {
     await this.adminInject.delete({ id: id });
   }
+
   async update_Envoy(id: string, envoy: boolean): Promise<void> {
     await this.adminInject.update({ id: id }, { envoy: envoy });
   }

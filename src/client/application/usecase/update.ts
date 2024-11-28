@@ -1,15 +1,15 @@
 import {
   Updatedriven,
-  updateDriver,
+  updateDriving,
   FindDriven,
-} from 'src/client/domain/adapter/driver';
+} from 'src/client/domain/adapter/driving';
 import { ormclient } from 'src/client/domain/entity/ormclient';
-import { updateClientDriver } from 'src/client/domain/port/driver/for-update';
+import { updateClientDriving } from 'src/client/domain/port/driving/for-update';
 
-export class UpdateMethod implements updateClientDriver {
-  private service: updateDriver;
+export class UpdateMethod implements updateClientDriving {
+  private service: updateDriving;
   constructor(readonly database: ormclient) {
-    this.service = new updateDriver(
+    this.service = new updateDriving(
       new Updatedriven(database),
       new FindDriven(database),
     );

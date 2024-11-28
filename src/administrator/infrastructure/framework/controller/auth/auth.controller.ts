@@ -12,48 +12,51 @@ import {
   type Response as ResponseExpress,
   type Request as RequestExpress,
 } from 'express';
-import { routes, subroutes } from 'src/administrator/application/router/router';
+import { routes, auth } from 'src/administrator/application/router/router';
 import { LocalAuthGuard } from 'src/administrator/infrastructure/framework/guard/local/local-auth.guard';
-import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
 import { JwtMethod } from 'src/administrator/infrastructure/framework/service/jwt/jwt.service';
 import { RefreshMethod } from 'src/administrator/infrastructure/framework/service/refresh/refresh.service';
 import { refreshGuard } from 'src/administrator/infrastructure/framework/guard/refresh/refresh.guard';
+import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
 
-@Controller(routes.admin)
+@Controller(routes.auth)
 export class AuthController {
   constructor(
     private authServiceJWT: JwtMethod,
     private refreshJwt: RefreshMethod,
   ) {}
+  /*-----*/
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Post(subroutes.login)
+  @Post(auth.login)
   async login(
     @Response() res: ResponseExpress,
     @Request() req: RequestExpress,
   ) {
-    await this.authServiceJWT.Login(res, req);
-    await this.refreshJwt.RefreshToken(res, req);
+    await this.authServiceJWT.Login(req.user as PayloadJwt, res);
+    await this.refreshJwt.RefreshToken(req.user as PayloadJwt, res);
   }
-
-  @UseGuards(JwtAuthGuard)
-  @Post(subroutes.logaut)
-  async logout(@Response() res: ResponseExpress) {
+  /*-----*/
+  @UseGuards(LocalAuthGuard)
+  @Post(auth.logaut)
+  async logout(@Request() req: any, @Response() res: ResponseExpress) {
     res
       .json({
         adminLoggin: 'false',
       })
-      .clearCookie(token.access_token)
+      .clearCookie(token.access_token_admin)
       .clearCookie(token.refresh_token)
       .redirect('/api');
+    return req.logout();
   }
 
+  /*-----*/
   @UseGuards(refreshGuard)
-  @Post(subroutes.refresh)
+  @Post(auth.refresh)
   async refresh(
     @Response() res: ResponseExpress,
     @Request() req: RequestExpress,
   ) {
-    await this.refreshJwt.RefreshLoggin(res, req);
+    await this.refreshJwt.RefreshLoggin(req, res);
   }
 }

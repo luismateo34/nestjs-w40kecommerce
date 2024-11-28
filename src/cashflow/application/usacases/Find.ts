@@ -1,4 +1,4 @@
-import { FindCashmethodDriven, Find } from 'src/cashflow/domain/adapter/driver';
+import { FindCashmethodDriven, Find } from 'src/cashflow/domain/adapter/driving';
 import {
   string_month_spanish,
   NumberMonth,
@@ -17,6 +17,13 @@ export class FindMethod {
   ): Promise<[Date, number]> {
     const month = NumberMonth(month_string);
     return await this.service.find_Balance_Year_Month_Day(year, month, day);
+  }
+  async find_Balance_Year_Month(
+    year: number,
+    month_string: string_month_spanish,
+  ): Promise<[Date, number]> {
+    const month = NumberMonth(month_string);
+    return await this.service.find_Balance_Year_Month(year, month);
   }
   async find_Expense_Month(
     year: number,

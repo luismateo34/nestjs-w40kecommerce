@@ -3,9 +3,9 @@ import {
   UpdateDriven,
   UpdateProduct,
   FindDriven,
-} from 'src/product/domain/adapter/driver';
+} from 'src/product/domain/adapter/driving';
 import { ormProduct } from 'src/product/domain/entity/ormProduct';
-import { Update } from 'src/product/domain/port/driver/for-update';
+import { Update } from 'src/product/domain/port/driving/for-update';
 
 export class updateMethod implements Update {
   private service: UpdateProduct;

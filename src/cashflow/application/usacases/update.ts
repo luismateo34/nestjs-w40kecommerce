@@ -1,7 +1,7 @@
 import {
   updateCashmethodDriven,
   Update,
-} from 'src/cashflow/domain/adapter/driver';
+} from 'src/cashflow/domain/adapter/driving';
 import {
   string_month_spanish,
   NumberMonth,

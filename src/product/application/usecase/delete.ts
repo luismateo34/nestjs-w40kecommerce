@@ -3,8 +3,8 @@ import {
   DeleteDriven,
   DeleteProduct,
   FindDriven,
-} from 'src/product/domain/adapter/driver';
-import { Delete } from 'src/product/domain/port/driver/for-delete';
+} from 'src/product/domain/adapter/driving';
+import { Delete } from 'src/product/domain/port/driving/for-delete';
 
 export class deleteMethod implements Delete {
   private service: DeleteProduct;

@@ -1,9 +1,14 @@
-import { Column, Entity, Repository } from 'typeorm';
-import { Base } from '../../config/base';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { cash } from '../domain/entity/entityInterfaceCashflow';
 
 @Entity({ name: 'cashflows' })
-export class CashFlowEntity extends Base implements cash {
+export class CashFlowEntity implements cash {
   @Column()
   date: Date;
   @Column({ nullable: true })
@@ -18,5 +23,16 @@ export class CashFlowEntity extends Base implements cash {
   monthly_expenses: number;
   @Column({ nullable: true })
   monthly_revenue: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
+  @CreateDateColumn({
+    name: 'create_at',
+    type: 'timestamp',
+  })
+  createdAt!: Date;
+  @UpdateDateColumn({
+    name: 'update_at',
+    type: 'timestamp',
+  })
+  updatedAt!: Date;
 }
-

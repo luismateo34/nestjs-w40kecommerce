@@ -1,17 +1,8 @@
-import {
-  Inject,
-  Injectable,
-  Request,
-  Response,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Inject, Injectable, Res, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Login } from 'src/administrator/application/usecase/login';
 import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
-import {
-  type Response as ResponseExpress,
-  type Request as RequestExpress,
-} from 'express';
+import { type Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { token } from 'src/administrator/infrastructure/framework/enum/token';
 import { cipher } from 'src/administrator/application/encripted/encripted';
@@ -34,7 +25,7 @@ export class JwtMethod {
 
   private async methodJwt(payloadAdmin: PayloadJwt) {
     return {
-      access_token: this.jwtService.sign(payloadAdmin, {
+      access_token_admin: this.jwtService.sign(payloadAdmin, {
         secret: process.env.JWT_SECRET,
         expiresIn: '1h',
       }),
@@ -46,36 +37,13 @@ export class JwtMethod {
     return date;
   }
 
-  async Login(
-    @Response() res: ResponseExpress,
-    @Request() req: RequestExpress,
-  ) {
+  async Login(req_user: PayloadJwt, @Res() res: Response) {
     try {
-      const admin = req.user as PayloadJwt;
-      const validate = await this.validateUser(admin);
+      const validate = await this.validateUser(req_user);
       const jwt = await this.methodJwt(validate);
-      const tokenCookie = cipher.encrypted(jwt.access_token);
+      const tokenCookie = cipher.encrypted(jwt.access_token_admin);
       res
-        .cookie(token.access_token, tokenCookie, {
-          httpOnly: true,
-          secure: this.configService.get('NODE_ENV') === 'production',
-          expires: this.addHours(new Date(), 1),
-        })
-        .json({ adminLoggin: 'true' });
-    } catch {
-      throw new UnauthorizedException();
-    }
-  }
-  async Refresh_token_create(
-    @Response() res: ResponseExpress,
-    admin: PayloadJwt,
-  ) {
-    try {
-      const validate = await this.validateUser(admin);
-      const jwt = await this.methodJwt(validate);
-      const tokenCookie = cipher.encrypted(jwt.access_token);
-      res
-        .cookie(token.access_token, tokenCookie, {
+        .cookie(token.access_token_admin, tokenCookie, {
           httpOnly: true,
           secure: this.configService.get('NODE_ENV') === 'production',
           expires: this.addHours(new Date(), 1),

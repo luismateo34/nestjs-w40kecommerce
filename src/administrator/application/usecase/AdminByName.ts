@@ -1,4 +1,7 @@
-import { FindAdmin, DrivenFind } from 'src/administrator/domain/adapter/driver';
+import {
+  FindAdmin,
+  DrivenFind,
+} from 'src/administrator/domain/adapter/driving';
 import { adminOrm } from 'src/administrator/domain/entity/orm_method.interface';
 
 export class AdminByName {

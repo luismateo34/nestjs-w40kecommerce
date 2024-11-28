@@ -1,0 +1,24 @@
+import { CreateOrder } from 'src/purchase/domain/port/driving/for-create';
+import { orderCreate } from 'src/purchase/domain/usecase/usecases';
+import { totalDto } from 'src/purchase/domain/validation/validate';
+import { validate } from 'class-validator';
+import { createType } from 'src/purchase/domain/port/driven/for-create-driven';
+
+export class CreateOrderImpl implements CreateOrder {
+  constructor(private readonly method: createType) {}
+  async create(order: orderCreate): Promise<'success'> {
+    const dto = new totalDto();
+    dto.amount = order.amount;
+    dto.envoy = order.envoy;
+    dto.date = order.date;
+    dto.client = order.client;
+    dto.products = order.products;
+
+    const errorsearch = await validate(dto);
+    if (errorsearch.length > 0) {
+      throw new Error('Error in the data');
+    }
+    await this.method.create(order);
+    return 'success';
+  }
+}

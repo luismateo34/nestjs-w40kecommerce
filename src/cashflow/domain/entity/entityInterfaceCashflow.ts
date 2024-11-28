@@ -6,4 +6,7 @@ export interface cash {
   monthly_expenses: number;
   balance_day: number;
   monthly_balance: number;
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

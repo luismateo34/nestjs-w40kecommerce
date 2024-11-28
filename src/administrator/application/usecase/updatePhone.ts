@@ -1,6 +1,6 @@
 import { Update as updateResponse } from 'src/administrator/application/usecase/response';
 import { adminOrm } from 'src/administrator/domain/entity/orm_method.interface';
-import { DrivenUpdate, Update } from 'src/administrator/domain/adapter/driver';
+import { DrivenUpdate, Update } from 'src/administrator/domain/adapter/driving';
 
 export class UpadatePhone {
   private method: Update;

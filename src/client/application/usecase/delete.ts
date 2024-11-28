@@ -1,15 +1,15 @@
 import {
   DeleteDriven,
-  deleteDriver,
+  deleteDriving,
   FindDriven,
-} from 'src/client/domain/adapter/driver';
-import { deleteClientDriver } from 'src/client/domain/port/driver/for-delete';
+} from 'src/client/domain/adapter/driving';
+import { deleteClientDriving } from 'src/client/domain/port/driving/for-delete';
 import { ormclient } from 'src/client/domain/entity/ormclient';
 
-export class deleteMethod implements deleteClientDriver {
-  private service: deleteDriver;
+export class deleteMethod implements deleteClientDriving {
+  private service: deleteDriving;
   constructor(readonly database: ormclient) {
-    this.service = new deleteDriver(
+    this.service = new deleteDriving(
       new FindDriven(database),
       new DeleteDriven(database),
     );

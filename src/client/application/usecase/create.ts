@@ -1,14 +1,14 @@
 import {
-  CreateClientDriver,
+  CreateClientDriving,
   CreateDriven,
-} from 'src/client/domain/adapter/driver';
-import { createClientDriver as createPort } from 'src/client/domain/port/driver/for-create';
+} from 'src/client/domain/adapter/driving';
+import { createClientDriving as createPort } from 'src/client/domain/port/driving/for-create';
 import { ormclient } from 'src/client/domain/entity/ormclient';
 
 export class CreateMethod implements createPort {
-  private sevice: CreateClientDriver;
+  private sevice: CreateClientDriving;
   constructor(readonly database: ormclient) {
-    this.sevice = new CreateClientDriver(new CreateDriven(database));
+    this.sevice = new CreateClientDriving(new CreateDriven(database));
   }
   async Create_Client(
     name: string,

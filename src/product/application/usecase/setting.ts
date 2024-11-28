@@ -3,8 +3,8 @@ import {
   SetterDriven,
   SetProduct,
   FindDriven,
-} from 'src/product/domain/adapter/driver';
-import { Set } from 'src/product/domain/port/driver/for-set';
+} from 'src/product/domain/adapter/driving';
+import { Set } from 'src/product/domain/port/driving/for-set';
 
 export class SettingMethod implements Set {
   private service: SetProduct;

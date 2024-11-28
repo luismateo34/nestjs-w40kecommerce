@@ -1,11 +1,12 @@
-import { FindDriven, findDriver } from 'src/client/domain/adapter/driver';
-import { getClientDriver } from 'src/client/domain/port/driver/for-get';
+import { FindDriven, findDriving } from 'src/client/domain/adapter/driving';
+import { getClientDriving } from 'src/client/domain/port/driving/for-get';
 import { ormclient } from 'src/client/domain/entity/ormclient';
+import { client } from '@/client/domain/entity/entityInterfaceClient';
 
-export class FindMethod implements getClientDriver {
-  private service: findDriver;
+export class FindMethod implements getClientDriving {
+  private service: findDriving;
   constructor(readonly database: ormclient) {
-    this.service = new findDriver(new FindDriven(database));
+    this.service = new findDriving(new FindDriven(database));
   }
   async Get_Client_Order_Purchase(
     name: string,
@@ -13,13 +14,17 @@ export class FindMethod implements getClientDriver {
   ): Promise<string[]> {
     return await this.service.Get_Client_Order_Purchase(name, lastname);
   }
-  async Get_Client_Password(name: string, lastname: string): Promise<string> {
-    return await this.service.Get_Client_Password(name, lastname);
+
+  async Get_Client(name: string, lastname: string): Promise<client> {
+    return await this.service.Get_Client(name, lastname);
   }
   async Get_Client_Product_Purchase(
     name: string,
     lastname: string,
   ): Promise<string[]> {
     return await this.service.Get_Client_Product_Purchase(name, lastname);
+  }
+  async Get_Client_Id(id: string): Promise<string[]> {
+    return await this.service.Get_Client_Id(id);
   }
 }

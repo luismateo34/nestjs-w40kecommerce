@@ -1,7 +1,7 @@
 import {
   Delete as deleteclass,
   DrivenDelete,
-} from 'src/administrator/domain/adapter/driver';
+} from 'src/administrator/domain/adapter/driving';
 import { adminOrm } from 'src/administrator/domain/entity/orm_method.interface';
 
 export class Delete {

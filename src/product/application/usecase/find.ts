@@ -1,6 +1,6 @@
 import { ormProduct } from 'src/product/domain/entity/ormProduct';
-import { FindDriven, FindProduct } from 'src/product/domain/adapter/driver';
-import { Find } from 'src/product/domain/port/driver/for-find';
+import { FindDriven, FindProduct } from 'src/product/domain/adapter/driving';
+import { Find } from 'src/product/domain/port/driving/for-find';
 import { productget } from '@/product/domain/entity/entityInterfaceProduct';
 
 export class findMethod implements Find {

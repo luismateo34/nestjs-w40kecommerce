@@ -2,9 +2,9 @@ import {
   deleteDriven,
   DeleteDriver,
   findDriven,
-} from 'src/purchase/domain/adapter/driver';
+} from 'src/purchase/domain/adapter/driving';
 import { ormPurchase } from 'src/purchase/domain/entity/ormPurchase';
-import { DeleteOrder } from 'src/purchase/domain/port/driver/for-delete';
+import { DeleteOrder } from 'src/purchase/domain/port/driving/for-delete';
 
 export class deleteMethod implements DeleteOrder {
   private service: DeleteDriver;
