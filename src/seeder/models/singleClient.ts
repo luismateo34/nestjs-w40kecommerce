@@ -1,13 +1,29 @@
 import { client } from 'src/client/domain/entity/entityInterfaceClient';
+import { Factory } from 'nestjs-seeder';
+import { hashSync } from 'bcrypt';
 
-export class clientSeed implements client {
-  email = 'gatogordo_naranja@gmail.com';
+export class singleclientSeed implements client {
+  @Factory('gatogordo_naranja@gmail.com')
+  email: string;
 
-  lastname = 'gordo';
+  @Factory('gordo')
+  lastname: string;
 
-  name = 'gato';
+  @Factory('gato')
+  name: string;
 
-  password: 'gatode4kilos';
+  @Factory(hashSync('gatode4kilos', 10))
+  password: string;
 
+  @Factory(null)
   purchase_order: string[] | null = null;
+
+  @Factory(new Date())
+  createdAt: Date;
+
+  @Factory((faker) => faker.string.uuid())
+  id: string;
+
+  @Factory(new Date())
+  updatedAt: Date;
 }

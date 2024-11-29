@@ -14,6 +14,7 @@ import { RefreshMethod } from 'src/administrator/infrastructure/framework/servic
 /*strategies*/
 import { LocalStrategy } from './strategies/local/local.strategy';
 import { JwtStrategy } from './strategies/jwt/jwt.strategy';
+import { refreshStrategy } from './strategies/refresh/refresh.strategy';
 /*guard*/
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
 /*entity*/
@@ -57,6 +58,7 @@ import {
     JwtMethod,
     JwtStrategy,
     RefreshMethod,
+    refreshStrategy,
     {
       provide: 'adminOrm',
       useClass: AdminDatabase,

@@ -17,10 +17,12 @@ import { JwtStrategy } from 'src/administrator/infrastructure/framework/strategi
 import { CashFlowEntity } from 'src/cashflow/infrastructure/Cash.entity';
 import { OrderEntity } from 'src/purchase/infrastructure/PurchaseOrder.entity';
 /*-----*/
+import { AdminModule } from 'src/administrator/infrastructure/framework/admin.module';
+/*---*/
 
 @Module({
   imports: [
-    JwtStrategy,
+    AdminModule,
     TypeOrmModule.forFeature([CashFlowEntity, OrderEntity]),
   ],
   controllers: [CreateCashController, FindCashController, UpdateCashController],

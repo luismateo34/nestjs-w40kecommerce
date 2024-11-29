@@ -20,8 +20,6 @@ import { RefreshClientService } from 'src/client/infrastructure/framework/servic
 /*Entity*/
 import { ClientEntity } from 'src/client/infrastructure/Client.entity';
 import { AdminEntity } from 'src/administrator/infrastructure/admin.entity';
-/*modules*/
-import { AdminModule } from 'src/administrator/infrastructure/framework/admin.module';
 /*--------*/
 
 @Module({
@@ -30,8 +28,6 @@ import { AdminModule } from 'src/administrator/infrastructure/framework/admin.mo
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1h' },
     }),
-    AdminModule,
-    JwtStrategy,
     TypeOrmModule.forFeature([ClientEntity, AdminEntity]),
   ],
 

@@ -28,9 +28,9 @@ export class CreateController {
   async create(@Body() admindto: AdminDto) {
     try {
       const resp = await this.register.registerMethod(admindto);
-      if (resp === register.NOT_FOUND) {
+      if (resp === register.ERRORDATA) {
         throw new HttpException('error data', HttpStatus.NOT_ACCEPTABLE);
-      } else if (resp === register.SUCCESS) {
+      } else if (resp === 'success') {
         return;
       }
     } catch (e) {

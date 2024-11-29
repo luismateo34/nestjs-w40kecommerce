@@ -1,7 +1,7 @@
 import { client } from '../entity/entityInterfaceClient';
 import { IsEmail, Min, IsNotEmpty, IsString } from 'class-validator';
 
-type clientType = Omit<client, 'purchase_order' | 'purchase_product'>;
+type clientType = Pick<client, 'name' | 'lastname' | 'email' | 'password'>;
 
 export class clientDTO implements clientType {
   @IsNotEmpty()

@@ -14,6 +14,15 @@ export class clientSeed implements client {
   @Factory((faker) => faker.internet.password())
   password: string;
 
-  @Factory((faker) => faker.string.uuid())
+  @Factory((faker) => [faker.string.uuid()])
   purchase_order: string[];
+
+  @Factory(new Date())
+  createdAt: Date;
+
+  @Factory((faker) => faker.string.uuid())
+  id: string;
+
+  @Factory(new Date())
+  updatedAt: Date;
 }

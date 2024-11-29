@@ -1,15 +1,11 @@
 import {
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
-  Inject,
   Query,
   Response,
   UseGuards,
 } from '@nestjs/common';
 import type { Response as expressResponse } from 'express';
-import { FindMethod } from 'src/cashflow/application/usacases/Find';
 import {
   findEnum,
   findSearchEnum,
@@ -17,10 +13,24 @@ import {
 } from 'src/cashflow/application/routes/routes';
 import { string_month_spanish } from '@/cashflow/application/month/month';
 import { JwtAuthGuard } from '@/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
+import { BalanceDayMethod } from './method/balanceDayMethod';
+import { BalanceMonthMethod } from './method/balanceMonthMethod';
+import { ExpenseDayMethod } from './method/expenseDayMethod';
+import { ExpenseMonthMethod } from './method/expenseMonth';
+import { RevenueDayMethod } from './method/revenueDayMethod';
+import { RevenueMonthMethod } from './method/revenueMonthMethod';
 
 @Controller(subRoutes.find)
 export class FindCashController {
-  constructor(@Inject('FindMethod') private readonly find: FindMethod) {}
+  constructor(
+    private readonly balance: BalanceDayMethod,
+    private readonly balanceMonth: BalanceMonthMethod,
+    private readonly expenseday: ExpenseDayMethod,
+    private readonly expenseMonth: ExpenseMonthMethod,
+    private readonly revenueday: RevenueDayMethod,
+    private readonly revenueMonth: RevenueMonthMethod,
+  ) {}
+  /*----*/
   @Get(`${findEnum.findBalance}_${findSearchEnum.day}`)
   @UseGuards(JwtAuthGuard)
   async balanceday(
@@ -29,16 +39,9 @@ export class FindCashController {
     @Query('day') day: number,
     @Response() res: expressResponse,
   ) {
-    try {
-      const obj = await this.find.find_Balance_Year_Month_Day(year, month, day);
-      res.status(HttpStatus.OK).json(obj);
-    } catch (e) {
-      if (e instanceof Error && e.message.length !== 0) {
-        throw new HttpException(`error:${e.message}`, HttpStatus.BAD_REQUEST);
-      }
-      throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.balance.balanceday(year, month, day, res);
   }
+  /*----*/
   @Get(`${findEnum.findBalance}_${findSearchEnum.month}`)
   @UseGuards(JwtAuthGuard)
   async balancemonth(
@@ -46,87 +49,48 @@ export class FindCashController {
     @Query('month') month: string_month_spanish,
     @Response() res: expressResponse,
   ) {
-    try {
-      const obj = await this.find.find_Balance_Year_Month(year, month);
-      res.status(HttpStatus.OK).json(obj);
-    } catch (e) {
-      if (e instanceof Error && e.message.length !== 0) {
-        throw new HttpException(`error:${e.message}`, HttpStatus.BAD_REQUEST);
-      }
-      throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.balanceMonth.balancemonth(year, month, res);
   }
-
+  /*----*/
   @Get(`${findEnum.findexpense}_${findSearchEnum.day}`)
-
   @UseGuards(JwtAuthGuard)
-  async expenseday(
+  async expense_day(
     @Query('year') year: number,
     @Query('year') month: string_month_spanish,
     @Query('day') day: number,
     @Response() res: expressResponse,
   ) {
-    try {
-      const obj = await this.find.find_Expense_Year_Month_Day(year, month, day);
-      res.status(HttpStatus.OK).json(obj);
-    } catch (e) {
-      if (e instanceof Error && e.message.length !== 0) {
-        throw new HttpException(`error:${e.message}`, HttpStatus.BAD_REQUEST);
-      }
-      throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    await this.expenseday.expenseday(year, month, day, res);
   }
-
+  /*----*/
   @Get(`${findEnum.findexpense}_${findSearchEnum.month}`)
   @UseGuards(JwtAuthGuard)
-  async expenseMonth(
+  async expense_Month(
     @Query('year') year: number,
     @Query('year') month: string_month_spanish,
     @Response() res: expressResponse,
   ) {
-    try {
-      const obj = await this.find.find_Expense_Month(year, month);
-      res.status(HttpStatus.OK).json(obj);
-    } catch (e) {
-      if (e instanceof Error && e.message.length !== 0) {
-        throw new HttpException(`error:${e.message}`, HttpStatus.BAD_REQUEST);
-      }
-      throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.expenseMonth.expense_Month(year, month, res);
   }
+  /*----*/
   @Get(`${findEnum.findRevenue}_${findSearchEnum.day}`)
   @UseGuards(JwtAuthGuard)
-  async revenueDay(
+  async revenue_Day(
     @Query('year') year: number,
     @Query('year') month: string_month_spanish,
     @Query('day') day: number,
     @Response() res: expressResponse,
   ) {
-    try {
-      const obj = await this.find.find_Expense_Year_Month_Day(year, month, day);
-      res.status(HttpStatus.OK).json(obj);
-    } catch (e) {
-      if (e instanceof Error && e.message.length !== 0) {
-        throw new HttpException(`error:${e.message}`, HttpStatus.BAD_REQUEST);
-      }
-      throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.revenueday.revenueDay(year, month, day, res);
   }
+  /*----*/
   @Get(`${findEnum.findRevenue}_${findSearchEnum.month}`)
   @UseGuards(JwtAuthGuard)
-  async revenueMonth(
+  async revenue_Month(
     @Query('year') year: number,
     @Query('year') month: string_month_spanish,
     @Response() res: expressResponse,
   ) {
-    try {
-      const obj = await this.find.find_Expense_Month(year, month);
-      res.status(HttpStatus.OK).json(obj);
-    } catch (e) {
-      if (e instanceof Error && e.message.length !== 0) {
-        throw new HttpException(`error:${e.message}`, HttpStatus.BAD_REQUEST);
-      }
-      throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+   return await this.revenueMonth.revenueMonth(year, month, res)
   }
 }

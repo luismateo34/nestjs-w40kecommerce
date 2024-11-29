@@ -17,8 +17,9 @@ import {
 import { FindMethod } from 'src/client/application/usecase/find';
 import { Response, Request } from 'express';
 import { JwtAuthGuard } from 'src/client/infrastructure/framework/guard/jwtGuard';
-import { permissions } from 'src/client/infrastructure/framework/permission/permission';
-import { clientJwt } from 'src/client/application/type/clientJtw';
+import { OrderpurchaseMethod } from './method/orderPurchaseMethod';
+import { ClientAllDataMehtod } from './method/clientAllDataMethod';
+import { ProductPurchaseMethod } from './method/ProductPurchaseMethod';
 /*guard*/
 import { JwtAuthGuard as guardAdmin } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
 /*---*/
@@ -26,7 +27,9 @@ import { JwtAuthGuard as guardAdmin } from 'src/administrator/infrastructure/fra
 export class FindController {
   constructor(
     @Inject('FindMethod') private service: FindMethod,
-    private readonly perm: permissions,
+    private readonly orderPurchaseMethod: OrderpurchaseMethod,
+    private readonly clientAllDataMethod: ClientAllDataMehtod,
+    private readonly productPurchaseMethod: ProductPurchaseMethod,
   ) {}
   /*----*/
   @Get(findroutes.orderPurchase)
@@ -37,27 +40,12 @@ export class FindController {
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    try {
-      const adminAuth = await this.perm.adminAuth(req);
-      let client: clientJwt;
-      if (!adminAuth) {
-        client = await this.perm.checkPermissions(req);
-      }
-      if (
-        (!adminAuth && client.lastname !== lastname) ||
-        client.name !== name
-      ) {
-        throw new HttpException('not permited', HttpStatus.FORBIDDEN);
-      }
-      /*----*/
-      const resp = await this.service.Get_Client_Order_Purchase(name, lastname);
-      res.status(HttpStatus.OK).json(resp);
-    } catch (e) {
-      if (e instanceof Error && e.message.length !== 0) {
-        throw new HttpException(`error: ${e.message}`, HttpStatus.BAD_REQUEST);
-      }
-      throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.orderPurchaseMethod.orderPurchase(
+      name,
+      lastname,
+      req,
+      res,
+    );
   }
   /*-----*/
   @Get(findroutes.clientAllData)
@@ -68,35 +56,12 @@ export class FindController {
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    try {
-      const adminAuth = await this.perm.adminAuth(req);
-      let client: clientJwt;
-      if (!adminAuth) {
-        client = await this.perm.checkPermissions(req);
-      }
-      if (
-        (!adminAuth && client.lastname !== lastname) ||
-        client.name !== name
-      ) {
-        throw new HttpException('not permited', HttpStatus.FORBIDDEN);
-      }
-      /*------*/
-      const resp = await this.service.Get_Client(name, lastname);
-      const obj = {
-        name: resp.name,
-        lastname: resp.lastname,
-        email: resp.email,
-        id: resp.id,
-        createDate: resp.createdAt,
-        order: resp.purchase_order,
-      };
-      res.status(HttpStatus.OK).json(obj);
-    } catch (e) {
-      if (e instanceof Error && e.message.length !== 0) {
-        throw new HttpException(`error: ${e.message}`, HttpStatus.BAD_REQUEST);
-      }
-      throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.clientAllDataMethod.clientAllData(
+      name,
+      lastname,
+      req,
+      res,
+    );
   }
   /*-----*/
   @Get(findroutes.productPurchase)
@@ -107,32 +72,13 @@ export class FindController {
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    try {
-      const adminAuth = await this.perm.adminAuth(req);
-      let client: clientJwt;
-      if (!adminAuth) {
-        client = await this.perm.checkPermissions(req);
-      }
-      if (
-        (!adminAuth && client.lastname !== lastname) ||
-        client.name !== name
-      ) {
-        throw new HttpException('not permited', HttpStatus.FORBIDDEN);
-      }
-      /*----*/
-      const resp = await this.service.Get_Client_Product_Purchase(
-        name,
-        lastname,
-      );
-      res.status(HttpStatus.ACCEPTED).json(resp);
-    } catch (e) {
-      if (e instanceof Error && e.message.length !== 0) {
-        throw new HttpException(`error: ${e.message}`, HttpStatus.BAD_REQUEST);
-      }
-      throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.productPurchaseMethod.productPurchase(
+      name,
+      lastname,
+      req,
+      res,
+    );
   }
-  // id
   // solo para administrador
   @UseGuards(guardAdmin)
   @Get(':id')

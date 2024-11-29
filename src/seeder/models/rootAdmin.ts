@@ -3,17 +3,24 @@ import {
   permissions,
 } from 'src/administrator/domain/entity/entityAdminInterface';
 import { hashSync } from 'bcrypt';
+import { Factory } from 'nestjs-seeder';
 
 export class RootSeed implements admin {
-  email: string = 'gatogordo@gmail.com';
+  @Factory('gatogordo@gmail.com')
+  email: string;
 
-  lastname: string = 'piñeiro';
+  @Factory('piñeiro')
+  lastname: string;
 
-  name: string = 'luis';
+  @Factory('luis')
+  name: string;
 
-  password: string = hashSync('luismateo129', 10);
+  @Factory(hashSync('luismateo129', 10))
+  password: string;
 
-  phone: number = 222 - 3422 - 6241;
+  @Factory(222 - 3422 - 6241)
+  phone: number;
 
-  permissions: permissions = permissions.SUPERADMIN;
+  @Factory(permissions.SUPERADMIN)
+  permissions: permissions;
 }

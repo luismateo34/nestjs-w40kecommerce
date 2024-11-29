@@ -10,10 +10,15 @@ import { deleteMethod } from 'src/product/application/usecase/delete';
 import { Product } from 'src/product/infrastructure/database.product';
 /*entity*/
 import { ProductEntity } from 'src/product/infrastructure/Product.entity';
+/*---*/
+import { AdminModule } from 'src/administrator/infrastructure/framework/admin.module';
+import { JwtStrategy } from 'src/administrator/infrastructure/framework/strategies/jwt/jwt.strategy';
+/*----*/
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProductEntity])],
+  imports: [AdminModule, TypeOrmModule.forFeature([ProductEntity])],
   providers: [
+    JwtStrategy,
     {
       provide: 'database',
       useClass: Product,

@@ -11,7 +11,7 @@ import { TypeOrmoptions } from 'src/database/typeorm';
 /*Modules*/
 import { AdminModule } from 'src/administrator/infrastructure/framework/admin.module';
 import { MainCashflowModule } from 'src/cashflow/infrastructure/framework/main-cashflow.module';
-import { PurchaseModule } from 'src/purchase/infrastructure/frameworke/purchase.module';
+import { PurchaseModule } from 'src/purchase/infrastructure/framework/purchase.module';
 import { ProductModule } from 'src/product/infrastructure/framework/product.module';
 import { ClientModule } from 'src/client/infrastructure/framework/client.module';
 /*modules paths*/
