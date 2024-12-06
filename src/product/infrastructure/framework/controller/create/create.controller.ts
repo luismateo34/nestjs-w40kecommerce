@@ -14,13 +14,25 @@ import { subRoutes } from 'src/product/application/routes/productRoute';
 import { createDto } from 'src/product/application/validate/create';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 /*---*/
+
+@ApiTags(subRoutes.create)
 @Controller(subRoutes.create)
 export class CreateController {
   constructor(@Inject('CreateMethod') private readonly create: CreateMethod) {}
 
   @Post()
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UsePipes(new ValidationPipe({ transform: true }))
   async create_Product(createDto: createDto, @Res() res: Response) {
     try {

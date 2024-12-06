@@ -12,7 +12,10 @@ import { subRoutes } from 'src/product/application/routes/productRoute';
 import { deleteMethod } from 'src/product/application/usecase/delete';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+/*--*/
 
+@ApiTags(subRoutes.delete)
 @Controller(subRoutes.delete)
 export class DeleteController {
   constructor(
@@ -20,6 +23,15 @@ export class DeleteController {
   ) {}
 
   @Delete(':id')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UseGuards(JwtAuthGuard)
   async delete_Product(@Param('id') id: string, @Res() res: Response) {
     try {

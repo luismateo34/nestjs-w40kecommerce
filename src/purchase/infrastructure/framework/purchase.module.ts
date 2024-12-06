@@ -13,11 +13,23 @@ import { Order } from 'src/purchase/infrastructure/database.purchase';
 import { JwtStrategy } from 'src/administrator/infrastructure/framework/strategies/jwt/jwt.strategy';
 /*entity*/
 import { OrderEntity } from 'src/purchase/infrastructure/PurchaseOrder.entity';
+/*----*/
+import { ClientModule } from 'src/client/infrastructure/framework/client.module';
+import { JwtStrategy as clientJwtStrategy } from 'src/client/infrastructure/framework/strategies/JwtStrategies.client';
+/*----*/
+/*----*/
 
 @Module({
-  imports: [AdminModule, JwtStrategy, TypeOrmModule.forFeature([OrderEntity])],
+  imports: [
+    AdminModule,
+    JwtStrategy,
+    ClientModule,
+    clientJwtStrategy,
+    TypeOrmModule.forFeature([OrderEntity]),
+  ],
   providers: [
     JwtStrategy,
+    clientJwtStrategy,
     {
       provide: 'database',
       useClass: Order,

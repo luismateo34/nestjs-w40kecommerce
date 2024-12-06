@@ -2,12 +2,9 @@ import { client } from '@/client/domain/entity/entityInterfaceClient';
 
 export interface usecase {
   Get_Client(name: string, lastname: string): Promise<client>;
-  Get_Client_Product_Purchase(
-    name: string,
-    lastname: string,
-  ): Promise<string[]>;
-  Get_Client_Order_Purchase(name: string, lastname: string): Promise<string[]>;
+  Get_Client_Order_Purchase(id: string): Promise<string[]>;
   Get_Client_by_Id(id: string): Promise<client>;
+  /*----*/
   Create_Client(
     name: string,
     lastname: string,
@@ -15,6 +12,7 @@ export interface usecase {
     email: string,
   ): Promise<void>;
   // update
+  Update_Purchase_orders(id: string, order: string[]): Promise<void>;
   Update_Client_Name(name: string, lastname: string): Promise<void>;
   Update_Client_Email(
     name: string,

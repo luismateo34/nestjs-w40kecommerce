@@ -1,4 +1,5 @@
 import { OrderPurchase } from '@/purchase/domain/entity/entityInterfaceOrder';
+import { client } from 'src/client/domain/entity/entityInterfaceClient';
 import {
   IsNotEmpty,
   IsNumber,
@@ -20,7 +21,7 @@ export class totalDto implements validate {
   @ArrayNotEmpty()
   @ArrayMaxSize(2)
   @ArrayMinSize(2)
-  client:string[];
+  client: client;
   @IsNotEmpty()
   @IsDate()
   date: Date;

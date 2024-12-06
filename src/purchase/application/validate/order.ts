@@ -1,34 +1,33 @@
 import {
   IsNotEmpty,
-  IsBoolean,
   IsNumber,
   IsArray,
-  ArrayMinSize,
-  ArrayMaxSize,
+  IsUUID,
+  IsString,
+  ValidateNested,
 } from 'class-validator';
 import { orderCreate } from '@/purchase/domain/usecase/usecases';
+import { client } from '@/client/domain/entity/entityInterfaceClient';
 
-export type OrderWithoutDate = Omit<orderCreate, 'date' | 'envoy'>;
+type createBodydto = Omit<orderCreate, 'envoy' | 'id'>;
+export type createtype = Omit<orderCreate, 'envoy'>;
 
-export class createDto implements OrderWithoutDate {
-  /*-----*/
+export class createBodyDto implements createBodydto {
+
   @IsNotEmpty()
-  @IsArray()
-  @ArrayMinSize(2)
-  @ArrayMaxSize(2, { each: true })
-  client: string[];
+  @ValidateNested()
+  client: client;
 
-  /*-----*/
   @IsNotEmpty()
   @IsNumber()
   amount: number;
 
-  /*-----*/
-
-  envoy: boolean;
-
-  /*-----*/
+  @IsNotEmpty()
+  @IsString()
+  @IsUUID()
+  clientId: string;
   @IsNotEmpty()
   @IsArray({ each: true })
   products: string[];
 }
+

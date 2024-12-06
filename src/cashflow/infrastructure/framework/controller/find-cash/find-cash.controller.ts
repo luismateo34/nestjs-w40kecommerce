@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  Query,
-  Response,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, HttpStatus, Query, Response, UseGuards } from '@nestjs/common';
 import type { Response as expressResponse } from 'express';
 import {
   findEnum,
@@ -19,7 +13,10 @@ import { ExpenseDayMethod } from './method/expenseDayMethod';
 import { ExpenseMonthMethod } from './method/expenseMonth';
 import { RevenueDayMethod } from './method/revenueDayMethod';
 import { RevenueMonthMethod } from './method/revenueMonthMethod';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+/*---*/
+@ApiTags(subRoutes.find)
 @Controller(subRoutes.find)
 export class FindCashController {
   constructor(
@@ -33,6 +30,15 @@ export class FindCashController {
   /*----*/
   @Get(`${findEnum.findBalance}_${findSearchEnum.day}`)
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   async balanceday(
     @Query('year') year: number,
     @Query('year') month: string_month_spanish,
@@ -91,6 +97,6 @@ export class FindCashController {
     @Query('year') month: string_month_spanish,
     @Response() res: expressResponse,
   ) {
-   return await this.revenueMonth.revenueMonth(year, month, res)
+    return await this.revenueMonth.revenueMonth(year, month, res);
   }
 }

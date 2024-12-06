@@ -1,6 +1,6 @@
 import {
   updateDriven,
-  updateDriver,
+  updateDriving,
   findDriven,
 } from 'src/purchase/domain/adapter/driving';
 import { UpdateOrder } from 'src/purchase/domain/port/driving/for-update';
@@ -9,9 +9,9 @@ import { orderCreate } from '@/purchase/domain/usecase/usecases';
 import { OrderWithoutDate } from 'src/purchase/application/validate/order';
 
 export class updateMethod implements UpdateOrder {
-  private service: updateDriver;
+  private service: updateDriving;
   constructor(readonly database: ormPurchase) {
-    this.service = new updateDriver(
+    this.service = new updateDriving(
       new updateDriven(database),
       new findDriven(database),
     );

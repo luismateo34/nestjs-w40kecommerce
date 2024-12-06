@@ -21,8 +21,10 @@ import { nameDto } from 'src/client/application/validate/updateName';
 import { nameDto as passwordDto } from 'src/client/application/validate/name';
 import { permissions } from 'src/client/infrastructure/framework/permission/permission';
 import { clientJwt } from 'src/client/application/type/clientJtw';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 /*---*/
+@ApiTags(subroutes.update)
 @Controller(subroutes.update)
 export class UpdateController {
   constructor(
@@ -31,6 +33,15 @@ export class UpdateController {
   ) {}
   /*---*/
   @Put(updateroutes.email)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UsePipes(new ValidationPipe({ transform: true }))
   async updateEmail(
     @Body() email: email_update_Dto,
@@ -41,7 +52,7 @@ export class UpdateController {
       const adminAuth = await this.permin.adminAuth(req);
       let client: clientJwt;
       if (!adminAuth) {
-        client = await this.permin.checkPermissions(req);
+        client = await this.permin.clientPayload(req);
       }
       if (
         (!adminAuth && client.lastname !== email.lastname) ||
@@ -65,6 +76,15 @@ export class UpdateController {
   }
   /*----*/
   @Put(updateroutes.name)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UsePipes(new ValidationPipe({ transform: true }))
   async updateName(
     @Body() nameUpdate: nameDto,
@@ -75,7 +95,7 @@ export class UpdateController {
       const adminAuth = await this.permin.adminAuth(req);
       let client: clientJwt;
       if (!adminAuth) {
-        client = await this.permin.checkPermissions(req);
+        client = await this.permin.clientPayload(req);
       }
       if (
         (!adminAuth && client.lastname !== nameUpdate.lastname) ||
@@ -96,7 +116,17 @@ export class UpdateController {
       throw new HttpException(`error`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  /*----*/
   @Put(updateroutes.password)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UsePipes(new ValidationPipe({ transform: true }))
   async updatePassword(
     @Body() passw: passwordDto,
@@ -107,7 +137,7 @@ export class UpdateController {
       const adminAuth = await this.permin.adminAuth(req);
       let client: clientJwt;
       if (!adminAuth) {
-        client = await this.permin.checkPermissions(req);
+        client = await this.permin.clientPayload(req);
       }
       if (
         (!adminAuth && client.lastname !== passw.lastname) ||

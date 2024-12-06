@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { RouterModule } from '@nestjs/core';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 /*constroller*/
 import { AppController } from './app.controller';
 /*service*/
@@ -27,6 +28,7 @@ import { purchaseRoute } from 'src/purchase/application/routes/purchaseRoutes';
     ConfigModule.forRoot({
       envFilePath: '../.env',
     }),
+    EventEmitterModule.forRoot(),
     AdminModule,
     MainCashflowModule,
     PurchaseModule,

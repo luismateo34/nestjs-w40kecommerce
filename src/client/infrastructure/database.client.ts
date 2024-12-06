@@ -9,6 +9,9 @@ export class Client implements ormclient {
     @InjectRepository(ClientEntity)
     private adminInject: Repository<ClientEntity>,
   ) {}
+  async update_purchase_orders(id: string, order: string[]): Promise<void> {
+    await this.adminInject.update({ id: id }, { purchase_order: order });
+  }
   async Update_Client_Password(
     name: string,
     lastname: string,

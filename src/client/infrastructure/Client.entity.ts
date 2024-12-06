@@ -3,7 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -24,9 +24,9 @@ export class ClientEntity implements client {
   @Column()
   email: string;
 
-  @ManyToOne(() => OrderEntity, (item) => item.client)
+  @OneToMany(() => OrderEntity, (item) => item.id)
   @JoinColumn({ name: 'purchase_order' })
-  purchase_order: string[];
+  purchase_order: OrderEntity[] | null;
 
   @PrimaryGeneratedColumn('uuid')
   id!: string;

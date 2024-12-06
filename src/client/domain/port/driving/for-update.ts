@@ -10,4 +10,5 @@ export interface updateClientDriving {
     lastname: string,
     password: string,
   ): Promise<'success'>;
+  Update_Purchase_orders(id: string, order: string[]): Promise<void>;
 }

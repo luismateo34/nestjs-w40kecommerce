@@ -31,4 +31,7 @@ export class UpdateMethod implements updateClientDriving {
   ): Promise<'success'> {
     return await this.service.Update_Client_Password(name, lastname, password);
   }
+  async Update_Purchase_orders(id: string, order: string[]): Promise<void> {
+    await this.service.Update_Purchase_orders(id, order);
+  }
 }

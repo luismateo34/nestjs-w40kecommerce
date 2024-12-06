@@ -13,13 +13,25 @@ import {
 } from 'src/product/application/routes/productRoute';
 import { findMethod } from 'src/product/application/usecase/find';
 import { Response } from 'express';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+/*---*/
 
+@ApiTags(subRoutes.find)
 @Controller(subRoutes.find)
 export class FindController {
   constructor(private readonly methodFind: findMethod) {}
 
   /*---*/
   @Get(findRoutes.productbyname)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   async findRoutes(@Query('name') name: string, @Res() res: Response) {
     try {
       const resp = await this.methodFind.find_Product_by_Name(name);
@@ -34,6 +46,15 @@ export class FindController {
 
   /*---*/
   @Get(findRoutes.stockproductname)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   async stock_product(@Query('name') name: string, @Res() res: Response) {
     try {
       const resp = await this.methodFind.find_Stock_productName(name);
@@ -48,6 +69,15 @@ export class FindController {
 
   /*---*/
   @Get(findRoutes.productsGender)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   async productgender(@Query('gender') gender: string, @Res() res: Response) {
     try {
       const resp = await this.methodFind.find_Products_Gender(gender);
@@ -61,6 +91,15 @@ export class FindController {
   }
   /*---*/
   @Get(findRoutes.productsCategory)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   async products_category(
     @Query('category') category: string,
     @Res() res: Response,
@@ -77,6 +116,15 @@ export class FindController {
   }
   /*----*/
   @Get(findRoutes.productsFranchise)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   async Products_Franchise(
     @Query('franchise') franchise: string,
     @Res() res: Response,
@@ -93,6 +141,15 @@ export class FindController {
   }
   /*---*/
   @Get(`${findRoutes.stockproductnameId}/:id`)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   async stock_productNameId(@Param('id') id: string, @Res() res: Response) {
     try {
       const resp = await this.methodFind.find_Stock_productId(id);
@@ -107,6 +164,15 @@ export class FindController {
 
   //id
   @Get(`${findRoutes.stockproductbyId}/:id`)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   async product_by_Id(@Param('id') id: string, @Res() res: Response) {
     try {
       const resp = await this.methodFind.find_Stock_Product_by_Id(id);

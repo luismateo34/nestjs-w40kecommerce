@@ -2,14 +2,14 @@ import {
   Column,
   Entity,
   DeleteDateColumn,
-  ManyToMany,
-  JoinTable,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
 } from 'typeorm';
 import { product } from '../domain/entity/entityInterfaceProduct';
-import { OrderEntity } from '../../purchase/infrastructure/PurchaseOrder.entity';
+import { OrderEntity } from 'src/purchase/infrastructure/PurchaseOrder.entity';
+import { OrderPurchase } from '@/purchase/domain/entity/entityInterfaceOrder';
 
 @Entity({ name: 'products' })
 export class ProductEntity implements product {
@@ -27,10 +27,6 @@ export class ProductEntity implements product {
     type: 'timestamp',
   })
   updatedAt!: Date;
-  // ordenes de compra donde aprarece el producto
-  @ManyToMany(() => OrderEntity, (item) => item.products)
-  @JoinTable({ name: 'order_product' })
-  order_product: string[];
 
   @Column()
   name: string;
@@ -58,4 +54,7 @@ export class ProductEntity implements product {
 
   @Column({ nullable: true })
   franchise: string;
+
+  @ManyToMany(() => OrderEntity, (item)=> item.products )
+  OrderPurchase: OrderPurchase[];
 }

@@ -3,7 +3,6 @@ import { Seeder, DataFactory } from 'nestjs-seeder';
 import { AdminSeed } from '../models/admin';
 import { RootSeed } from '../models/rootAdmin';
 import { singleclientSeed } from '../models/singleClient';
-import { PurchaseSeed } from '../models/purchase';
 import { cashSeeder } from '../models/cashflow';
 import { clientSeed } from '../models/client';
 import { Delete } from 'src/administrator/application/usecase/delete';
@@ -19,7 +18,6 @@ export class AdminSeeder implements Seeder {
     DataFactory.createForClass(AdminSeed).generate(5);
     DataFactory.createForClass(RootSeed).generate(1);
     DataFactory.createForClass(clientSeed).generate(5);
-    DataFactory.createForClass(PurchaseSeed).generate(5);
     DataFactory.createForClass(singleclientSeed).generate(1);
     DataFactory.createForClass(cashSeeder).generate(1);
   }

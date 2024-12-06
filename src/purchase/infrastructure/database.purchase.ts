@@ -14,28 +14,28 @@ export class Order implements ormPurchase {
   async delete(id: string): Promise<void> {
     await this.adminInject.delete({ id: id });
   }
-
+  async find_by_clientId(clientId: string): Promise<OrderPurchase[]> {
+    return await this.adminInject.findBy({ clientId: clientId });
+  }
   async update_Envoy(id: string, envoy: boolean): Promise<void> {
     await this.adminInject.update({ id: id }, { envoy: envoy });
-  }
-  async find_by_client_name(name: string): Promise<OrderPurchase[]> {
-    return await this.adminInject.findBy({ client: name });
   }
   async find_Id(id: string): Promise<OrderPurchase> {
     return await this.adminInject.findOneBy({ id: id });
   }
   async find_orders_by_day(day: Date, nextDay: Date): Promise<OrderPurchase[]> {
-    const resp = await this.adminInject.findBy({ date: Between(day, nextDay) });
+    const resp = await this.adminInject.findBy({
+      createdAt: Between(day, nextDay),
+    });
     const obj = resp.map((el) => {
       const obj: OrderPurchase = {
         amount: el.amount,
-        client: el.client,
         createdAt: el.createdAt,
-        date: el.date,
         envoy: el.envoy,
         id: el.id,
         products: el.products,
         updatedAt: el.updatedAt,
+	client: el.client
       };
       return obj;
     });
@@ -47,18 +47,17 @@ export class Order implements ormPurchase {
     nextMonth: Date,
   ): Promise<OrderPurchase[]> {
     const resp = await this.adminInject.findBy({
-      date: Between(month, nextMonth),
+      createdAt: Between(month, nextMonth),
     });
     const obj = resp.map((el) => {
       const obj: OrderPurchase = {
         amount: el.amount,
-        client: el.client,
         createdAt: el.createdAt,
-        date: el.date,
         envoy: el.envoy,
         id: el.id,
         products: el.products,
         updatedAt: el.updatedAt,
+	client: el.client,
       };
       return obj;
     });
@@ -73,24 +72,23 @@ export class Order implements ormPurchase {
     const dayDate = new Date(year, month, day, 0, 0, 0);
     const nextdayDate = new Date(year, month, day + 1, 0, 0, 0);
     const obj = await this.adminInject.findBy({
-      date: Between(dayDate, nextdayDate),
+      createdAt: Between(dayDate, nextdayDate),
     });
     const resp = obj.map((el) => {
       const objEl: OrderPurchase = {
         amount: el.amount,
-        client: el.client,
         createdAt: el.createdAt,
-        date: el.date,
         envoy: el.envoy,
         id: el.id,
         products: el.products,
         updatedAt: el.updatedAt,
+	client: el.client
       };
       return objEl;
     });
     return resp;
   }
-  async save(order: orderCreate): Promise<void> {
-    await this.adminInject.save(order);
+  async save(order: orderCreate): Promise<OrderEntity> {
+  return  await this.adminInject.save(order);
   }
 }

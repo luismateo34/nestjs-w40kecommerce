@@ -1,6 +1,8 @@
-import { updateClientDriving } from '@/client/domain/port/driving/for-update';
-import { getclient } from '@/client/domain/port/driven/for-getClient-driven';
-import { updateType } from '@/client/domain/port/driven/for-updateClient-driven';
+import { updateClientDriving } from 'src/client/domain/port/driving/for-update';
+import { getclient } from 'src/client/domain/port/driven/for-getClient-driven';
+import { updateType } from 'src/client/domain/port/driven/for-updateClient-driven';
+import { UpdatePurchase } from 'src/client/domain/validation/validate';
+import { validate } from 'class-validator';
 
 export class Update implements updateClientDriving {
   constructor(
@@ -38,5 +40,15 @@ export class Update implements updateClientDriving {
     }
     await this.method.Update_Client_Password(name, lastname, password);
     return 'success';
+  }
+  async Update_Purchase_orders(id: string, order: string[]): Promise<void> {
+    const dto = new UpdatePurchase();
+    dto.id = id;
+    dto.purchase_orders = order;
+    const error = await validate(dto);
+    if (error.length > 0) {
+      throw new Error('datos no validos');
+    }
+    await this.method.Update_Purchase_orders(id, order);
   }
 }

@@ -26,8 +26,8 @@ export class permissions {
       return false;
     }
   }
-
-  async checkPermissions(req: Request) {
+  // EXTRACT CLIENT PAYLOAD
+  async clientPayload(req: Request) {
     const cookie = req.cookies.access_token_client as string;
     const payCipher = cipher.decrypted(cookie);
     const payload = (await this.jwt.decode(payCipher)) as clientJwt;

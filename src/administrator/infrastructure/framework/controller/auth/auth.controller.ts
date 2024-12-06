@@ -18,7 +18,9 @@ import { JwtMethod } from 'src/administrator/infrastructure/framework/service/jw
 import { RefreshMethod } from 'src/administrator/infrastructure/framework/service/refresh/refresh.service';
 import { refreshGuard } from 'src/administrator/infrastructure/framework/guard/refresh/refresh.guard';
 import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags(routes.auth)
 @Controller(routes.auth)
 export class AuthController {
   constructor(
@@ -28,6 +30,18 @@ export class AuthController {
   /*-----*/
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'bad request',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'error en el servidor',
+  })
   @Post(auth.login)
   async login(
     @Response() res: ResponseExpress,
@@ -39,6 +53,15 @@ export class AuthController {
   /*-----*/
   @UseGuards(LocalAuthGuard)
   @Post(auth.logaut)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'bad request' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'error en el servidor',
+  })
   async logout(@Request() req: any, @Response() res: ResponseExpress) {
     res
       .json({
@@ -53,6 +76,15 @@ export class AuthController {
   /*-----*/
   @UseGuards(refreshGuard)
   @Post(auth.refresh)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'bad request' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   async refresh(
     @Response() res: ResponseExpress,
     @Request() req: RequestExpress,

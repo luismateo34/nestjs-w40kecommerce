@@ -23,9 +23,7 @@ export class createDto implements createProduct {
   @IsNotEmpty()
   @IsString()
   gender: string;
-  @IsNotEmpty()
-  @IsArray({ each: true })
-  order_product: string[];
+
   @IsNotEmpty()
   @IsNumber()
   percentaje_discount: number;

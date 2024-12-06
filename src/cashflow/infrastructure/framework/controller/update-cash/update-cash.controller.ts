@@ -19,7 +19,9 @@ import {
 } from 'src/cashflow/application/validate/create';
 import { revenueDay } from 'src/cashflow/application/validate/create';
 import { JwtAuthGuard } from '@/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
-
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+/*---*/
+@ApiTags(subRoutes.update)
 @Controller(subRoutes.update)
 export class UpdateCashController {
   constructor(@Inject('UpdateMethod') private readonly update: UpdateMethod) {}
@@ -27,6 +29,15 @@ export class UpdateCashController {
   @HttpCode(HttpStatus.OK)
   @Put(updateEnum.Balance_Day)
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UsePipes(new ValidationPipe({ transform: true }))
   async balanceday(@Body() Create: createcash) {
     try {
@@ -43,6 +54,15 @@ export class UpdateCashController {
   @Put(updateEnum.Balance_Month)
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UsePipes(new ValidationPipe({ transform: true }))
   async balanceMonth(@Body() Create: createcashMonth) {
     try {
@@ -60,6 +80,15 @@ export class UpdateCashController {
   @HttpCode(HttpStatus.OK)
   @Put(updateEnum.Expense_Day)
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UsePipes(new ValidationPipe({ transform: true }))
   async expenseday(@Body() Create: expenseDay) {
     try {
@@ -77,6 +106,15 @@ export class UpdateCashController {
   @HttpCode(HttpStatus.OK)
   @Put(updateEnum.Expense_Month)
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UsePipes(new ValidationPipe({ transform: true }))
   async expensemonth(@Body() Create: createcashMonth) {
     try {
@@ -94,6 +132,15 @@ export class UpdateCashController {
   @HttpCode(HttpStatus.OK)
   @Put(updateEnum.Revenue_Month)
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UsePipes(new ValidationPipe({ transform: true }))
   async revenueMonth(@Body() Create: createcashMonth) {
     try {
@@ -111,6 +158,15 @@ export class UpdateCashController {
   @HttpCode(HttpStatus.OK)
   @Put(updateEnum.Revenue_Day)
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UsePipes(new ValidationPipe({ transform: true }))
   async revenueday(@Body() Create: revenueDay) {
     try {

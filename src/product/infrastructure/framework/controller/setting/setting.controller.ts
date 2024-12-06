@@ -22,7 +22,10 @@ import {
 } from 'src/product/application/validate/Setting';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 /*---*/
+
+@ApiTags(subRoutes.setting)
 @Controller(subRoutes.setting)
 export class SettingController {
   constructor(
@@ -31,6 +34,15 @@ export class SettingController {
   /*---*/
   @Patch(settingRoutes.discountproduct)
   @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UseGuards(JwtAuthGuard)
   async discont_product(
     @Body() discountObj: DiscountDto,
@@ -50,6 +62,15 @@ export class SettingController {
   /*---*/
   @Patch(settingRoutes.priceproduct)
   @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UseGuards(JwtAuthGuard)
   async price_product(@Body() priceObj: PriceDto, @Res() res: Response) {
     try {
@@ -66,6 +87,15 @@ export class SettingController {
   /*---*/
   @Patch(settingRoutes.stockproduct)
   @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UseGuards(JwtAuthGuard)
   async stock_product(@Body() stockobj: StockDto, @Res() res: Response) {
     try {

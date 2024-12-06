@@ -17,8 +17,10 @@ import { DeleteDto } from 'src/administrator/application/validation/delete';
 import { Roles } from 'src/administrator/infrastructure/framework/decorator/roleDecorator';
 import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
 import { RoleGuard } from 'src/administrator/infrastructure/framework/guard/role/role.guard';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 // borrar administrador
+@ApiTags(routes.delete)
 @Controller(routes.delete)
 export class DeleteController {
   constructor(@Inject('Delete') private readonly deleteMethod: DeleteCase) {}
@@ -26,6 +28,15 @@ export class DeleteController {
   @Roles(permissions.SUPERADMIN)
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'bad request' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   @UsePipes(new ValidationPipe({ transform: true }))
   @DeleteMethod()
   async delete(@Body() deleteDto: DeleteDto) {

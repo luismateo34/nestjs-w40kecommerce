@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { clientJwt } from '@/client/application/type/clientJtw';
+import { clientJwt } from 'src/client/application/type/clientJtw';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { FindMethod } from 'src/client/application/usecase/find';
 import { permissions } from 'src/client/infrastructure/framework/permission/permission';
@@ -20,7 +20,7 @@ export class ClientAllDataMehtod {
       const adminAuth = await this.perm.adminAuth(req);
       let client: clientJwt;
       if (!adminAuth) {
-        client = await this.perm.checkPermissions(req);
+        client = await this.perm.clientPayload(req);
       }
       if (
         (!adminAuth && client.lastname !== lastname) ||

@@ -11,13 +11,8 @@ export class FindDriven implements getclient {
   async Get_Client_by_Id(id: string): Promise<client> {
     return await this.client.get_by_id(id);
   }
-
-  async Get_Client_Order_Purchase(
-    name: string,
-    lastname: string,
-  ): Promise<string[]> {
-    const res = await this.client.get_by_name_lastname(name, lastname);
-    const order = res.purchase_order;
-    return order;
+  async Get_Client_Order_Purchase(id: string): Promise<string[]> {
+    const res = await this.client.get_by_id(id);
+    return res.purchase_order;
   }
 }

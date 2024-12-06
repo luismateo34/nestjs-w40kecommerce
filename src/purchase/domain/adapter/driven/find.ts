@@ -4,10 +4,11 @@ import { ormPurchase } from 'src/purchase/domain/entity/ormPurchase';
 
 export class Find implements findType {
   constructor(private method: ormPurchase) {}
-  async find_Client(name: string): Promise<OrderPurchase[]> {
-    const resp = await this.method.find_by_client_name(name);
+  async find_by_Id(id: string): Promise<OrderPurchase> {
+    const resp = await this.method.find_Id(id);
     return resp;
   }
+  /*----*/
   async find_Orders_Date(
     year: number,
     month: number,
@@ -20,6 +21,7 @@ export class Find implements findType {
     );
     return resp;
   }
+  /*----*/
   async find_Orders_Month(
     year: number,
     month: number,
@@ -30,16 +32,5 @@ export class Find implements findType {
       new Date(year, monthNext, 1, 0),
     );
     return resp;
-  }
-
-  async find_Id(id: string): Promise<OrderPurchase> {
-    const resp = await this.method.find_Id(id);
-    return resp;
-  }
-
-  async find_client_Id(name: string, id: string): Promise<OrderPurchase> {
-    const resp = await this.find_Client(name);
-    const search = resp.find((el) => el.id === id);
-    return search;
   }
 }

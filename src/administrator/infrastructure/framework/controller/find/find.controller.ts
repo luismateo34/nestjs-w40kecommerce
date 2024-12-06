@@ -1,12 +1,21 @@
-import { Controller, Get, UseGuards, Query, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  UseGuards,
+  Query,
+  Res,
+  HttpStatus,
+} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
 import { routes, routFind } from 'src/administrator/application/router/router';
 import { type Response as ExpRes } from 'express';
 import { lastname } from './method/lastnameMethod';
 import { Emailmethod } from './method/EmailMethod';
 import { Allmethod } from './method/allMethod';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 /*----*/
+@ApiTags(routes.find)
 @Controller(routes.find)
 export class FindController {
   constructor(
@@ -17,6 +26,15 @@ export class FindController {
   /*---*/
   @UseGuards(JwtAuthGuard)
   @Get(routFind.byName)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'bad request' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   async find_Name_Lastname(
     @Query('name') name: string,
     @Query('lastname') lastname: string,
@@ -26,11 +44,29 @@ export class FindController {
   }
   /*----*/
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'bad request' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   @Get(routFind.byEmail)
   async find_Email(@Query('email') email: string, @Res() res: ExpRes) {
     return await this.emailmethod.find_Email(email, res);
   }
   @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'bad request' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   @Get(routFind.all)
   async find_All(@Res() res: ExpRes) {
     return await this.allmethod.find_All(res);

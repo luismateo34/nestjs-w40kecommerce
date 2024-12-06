@@ -6,7 +6,7 @@ export {
   Update as updateDriven,
 } from 'src/purchase/domain/adapter/driven';
 /*--driving adapter--*/
-export { CreateOrderImpl as CreateDriver } from './create';
-export { Find as findDriver } from './find';
-export { UpdateOrderImpl as updateDriver } from './update';
-export { Delete as DeleteDriver } from './delete';
+export { CreateOrderImpl as CreateDriving } from './create';
+export { Find as findDriving } from './find';
+export { UpdateOrderImpl as updateDriving } from './update';
+export { Delete as DeleteDriving } from './delete';

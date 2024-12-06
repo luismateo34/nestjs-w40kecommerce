@@ -1,5 +1,5 @@
 import { OrderPurchase } from 'src/purchase/domain/entity/entityInterfaceOrder';
-import { findDriven, findDriver } from 'src/purchase/domain/adapter/driving';
+import { findDriven, findDriving } from 'src/purchase/domain/adapter/driving';
 import { ormPurchase } from 'src/purchase/domain/entity/ormPurchase';
 import {
   NumberMonth,
@@ -8,21 +8,13 @@ import {
 import { dateFind } from 'src/purchase/application/interface/FindType';
 
 export class FindMethod implements dateFind {
-  private service: findDriver;
+  private service: findDriving;
   constructor(readonly database: ormPurchase) {
-    this.service = new findDriver(new findDriven(database));
+    this.service = new findDriving(new findDriven(database));
   }
   /*----*/
-  async find_Client(name: string): Promise<OrderPurchase[]> {
-    return await this.service.find_Client(name);
-  }
-  /*----*/
-  async find_Id(id: string): Promise<OrderPurchase> {
-    return await this.service.find_Id(id);
-  }
-  /*----*/
-  async find_Id_Client(id: string, name: string): Promise<OrderPurchase> {
-    return await this.service.find_Id_Client(id, name);
+  async find_by_Id(id: string): Promise<OrderPurchase> {
+    return await this.service.find_by_Id(id);
   }
   /*----*/
   async find_Orders_Date(

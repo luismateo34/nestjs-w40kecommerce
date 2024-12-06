@@ -16,14 +16,25 @@ import { routes } from 'src/administrator/application/router/router';
 import { Roles } from 'src/administrator/infrastructure/framework/decorator/roleDecorator';
 import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
 import { RoleGuard } from 'src/administrator/infrastructure/framework/guard/role/role.guard';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 // crear administrador
+@ApiTags(routes.create)
 @Controller(routes.create)
 export class CreateController {
   constructor(@Inject('Register') private readonly register: Register) {}
   @Roles(permissions.SUPERADMIN)
   @UseGuards(JwtAuthGuard, RoleGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'bad request' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'internal server error',
+  })
   @Post()
   async create(@Body() admindto: AdminDto) {
     try {

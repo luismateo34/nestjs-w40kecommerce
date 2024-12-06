@@ -19,7 +19,6 @@ export enum authroutes {
 export enum findroutes {
   orderPurchase = 'orderPurchase',
   clientAllData = 'clientAllData',
-  productPurchase = 'productPurchase',
   id = 'id',
 }
 /*---*/

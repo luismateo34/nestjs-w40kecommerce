@@ -1,11 +1,4 @@
-import {
-  IsNotEmpty,
-  IsString,
-  IsDate,
-  IsOptional,
-  IsNumber,
-  IsArray,
-} from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsNumber } from 'class-validator';
 import { createProduct } from '@/product/domain/entity/entityInterfaceProduct';
 
 export class ProductDto implements createProduct {
@@ -25,10 +18,6 @@ export class ProductDto implements createProduct {
   @IsString()
   @IsOptional()
   gender: string | null;
-
-  @IsNotEmpty()
-  @IsArray()
-  order_product: string[];
 
   @IsNotEmpty()
   @IsNumber()

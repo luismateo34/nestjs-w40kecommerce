@@ -22,4 +22,7 @@ export class Updatedriven implements updateType {
     const hashpass = await hash(password, 8);
     await this.client.Update_Client_Password(name, lastname, hashpass);
   }
+  async Update_Purchase_orders(id: string, order: string[]): Promise<void> {
+      await this.client.update_purchase_orders(id, order);
+  }
 }

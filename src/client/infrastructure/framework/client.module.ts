@@ -17,10 +17,14 @@ import { JwtStrategy } from 'src/client/infrastructure/framework/strategies/JwtS
 import { JwtClientService } from 'src/client/infrastructure/framework/service/jwt-client/jwt-client.service';
 import { LocalClientService } from 'src/client/infrastructure/framework/service/local-client/local-client.service';
 import { RefreshClientService } from 'src/client/infrastructure/framework/service/refresh-client/refresh-client.service';
+import { FindClientIdService } from 'src/client/infrastructure/framework/service/find-client-id/find-client-id.service';
+import { UpdateClientService } from 'src/client/infrastructure/framework/service/update-client/update-client.service';
 /*Entity*/
 import { ClientEntity } from 'src/client/infrastructure/Client.entity';
 import { AdminEntity } from 'src/administrator/infrastructure/admin.entity';
 /*--------*/
+import { permissions } from 'src/client/infrastructure/framework/permission/permission';
+/*---*/
 
 @Module({
   imports: [
@@ -30,8 +34,11 @@ import { AdminEntity } from 'src/administrator/infrastructure/admin.entity';
     }),
     TypeOrmModule.forFeature([ClientEntity, AdminEntity]),
   ],
-
+  exports: [FindClientIdService],
   providers: [
+    permissions,
+    FindClientIdService,
+    UpdateClientService,
     LocalStrategy,
     JwtStrategy,
     JwtClientService,

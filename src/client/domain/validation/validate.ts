@@ -1,5 +1,12 @@
 import { client } from '../entity/entityInterfaceClient';
-import { IsEmail, Min, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEmail,
+  Min,
+  IsNotEmpty,
+  IsString,
+  IsArray,
+  IsUUID,
+} from 'class-validator';
 
 type clientType = Pick<client, 'name' | 'lastname' | 'email' | 'password'>;
 
@@ -20,4 +27,14 @@ export class clientDTO implements clientType {
   @IsNotEmpty()
   @IsString()
   password: string;
+}
+export class UpdatePurchase {
+  @IsNotEmpty()
+  @IsUUID()
+  @IsString()
+  id: string;
+
+  @IsNotEmpty()
+  @IsArray({ each: true })
+  purchase_orders: string[];
 }

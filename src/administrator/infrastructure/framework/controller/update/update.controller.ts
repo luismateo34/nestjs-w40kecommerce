@@ -24,8 +24,10 @@ import { PhoneMethod } from './method/PhoneMethod';
 import { PermissonMethod } from './method/permissionMethod';
 import { PassMethod } from './method/PasswordMethod';
 import { EmailMethod } from './method/emailMethod';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 // actualizar datos
+@ApiTags(routes.update)
 @Controller(routes.update)
 export class UpdateController {
   constructor(
@@ -39,6 +41,15 @@ export class UpdateController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @Post(updateEnum.phone)
   async phone(@Body() phoneDto: Phone) {
     return await this.phoneMethod.phone(phoneDto);
@@ -48,6 +59,15 @@ export class UpdateController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @Post(updateEnum.permission)
   async permission(@Body() perminssionDto: Permission) {
     return await this.permissionMethod.permission(perminssionDto);
@@ -57,6 +77,15 @@ export class UpdateController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @Post(updateEnum.password)
   async password(@Body() passwordDto: PasswordDto) {
     return await this.passMethod.password(passwordDto);
@@ -66,6 +95,15 @@ export class UpdateController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe({ transform: true }))
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @Post(updateEnum.email)
   async email(@Body() emailDto: EmailDto) {
     return await this.emailMethod.email(emailDto);

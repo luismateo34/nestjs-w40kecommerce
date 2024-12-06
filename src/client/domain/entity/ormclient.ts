@@ -21,4 +21,5 @@ export interface ormclient {
     lastname: string,
     password: string,
   ): Promise<void>;
+  update_purchase_orders(id: string, order: string[]): Promise<void>;
 }

@@ -19,36 +19,48 @@ import { Response, Request } from 'express';
 import { JwtAuthGuard } from 'src/client/infrastructure/framework/guard/jwtGuard';
 import { OrderpurchaseMethod } from './method/orderPurchaseMethod';
 import { ClientAllDataMehtod } from './method/clientAllDataMethod';
-import { ProductPurchaseMethod } from './method/ProductPurchaseMethod';
 /*guard*/
 import { JwtAuthGuard as guardAdmin } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 /*---*/
+@ApiTags(subroutes.find)
 @Controller(subroutes.find)
 export class FindController {
   constructor(
     @Inject('FindMethod') private service: FindMethod,
     private readonly orderPurchaseMethod: OrderpurchaseMethod,
     private readonly clientAllDataMethod: ClientAllDataMehtod,
-    private readonly productPurchaseMethod: ProductPurchaseMethod,
   ) {}
   /*----*/
   @Get(findroutes.orderPurchase)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UseGuards(JwtAuthGuard)
   async orderPurchase(
-    @Query('name') name: string,
-    @Query('lastname') lastname: string,
+    @Query('id') id: string,
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    return await this.orderPurchaseMethod.orderPurchase(
-      name,
-      lastname,
-      req,
-      res,
-    );
+    return await this.orderPurchaseMethod.orderPurchase(id, req, res);
   }
   /*-----*/
   @Get(findroutes.clientAllData)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UseGuards(JwtAuthGuard)
   async clientAllData(
     @Query('name') name: string,
@@ -63,24 +75,17 @@ export class FindController {
       res,
     );
   }
-  /*-----*/
-  @Get(findroutes.productPurchase)
-  @UseGuards(JwtAuthGuard)
-  async productPurchase(
-    @Query('name') name: string,
-    @Query('lastname') lastname: string,
-    @Req() req: Request,
-    @Res() res: Response,
-  ) {
-    return await this.productPurchaseMethod.productPurchase(
-      name,
-      lastname,
-      req,
-      res,
-    );
-  }
   // solo para administrador
   @UseGuards(guardAdmin)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @Get(':id')
   async find_by_Id(@Param('id') id: string, @Res() res: Response) {
     try {

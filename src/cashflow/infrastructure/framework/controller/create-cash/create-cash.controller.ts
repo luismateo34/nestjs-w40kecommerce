@@ -8,13 +8,25 @@ import {
 import { CreateMethod } from 'src/cashflow/application/usacases/create';
 import { subRoutes } from 'src/cashflow/application/routes/routes';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
+/*--*/
+@ApiTags(subRoutes.create)
 @Controller(subRoutes.create)
 export class CreateCashController {
   constructor(
     @Inject('CreateMethod') private readonly createMethod: CreateMethod,
   ) {}
   @Post()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   async create(request: VercelRequest, response: VercelResponse) {
     //const authHeader = request.headers.get('authorization');
     const authHeader = request.headers.authorization;
@@ -38,7 +50,17 @@ export class CreateCashController {
       throw new HttpException('error server', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  /*---*/
   @Post('dev')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   async create_dev() {
     if (process.env.ENVIRONMENT !== 'dev') {
       throw new HttpException(

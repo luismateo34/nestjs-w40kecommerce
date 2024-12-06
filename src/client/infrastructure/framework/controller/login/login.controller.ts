@@ -1,4 +1,11 @@
-import { Controller, Post, Res, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Res,
+  Req,
+  UseGuards,
+  HttpStatus,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import {
   subroutes,
@@ -10,8 +17,9 @@ import { JwtClientService } from 'src/client/infrastructure/framework/service/jw
 import { RefreshClientService } from 'src/client/infrastructure/framework/service/refresh-client/refresh-client.service';
 import { clientJwt } from 'src/client/application/type/clientJtw';
 import { tokenClient } from 'src/client/infrastructure/framework/enum/token';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 /*-----*/
-
+@ApiTags(subroutes.auth)
 @Controller(subroutes.auth)
 export class LoginController {
   constructor(
@@ -28,6 +36,15 @@ export class LoginController {
   }
   /*------*/
   @Post(authroutes.logout)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @UseGuards(localAuthGuard)
   async logout(@Req() req: any, @Res() res: Response) {
     res
@@ -42,6 +59,15 @@ export class LoginController {
   }
   /*------*/
   @UseGuards(refreshAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'The record has been successfully created.',
+  })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Forbidden.' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Forbidden.',
+  })
   @Post(authroutes.refresh)
   async refresh(@Req() req: Request, @Res() res: Response) {
     await this.refreshClientService.RefreshLoggin(req, res);

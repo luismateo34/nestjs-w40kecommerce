@@ -9,7 +9,6 @@ export enum subRoutes {
 }
 
 export enum findRoutes {
-  name = 'name',
   id = 'id',
   id_client = 'id_client',
   orders_date = 'orders_date',

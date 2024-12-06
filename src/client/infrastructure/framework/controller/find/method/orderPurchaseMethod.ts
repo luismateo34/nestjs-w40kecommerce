@@ -11,26 +11,18 @@ export class OrderpurchaseMethod {
     @Inject('FindMethod') private service: FindMethod,
     private readonly perm: permissions,
   ) {}
-  async orderPurchase(
-    name: string,
-    lastname: string,
-    req: Request,
-    res: Response,
-  ) {
+  async orderPurchase(id: string, req: Request, res: Response) {
     try {
       const adminAuth = await this.perm.adminAuth(req);
       let client: clientJwt;
       if (!adminAuth) {
-        client = await this.perm.checkPermissions(req);
+        client = await this.perm.clientPayload(req);
       }
-      if (
-        (!adminAuth && client.lastname !== lastname) ||
-        client.name !== name
-      ) {
+      if (!adminAuth && client.id !== id) {
         throw new HttpException('not permited', HttpStatus.FORBIDDEN);
       }
       /*----*/
-      const resp = await this.service.Get_Client_Order_Purchase(name, lastname);
+      const resp = await this.service.Get_Client_Order_Purchase(id);
       res.status(HttpStatus.OK).json(resp);
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {
