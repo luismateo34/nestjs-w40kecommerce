@@ -1,8 +1,8 @@
 import { JwtService } from '@nestjs/jwt';
-import { cipher } from 'src/administrator/application/encripted/encripted';
-import { clientJwt } from 'src/client/application/type/clientJtw';
 import { Request } from 'express';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+//----
+import { clientJwt } from 'src/client/application/type/clientJtw';
 import { Login } from 'src/administrator/application/usecase';
 import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
 /*---*/
@@ -11,13 +11,16 @@ import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
 export class permissions {
   constructor(
     private readonly jwt: JwtService,
-    private readonly login: Login,
+    @Inject('LOGIN_CLIENT') private readonly login: Login,
   ) {}
-  async adminAuth(req: Request) {
+  private async decode(token: string): Promise<PayloadJwt> {
+    return (await this.jwt.decode(token)) as PayloadJwt;
+  }
+
+  async adminAuth(req: Request): Promise<boolean> {
     try {
       const cookie = req.cookies.access_token_admin as string;
-      const payCipher = cipher.decrypted(cookie);
-      const payload = (await this.jwt.decode(payCipher)) as PayloadJwt;
+      const payload = await this.decode(cookie);
       const resp = await this.login.loginToken(payload);
       if (resp !== null) {
         return true;
@@ -27,10 +30,9 @@ export class permissions {
     }
   }
   // EXTRACT CLIENT PAYLOAD
-  async clientPayload(req: Request) {
+  async clientPayload(req: Request): Promise<clientJwt> {
     const cookie = req.cookies.access_token_client as string;
-    const payCipher = cipher.decrypted(cookie);
-    const payload = (await this.jwt.decode(payCipher)) as clientJwt;
+    const payload = (await this.jwt.decode(cookie)) as clientJwt;
     return payload;
   }
 }

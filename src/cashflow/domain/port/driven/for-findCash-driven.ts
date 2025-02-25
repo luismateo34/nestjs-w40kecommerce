@@ -1,4 +1,4 @@
-import { usecase } from '@/cashflow/domain/usecase/usecase';
+import { usecase } from 'src/cashflow/domain/usecase/usecase';
 
 export type findmethod = Pick<
   usecase,

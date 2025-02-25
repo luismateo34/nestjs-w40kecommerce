@@ -1,0 +1,65 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { HttpException } from '@nestjs/common';
+import { Request } from 'express';
+//---
+import { UpdateEventController } from './update-event.controller';
+import { UpdateClientDto } from './dto/dto';
+import { OrderPurchase } from 'src/purchase/domain/entity/entityInterfaceOrder';
+//---
+import { UpdateEventService } from 'src/client/infrastructure/framework/service/upadate-event/update-event.service';
+//---
+
+class updatemock {
+  async Update_order_by_Client(req: Request, order: OrderPurchase) {
+    if (req !== null && order !== null) {
+      return;
+    }
+  }
+}
+const updateclientMock: UpdateClientDto = {
+  payload: {} as OrderPurchase,
+  req: {} as Request,
+};
+
+describe('UpdateEventController', () => {
+  let controller: UpdateEventController;
+  let service: UpdateEventService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [UpdateEventController],
+      providers: [
+        {
+          provide: UpdateEventService,
+          useClass: updatemock,
+        },
+      ],
+    }).compile();
+
+    controller = module.get<UpdateEventController>(UpdateEventController);
+    service = module.get<UpdateEventService>(UpdateEventService);
+  });
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
+  describe('update method test', () => {
+    it('should be return void', async () => {
+      expect(await controller.updateclientPurchase(updateclientMock)).toBe(
+        undefined,
+      );
+    });
+    it('should be throw error', async () => {
+      try {
+        jest.spyOn(service, 'Update_order_by_Client').mockImplementation(() => {
+          throw new Error();
+        });
+        await controller.updateclientPurchase(updateclientMock);
+      } catch (err) {
+        if (err instanceof Error) {
+          expect(err).toBeInstanceOf(HttpException);
+        }
+      }
+    });
+  });
+});

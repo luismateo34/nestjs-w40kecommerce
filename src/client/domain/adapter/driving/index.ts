@@ -4,7 +4,7 @@ export {
   DeleteDriven,
   FindDriven,
   Updatedriven,
-} from '@/client/domain/adapter/driven';
+} from 'src/client/domain/adapter/driven';
 /*--driving adapter--*/
 export { CreateClientDriving } from './create';
 export { Find as findDriving } from './find';

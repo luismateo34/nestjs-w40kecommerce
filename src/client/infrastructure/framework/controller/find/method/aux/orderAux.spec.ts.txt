@@ -1,0 +1,81 @@
+import { Controller, Get, HttpException } from '@nestjs/common';
+import { Request } from 'express';
+import { OrderAux } from './orderAux';
+import { clientJwt } from 'src/client/application/type/clientJtw';
+import { permissions } from 'src/client/infrastructure/framework/permission/permission';
+
+const client: clientJwt = {
+  id: '1',
+  lastname: 'gordo',
+  name: 'gato',
+};
+
+class permMock {
+  async adminAuth(req: Request) {
+    if (req !== null) {
+      return true;
+    }
+  }
+  async clientPayload(req: Request) {
+    if (req !== null) {
+      return client;
+    }
+  }
+}
+//----
+class permMock2 {
+  async adminAuth(req: Request) {
+    if (req !== null) {
+      return false;
+    }
+  }
+  async clientPayload(req: Request) {
+    if (req !== null) {
+      return client;
+    }
+  }
+}
+@Controller()
+class mockController {
+  constructor(private readonly orderAux: OrderAux) {}
+  async test(id: string, req: Request) {
+    await this.orderAux.orderAux(id, req);
+  }
+}
+describe('orderaux test admin true', () => {
+  let controller: mockController;
+  let service: OrderAux;
+  let req: Request;
+  beforeEach(() => {
+    service = new OrderAux(new permMock() as permissions);
+    controller = new mockController(service);
+  });
+  describe('orderaux service test', () => {
+    it('is admin', async () => {
+      expect(await controller.test('1', req)).toBe(undefined);
+    });
+  });
+});
+describe('orderaux test admin false', () => {
+  let controller: mockController;
+  let service: OrderAux;
+  let req: Request;
+  beforeEach(() => {
+    service = new OrderAux(new permMock2() as permissions);
+    controller = new mockController(service);
+  });
+  describe('is not admin', () => {
+    it('is user ', async () => {
+      expect(await controller.test('1', req)).toBe(undefined);
+    });
+    it('is not user', async () => {
+      try {
+        await controller.test('32', req);
+      } catch (err) {
+        if (err instanceof Error) {
+          expect(err).toBeInstanceOf(HttpException);
+        }
+      }
+    });
+  });
+});

@@ -43,12 +43,8 @@ export class updateCashmethodDriven implements updateMethod {
     );
   }
 
-  async update_Expense_Month(
-    year: number,
-    month: number,
-    day: number,
-  ): Promise<void> {
-    await this.method_expense_service.update_Expense_Month(year, month, day);
+  async update_Expense_Month(year: number, month: number): Promise<void> {
+    await this.method_expense_service.update_Expense_Month(year, month);
   }
   async update_Revenue_Day(
     year: number,
@@ -64,11 +60,7 @@ export class updateCashmethodDriven implements updateMethod {
     );
   }
 
-  async update_Revenue_Month(
-    year: number,
-    month: number,
-    day: number,
-  ): Promise<void> {
-    await this.method_revenue_service.update_Revenue_Month(year, month, day);
+  async update_Revenue_Month(year: number, month: number): Promise<void> {
+    await this.method_revenue_service.update_Revenue_Month(year, month);
   }
 }

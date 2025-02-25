@@ -1,0 +1,61 @@
+import { Controller, Get, HttpException } from '@nestjs/common';
+import { Response, Request } from 'express';
+import { OrderAux } from './aux/orderAux';
+import { FindMethod } from 'src/client/application/usecase/find';
+import { OrderpurchaseMethod } from './orderPurchaseMethod';
+import { findMethodMock } from './mock/mockclient';
+//----
+const mockResponse = () => {
+  const res = {} as Response;
+  res.status = jest.fn().mockReturnValue(res);
+  res.json = jest.fn().mockReturnValue(res);
+  return res as Response;
+};
+class orderAuxMock {
+  async orderAux(id: string, req: Request) {
+    if (req !== null && typeof id === 'string') {
+      return;
+    }
+  }
+}
+
+@Controller()
+class mockcontroller {
+  constructor(private order: OrderpurchaseMethod) {}
+  @Get()
+  async test(id: string, req: Request, res: Response) {
+    if (req !== null && res !== null && id !== 'undefined') {
+      await this.order.orderPurchase(id, req, res);
+    }
+  }
+}
+describe('test orderpurchase method', () => {
+  let service: OrderpurchaseMethod;
+  let controller: mockcontroller;
+  const req = {} as Request;
+  beforeEach(() => {
+    service = new OrderpurchaseMethod(
+      new findMethodMock() as FindMethod,
+      new orderAuxMock() as OrderAux,
+    );
+    controller = new mockcontroller(service);
+  });
+  describe('orderpurchase method', () => {
+    it('should be  void response', async () => {
+      expect(await controller.test('1', req, mockResponse())).toBe(undefined);
+    });
+    it('should be  throw error', async () => {
+      jest.spyOn(Response, 'json').mockImplementation(() => {
+        throw new Error();
+      });
+
+      try {
+        await controller.test('1', req, mockResponse());
+      } catch (err) {
+        if (err instanceof Error) {
+          expect(err).toBeInstanceOf(HttpException);
+        }
+      }
+    });
+  });
+});

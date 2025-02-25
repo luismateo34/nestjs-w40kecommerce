@@ -1,9 +1,9 @@
 import { seeder } from 'nestjs-seeder';
 import { AdminSeeder } from './inject/adminSeeder';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeOrmoptions } from 'src/database/typeorm';
+import { TypeOrmoptions } from 'src/typeorm/typeorm';
 import { Delete } from 'src/administrator/application/usecase/delete';
-import { AdminDatabase } from 'src/administrator/infrastructure/admin.database';
+import { AdminDatabase } from 'src/administrator/infrastructure/framework/admin.database';
 /*---*/
 seeder({
   imports: [TypeOrmModule.forRoot({ ...TypeOrmoptions })],

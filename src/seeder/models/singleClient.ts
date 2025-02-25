@@ -1,4 +1,5 @@
 import { client } from 'src/client/domain/entity/entityInterfaceClient';
+import { purchase as OrderPurchase } from 'src/client/domain/type/purchase';
 import { Factory } from 'nestjs-seeder';
 import { hashSync } from 'bcrypt';
 
@@ -16,7 +17,7 @@ export class singleclientSeed implements client {
   password: string;
 
   @Factory(null)
-  purchase_order: string[] | null = null;
+  purchase_order: OrderPurchase[] | null = null;
 
   @Factory(new Date())
   createdAt: Date;

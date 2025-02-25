@@ -1,4 +1,4 @@
-import { usecases } from '@/purchase/domain/usecase/usecases';
+import { usecases } from 'src/purchase/domain/usecase/usecases';
 
 export type findType = Pick<
   usecases,

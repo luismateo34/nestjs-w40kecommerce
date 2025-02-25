@@ -8,7 +8,6 @@ import { JwtService } from '@nestjs/jwt';
 import { clientJwt } from 'src/client/application/type/clientJtw';
 import { type Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { cipher } from 'src/administrator/application/encripted/encripted';
 import { tokenClient } from 'src/client/infrastructure/framework/enum/token';
 
 @Injectable()
@@ -18,7 +17,9 @@ export class JwtClientService {
     private configService: ConfigService,
   ) {}
 
-  private async methodJwt(payloadAdmin: clientJwt) {
+  private async methodJwt(
+    payloadAdmin: clientJwt,
+  ): Promise<{ access_token_client: string }> {
     return {
       access_token_client: this.jwtService.sign(payloadAdmin, {
         secret: process.env.JWT_SECRET,
@@ -30,12 +31,11 @@ export class JwtClientService {
     date.setTime(date.getTime() + hours * 60 * 60 * 1000);
     return date;
   }
-  async Login(req_user: clientJwt, @Res() res: Response) {
+  async Login(req_user: clientJwt, @Res() res: Response): Promise<void> {
     try {
       const jwt = await this.methodJwt(req_user);
-      const tokenCookie = cipher.encrypted(jwt.access_token_client);
       res
-        .cookie(tokenClient.access_token_client, tokenCookie, {
+        .cookie(tokenClient.access_token_client, jwt.access_token_client , {
           httpOnly: true,
           secure: this.configService.get('NODE_ENV') === 'production',
           expires: this.addHours(new Date(), 1),

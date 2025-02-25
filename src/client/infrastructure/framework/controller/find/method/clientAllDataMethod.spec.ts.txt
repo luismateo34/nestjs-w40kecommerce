@@ -1,0 +1,51 @@
+import { ClientAllDataMehtod } from './clientAllDataMethod';
+import { MockController } from './mock/mockclient.controller';
+import { FindMethod } from 'src/client/application/usecase/find';
+import type { Request, Response } from 'express';
+import { findMethodMock, checkmock } from './mock/mockclient';
+import { Admincheq } from './aux/admincheq';
+import { HttpException } from '@nestjs/common';
+//-----
+const mockResponse = () => {
+  const res = {} as Response;
+  res.status = jest.fn().mockReturnValue(res);
+  res.json = jest.fn().mockReturnValue(res);
+  return res as Response;
+};
+
+describe('ClientJwt', () => {
+  let serviceClient: ClientAllDataMehtod;
+  let controller: MockController;
+  let req: Request;
+  beforeEach(() => {
+    serviceClient = new ClientAllDataMehtod(
+      new findMethodMock() as FindMethod,
+      new checkmock() as Admincheq,
+    );
+    controller = new MockController(serviceClient);
+  });
+  describe('test service', () => {
+    it('find method test', async () => {
+      //jest.spyOn(Response, 'json').mockImplementation((obj) => obj);
+      const resp = await controller.find(
+        'gato',
+        'gordo',
+        req,
+        mockResponse() as Response,
+      );
+      expect(resp).toBe(undefined);
+    });
+    it('find error', async () => {
+      jest.spyOn(Response, 'json').mockImplementation(() => {
+        throw new Error();
+      });
+      try {
+        await controller.find('gato', 'gordo', req, mockResponse() as Response);
+      } catch (err) {
+        if (err instanceof Error) {
+          expect(err).toBeInstanceOf(HttpException);
+        }
+      }
+    });
+  });
+});

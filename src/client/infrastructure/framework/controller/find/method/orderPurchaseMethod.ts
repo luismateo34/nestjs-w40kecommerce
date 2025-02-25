@@ -1,26 +1,17 @@
 import { Response, Request } from 'express';
-import { clientJwt } from '@/client/application/type/clientJtw';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { permissions } from 'src/client/infrastructure/framework/permission/permission';
 import { FindMethod } from 'src/client/application/usecase/find';
-/**/
+import { OrderAux } from './aux/orderAux';
 
 @Injectable()
 export class OrderpurchaseMethod {
   constructor(
     @Inject('FindMethod') private service: FindMethod,
-    private readonly perm: permissions,
+    private orderAux: OrderAux,
   ) {}
   async orderPurchase(id: string, req: Request, res: Response) {
     try {
-      const adminAuth = await this.perm.adminAuth(req);
-      let client: clientJwt;
-      if (!adminAuth) {
-        client = await this.perm.clientPayload(req);
-      }
-      if (!adminAuth && client.id !== id) {
-        throw new HttpException('not permited', HttpStatus.FORBIDDEN);
-      }
+      await this.orderAux.orderAux(id, req);
       /*----*/
       const resp = await this.service.Get_Client_Order_Purchase(id);
       res.status(HttpStatus.OK).json(resp);

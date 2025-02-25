@@ -14,9 +14,10 @@ import {
   subroutes,
   findroutes,
 } from 'src/client/application/routes/clientRoutes';
-import { FindMethod } from 'src/client/application/usecase/find';
 import { Response, Request } from 'express';
 import { JwtAuthGuard } from 'src/client/infrastructure/framework/guard/jwtGuard';
+//---
+import { FindMethod } from 'src/client/application/usecase/find';
 import { OrderpurchaseMethod } from './method/orderPurchaseMethod';
 import { ClientAllDataMehtod } from './method/clientAllDataMethod';
 /*guard*/

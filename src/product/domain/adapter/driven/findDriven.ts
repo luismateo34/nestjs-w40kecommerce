@@ -1,5 +1,5 @@
 import { findProductdriven } from 'src/product/domain/port/driven/for-findProductdriven';
-import { productget } from '../../entity/entityInterfaceProduct';
+import { product, productget } from '../../entity/entityInterfaceProduct';
 import { ormProduct } from 'src/product/domain/entity/ormProduct';
 
 export class FindDriven implements findProductdriven {
@@ -26,5 +26,8 @@ export class FindDriven implements findProductdriven {
   }
   async find_Stock_product_Name(name: string): Promise<number> {
     return await this.method.find_Stock_product_Name(name);
+  }
+  async find_Product_All_Id(id: string): Promise<product> {
+    return await this.method.find_Product_All_Id(id);
   }
 }

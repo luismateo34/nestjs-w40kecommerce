@@ -43,7 +43,7 @@ export class FindController {
     description: 'internal server error.',
   })
   @UseGuards(JwtAuthGuard)
-  async client_name(
+  async find_by_Id(
     @Param('id') id: string,
     @Res() res: Response,
     @Req() req: Request,
@@ -58,7 +58,7 @@ export class FindController {
         throw new HttpException(`error: forbidden`, HttpStatus.FORBIDDEN);
       }
       /*----*/
-      const resp = await this.find.find_by_ClientId(id);
+      const resp = await this.find.find_by_Id(id);
       res.status(HttpStatus.OK).json(resp);
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {
@@ -120,32 +120,6 @@ export class FindController {
   ) {
     try {
       const resp = await this.find.find_Orders_Month(month, year);
-      res.status(HttpStatus.OK).json(resp);
-    } catch (e) {
-      if (e instanceof Error && e.message.length !== 0) {
-        throw new HttpException(`error: ${e.message}`, HttpStatus.BAD_REQUEST);
-      }
-      throw new HttpException(
-        'error: Internal Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-  /*---ultimo--*/
-  @Get(':id')
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'The record has been successfully created.',
-  })
-  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'bad request' })
-  @ApiResponse({
-    status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'internal server error.',
-  })
-  @UseGuards(JwtAuthGuard)
-  async by_Id(@Param('id') id: string, @Res() res: Response) {
-    try {
-      const resp = await this.find.find_Id(id);
       res.status(HttpStatus.OK).json(resp);
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {

@@ -9,7 +9,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../../guard/jwt/jwt-auth.guard';
+import {JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard'
 import { AdminDto } from 'src/administrator/domain/validate/admin';
 import { Register, register } from 'src/administrator/application/usecase';
 import { routes } from 'src/administrator/application/router/router';

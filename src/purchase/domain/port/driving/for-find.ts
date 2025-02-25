@@ -1,4 +1,4 @@
-import { OrderPurchase } from '@/purchase/domain/entity/entityInterfaceOrder';
+import { OrderPurchase } from 'src/purchase/domain/entity/entityInterfaceOrder';
 
 export interface find {
   find_Orders_Date(

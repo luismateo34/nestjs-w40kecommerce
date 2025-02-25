@@ -5,14 +5,13 @@ import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
 import { type Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { token } from 'src/administrator/infrastructure/framework/enum/token';
-import { cipher } from 'src/administrator/application/encripted/encripted';
 
 @Injectable()
 export class JwtMethod {
   constructor(
-    @Inject('Login') private readonly usersService: Login,
     private jwtService: JwtService,
     private configService: ConfigService,
+    @Inject('LOGIN') private readonly usersService: Login,
   ) {}
 
   private async validateUser(token: PayloadJwt): Promise<PayloadJwt> {
@@ -41,9 +40,8 @@ export class JwtMethod {
     try {
       const validate = await this.validateUser(req_user);
       const jwt = await this.methodJwt(validate);
-      const tokenCookie = cipher.encrypted(jwt.access_token_admin);
       res
-        .cookie(token.access_token_admin, tokenCookie, {
+        .cookie(token.access_token_admin, jwt.access_token_admin, {
           httpOnly: true,
           secure: this.configService.get('NODE_ENV') === 'production',
           expires: this.addHours(new Date(), 1),

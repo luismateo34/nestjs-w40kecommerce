@@ -9,6 +9,7 @@ import {
   Body,
   Param,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
@@ -17,13 +18,18 @@ import {
 } from 'src/purchase/application/routes/purchaseRoutes';
 import { updateMethod } from 'src/purchase/application/usecases/update';
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
-import { createDto } from 'src/purchase/application/validate/order';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { orderCreateDto } from 'src/purchase/application/validate/orderCreate';
+import { Request } from 'express';
 /*---*/
 
 @ApiTags(subRoutes.update)
 @Controller(subRoutes.update)
 export class UpdateController {
-  constructor(@Inject('updateMethod') private readonly service: updateMethod) {}
+  constructor(
+    @Inject('updateMethod') private readonly service: updateMethod,
+    private eventEmitter: EventEmitter2,
+  ) {}
   /*----*/
   @Put(updateRoutes.order)
   @ApiResponse({
@@ -37,12 +43,17 @@ export class UpdateController {
   })
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async order(@Body() order: createDto) {
+  async order(@Body() order: orderCreateDto, @Req() req: Request) {
     try {
       const resp = await this.service.update(order);
-      if (resp === 'success') {
-        return;
-      }
+
+      this.eventEmitter.emit('purchase_update', {
+        req: req,
+        payload: resp,
+      });
+      this.eventEmitter.emit('product_purchase', {
+        product: order.products,
+      });
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {
         throw new HttpException(`error:${e.message}`, HttpStatus.BAD_REQUEST);

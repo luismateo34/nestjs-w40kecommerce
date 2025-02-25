@@ -6,8 +6,7 @@ import { Request } from 'express';
 
 /*-----*/
 import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
-import { Login } from '@/administrator/application/usecase';
-import { cipher } from 'src/administrator/application/encripted/encripted';
+import { Login } from 'src/administrator/application/usecase';
 import { FindMethod } from 'src/client/application/usecase/find';
 import { clientJwt } from 'src/client/application/type/clientJtw';
 
@@ -24,9 +23,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'refresh') {
           const tokenadmin = req?.cookies.access_token_admin;
           const tokenclient = req?.cookies.access_token_client;
           if (tokenadmin !== undefined) {
-            return cipher.decrypted(tokenadmin);
+            return tokenadmin;
           } else if (tokenadmin === undefined) {
-            return cipher.decrypted(tokenclient);
+            return tokenclient;
           }
         },
       ]),

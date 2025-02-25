@@ -1,0 +1,98 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { Response, Request } from 'express';
+import { RefreshClientService } from './refresh-client.service';
+import { configMock } from 'src/client/infrastructure/framework/mock/configMock';
+import { jwtmock } from 'src/client/infrastructure/framework/mock/jwtmock';
+import { FindMethod } from 'src/client/application/usecase/find';
+import { clientJwt } from 'src/client/application/type/clientJtw';
+import { JwtService } from '@nestjs/jwt';
+import { client } from 'src/client/domain/entity/entityInterfaceClient';
+import { OrderPurchase } from 'src/purchase/domain/entity/entityInterfaceOrder';
+import { UnauthorizedException } from '@nestjs/common';
+//---
+const jwtclient: clientJwt = {
+  id: '1',
+  lastname: 'gordo',
+  name: 'gato',
+};
+const order = {} as OrderPurchase;
+const objclient: client = {
+  name: 'gato',
+  lastname: 'gordo',
+  id: '1',
+  createdAt: new Date(),
+  email: 'gato_gordo@hola',
+  password: 'gatogordo',
+  purchase_order: [order],
+  updatedAt: new Date(),
+};
+class mockfind {
+  async Get_Client_Id(id: string): Promise<client> {
+    if (typeof id === 'string') {
+      return objclient;
+    }
+  }
+}
+const mockResponseFn = () => {
+  const res = {} as Response;
+  res.status = jest.fn().mockReturnValue(res);
+  res.cookie = jest.fn().mockReturnValue(res);
+  res.json = jest.fn().mockReturnValue(res);
+  return res as Response;
+};
+const customEnvVars = {
+  JWT_SECRET: 'gato_gordo_secret',
+  NODE_ENV: 'production',
+};
+
+process.env = { ...process.env, ...customEnvVars };
+
+describe('RefreshClientService', () => {
+  let service: RefreshClientService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        RefreshClientService,
+        {
+          provide: RefreshClientService,
+          useValue: new RefreshClientService(
+            new mockfind() as FindMethod,
+            new jwtmock() as JwtService,
+            new configMock(),
+          ),
+        },
+      ],
+    }).compile();
+
+    service = module.get<RefreshClientService>(RefreshClientService);
+  });
+  
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+  it('should be return void', async () => {
+    expect(
+      await service.Init_Service_Refresh_Token(jwtclient, mockResponseFn()),
+    ).toBe(undefined);
+  });
+  it('should be return void ', async () => {
+    const req = {} as Request;
+    req.cookies = { cookies: 'hola gato' };
+    const resp = await service.Init_Service_Refresh_Token(
+      jwtclient,
+      mockResponseFn(),
+    );
+    expect(resp).toBe(undefined);
+  });
+  it('should be return error', async () => {
+    try {
+      const req = {} as Request;
+      await service.RefreshLoggin(req, mockResponseFn());
+    } catch (err) {
+      if (err instanceof Error) {
+        expect(err).toBeInstanceOf(UnauthorizedException);
+      }
+    }
+  });
+});

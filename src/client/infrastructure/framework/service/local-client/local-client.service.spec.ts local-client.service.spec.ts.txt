@@ -1,0 +1,54 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { LocalClientService } from './local-client.service';
+import { clientJwt } from 'src/client/application/type/clientJtw';
+import { FindMethod } from 'src/client/application/usecase/find';
+//import { compare } from 'bcrypt';
+
+const clientMock: clientJwt = {
+  id: '1',
+  lastname: 'gordo',
+  name: 'gato',
+};
+
+jest.mock('bcrypt', () => {
+  return {
+    compare: jest.fn().mockResolvedValue(true)
+  }
+});
+//---
+class findMock {
+  async Get_Client(name: string, lastname: string): Promise<clientJwt> {
+    if (typeof name === 'string' && typeof lastname === 'string') {
+      return clientMock;
+    }
+  }
+}
+
+describe('LocalClientService', () => {
+  let service: LocalClientService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        {
+          provide: LocalClientService,
+          useValue: new LocalClientService(new findMock() as FindMethod),
+        },
+      ],
+    }).compile();
+
+    service = module.get<LocalClientService>(LocalClientService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+  it('should be return client', async () => {
+    const client = await service.validateUser(
+      clientMock.name,
+      clientMock.lastname,
+      '123',
+    );
+    expect(client).toStrictEqual(clientMock);
+  });
+});

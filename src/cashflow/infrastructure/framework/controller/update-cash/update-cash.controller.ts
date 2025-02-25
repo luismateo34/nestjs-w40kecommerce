@@ -18,7 +18,7 @@ import {
   expenseDay,
 } from 'src/cashflow/application/validate/create';
 import { revenueDay } from 'src/cashflow/application/validate/create';
-import { JwtAuthGuard } from '@/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 /*---*/
 @ApiTags(subRoutes.update)

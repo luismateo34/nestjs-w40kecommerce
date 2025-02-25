@@ -1,4 +1,6 @@
-import { OrderPurchase } from 'src/purchase/domain/entity/entityInterfaceOrder';
+
+
+/*--*/
 export interface product {
   id: string;
   createdAt: Date;
@@ -12,7 +14,6 @@ export interface product {
   gender: string;
   percentaje_discount: number;
   franchise: string | null;
-  OrderPurchase: OrderPurchase[];
 }
 export type createProduct = Omit<
   product,

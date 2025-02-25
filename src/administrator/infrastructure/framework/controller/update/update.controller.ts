@@ -13,20 +13,19 @@ import {
   routes,
   updateEnum,
 } from 'src/administrator/application/router/router';
-import { Phone } from '@/administrator/application/validation/phone';
-import { Permission } from '@/administrator/application/validation/permission';
-import { PasswordDto } from '@/administrator/application/validation/password';
-import { EmailDto } from '@/administrator/application/validation/email';
+import { Phone } from 'src/administrator/application/validation/phone';
+import { Permission } from 'src/administrator/application/validation/permission';
+import { PasswordDto } from 'src/administrator/application/validation/password';
+import { EmailDto } from 'src/administrator/application/validation/email';
 import { Roles } from 'src/administrator/infrastructure/framework/decorator/roleDecorator';
 import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
 import { RoleGuard } from 'src/administrator/infrastructure/framework/guard/role/role.guard';
 import { PhoneMethod } from './method/PhoneMethod';
 import { PermissonMethod } from './method/permissionMethod';
 import { PassMethod } from './method/PasswordMethod';
-import { EmailMethod } from './method/emailMethod';
+import { EmailMethodUpdate } from './method/emailMethod';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-
-// actualizar datos
+//
 @ApiTags(routes.update)
 @Controller(routes.update)
 export class UpdateController {
@@ -34,7 +33,7 @@ export class UpdateController {
     private readonly phoneMethod: PhoneMethod,
     private readonly permissionMethod: PermissonMethod,
     private readonly passMethod: PassMethod,
-    private readonly emailMethod: EmailMethod,
+    private readonly emailMethod: EmailMethodUpdate,
   ) {}
   /*---*/
   @Roles(permissions.SUPERADMIN)

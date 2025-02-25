@@ -1,11 +1,11 @@
-import { UpadatePhone } from 'src/administrator/application/usecase';
+import { UpdatePhone } from 'src/administrator/application/usecase';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Phone } from 'src/administrator/application/validation/phone';
 
 @Injectable()
 export class PhoneMethod {
   constructor(
-    @Inject('UpadatePhone') private readonly updatePhone: UpadatePhone,
+    @Inject('UpdatePhone') private readonly updatePhone: UpdatePhone,
   ) {}
   async phone(phoneDto: Phone) {
     try {

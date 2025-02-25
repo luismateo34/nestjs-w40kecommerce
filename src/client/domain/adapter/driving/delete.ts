@@ -1,6 +1,6 @@
-import { deleteClientDriving } from '@/client/domain/port/driving/for-delete';
-import { deleteType } from '@/client/domain/port/driven/for-deleteClient-driven';
-import { getclient } from '@/client/domain/port/driven/for-getClient-driven';
+import { deleteClientDriving } from 'src/client/domain/port/driving/for-delete';
+import { deleteType } from 'src/client/domain/port/driven/for-deleteClient-driven';
+import { getclient } from 'src/client/domain/port/driven/for-getClient-driven';
 
 export class Delete implements deleteClientDriving {
   constructor(

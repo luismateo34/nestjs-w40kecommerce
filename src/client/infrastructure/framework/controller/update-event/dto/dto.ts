@@ -1,13 +1,13 @@
-import { IsString, IsNotEmpty, IsUUID, ValidateNested } from 'class-validator';
+import { OrderPurchase } from 'src/purchase/domain/entity/entityInterfaceOrder';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { Request } from 'express';
 
 export class UpdateClientDto {
-  @IsString()
   @IsNotEmpty()
-  @IsUUID()
-  purchaseId: string;
+  @ValidateNested({ each: true })
+  payload: OrderPurchase;
 
   @IsNotEmpty()
-  @ValidateNested()
-  payload: Request;
+  @ValidateNested({ each: true })
+  req: Request;
 }

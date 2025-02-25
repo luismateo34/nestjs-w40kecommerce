@@ -1,3 +1,5 @@
+import { OrderPurchase } from 'src/purchase/domain/entity/entityInterfaceOrder';
+
 export interface updateClientDriving {
   Update_Client_Name(name: string, lastname: string): Promise<'success'>;
   Update_Client_Email(
@@ -10,5 +12,5 @@ export interface updateClientDriving {
     lastname: string,
     password: string,
   ): Promise<'success'>;
-  Update_Purchase_orders(id: string, order: string[]): Promise<void>;
+  Update_Purchase_orders(id: string, order: OrderPurchase): Promise<void>;
 }

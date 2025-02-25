@@ -5,7 +5,7 @@ export {
   FindDriven,
   SetterDriven,
   UpdateDriven,
-} from '@/product/domain/adapter/driven';
+} from 'src/product/domain/adapter/driven';
 /*--driving adapter--*/
 export { CreateProduct } from './create';
 export { SetProduct } from './setter';

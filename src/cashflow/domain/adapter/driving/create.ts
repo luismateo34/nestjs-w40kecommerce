@@ -1,6 +1,6 @@
-import { Create } from '@/cashflow/domain/port/driving/for-createCash';
-import { createCash } from '@/cashflow/domain/port/driven/for-create-cashflow-driven';
-import { Dataday } from '@/cashflow/domain/validation/validate';
+import { Create } from 'src/cashflow/domain/port/driving/for-createCash';
+import { createCash } from 'src/cashflow/domain/port/driven/for-create-cashflow-driven';
+import { Dataday } from 'src/cashflow/domain/validation/validate';
 import { validate } from 'class-validator';
 
 export class CreateCash implements Create {

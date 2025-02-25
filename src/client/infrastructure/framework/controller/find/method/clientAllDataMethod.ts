@@ -1,14 +1,13 @@
 import { Response, Request } from 'express';
-import { clientJwt } from 'src/client/application/type/clientJtw';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { FindMethod } from 'src/client/application/usecase/find';
-import { permissions } from 'src/client/infrastructure/framework/permission/permission';
-/**/
+import { Admincheq } from './aux/admincheq';
+//----
 @Injectable()
 export class ClientAllDataMehtod {
   constructor(
     @Inject('FindMethod') private service: FindMethod,
-    private readonly perm: permissions,
+    private cheq: Admincheq,
   ) {}
   async clientAllData(
     name: string,
@@ -17,18 +16,7 @@ export class ClientAllDataMehtod {
     res: Response,
   ) {
     try {
-      const adminAuth = await this.perm.adminAuth(req);
-      let client: clientJwt;
-      if (!adminAuth) {
-        client = await this.perm.clientPayload(req);
-      }
-      if (
-        (!adminAuth && client.lastname !== lastname) ||
-        client.name !== name
-      ) {
-        throw new HttpException('not permited', HttpStatus.FORBIDDEN);
-      }
-      /*------*/
+      await this.cheq.cheq(req, name, lastname);
       const resp = await this.service.Get_Client(name, lastname);
       const obj = {
         name: resp.name,
@@ -38,7 +26,7 @@ export class ClientAllDataMehtod {
         createDate: resp.createdAt,
         order: resp.purchase_order,
       };
-      res.status(HttpStatus.OK).json(obj);
+       res.status(HttpStatus.OK).json(obj);
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {
         throw new HttpException(`error: ${e.message}`, HttpStatus.BAD_REQUEST);

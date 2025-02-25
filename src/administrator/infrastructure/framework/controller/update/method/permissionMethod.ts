@@ -1,12 +1,12 @@
-import { UpadatePermissions } from 'src/administrator/application/usecase';
+import { UpdatePermissions } from 'src/administrator/application/usecase';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Permission } from 'src/administrator/application/validation/permission';
 
 @Injectable()
 export class PermissonMethod {
   constructor(
-    @Inject('UpadatePermissions')
-    private readonly updatePermissions: UpadatePermissions,
+    @Inject('UpdatePermissions')
+    private readonly updatePermissions: UpdatePermissions,
   ) {}
   async permission(perminssionDto: Permission) {
     try {

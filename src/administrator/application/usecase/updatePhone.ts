@@ -2,7 +2,7 @@ import { Update as updateResponse } from 'src/administrator/application/usecase/
 import { adminOrm } from 'src/administrator/domain/entity/orm_method.interface';
 import { DrivenUpdate, Update } from 'src/administrator/domain/adapter/driving';
 
-export class UpadatePhone {
+export class UpdatePhone {
   private method: Update;
   constructor(readonly service: adminOrm) {
     this.method = new Update(new DrivenUpdate(service));

@@ -11,7 +11,7 @@ import { Response } from 'express';
 @Injectable()
 export class lastname {
   constructor(
-    @Inject('AdminByName') private readonly adminByName: AdminByName,
+    @Inject('adminByName') private readonly adminByName: AdminByName,
   ) {}
   async find_Name_Lastname(
     name: string,

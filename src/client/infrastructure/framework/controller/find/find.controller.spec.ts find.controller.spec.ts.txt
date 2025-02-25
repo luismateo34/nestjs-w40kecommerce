@@ -1,0 +1,89 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { FindController } from './find.controller';
+import { Response, Request } from 'express';
+//----
+import { FindMethod } from 'src/client/application/usecase/find';
+import { OrderpurchaseMethod } from './method/orderPurchaseMethod';
+import { ClientAllDataMehtod } from './method/clientAllDataMethod';
+import { HttpException } from '@nestjs/common';
+//---
+const mockResponseFn = () => {
+  const res = {} as Response;
+  res.status = jest.fn().mockReturnValue(res);
+  res.json = jest.fn().mockReturnValue(res);
+  return res as Response;
+};
+
+describe('FindController', () => {
+  let controller: FindController;
+  const req = {} as Request;
+  const mockResponse = mockResponseFn();
+  let findservice: FindMethod;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [FindController],
+      providers: [
+        {
+          provide: 'FindMethod',
+          useValue: {
+            Get_Client_Id: jest.fn().mockResolvedValue(undefined),
+          },
+        },
+        {
+          provide: OrderpurchaseMethod,
+          useValue: {
+            orderPurchase: jest.fn().mockResolvedValue(undefined),
+          },
+        },
+        {
+          provide: ClientAllDataMehtod,
+          useValue: {
+            clientAllData: jest.fn().mockResolvedValue(undefined),
+          },
+        },
+      ],
+    }).compile();
+    findservice = module.get<FindMethod>(FindController);
+    controller = module.get<FindController>(FindController);
+  });
+
+  describe('Orderpurchase', () => {
+    it('should be return void', async () => {
+      const resp = await controller.orderPurchase('1', req, mockResponse);
+      expect(resp).toBe(undefined);
+    });
+  });
+  describe('find_by_Id', () => {
+    it('should be return void', async () => {
+      const resp = await controller.find_by_Id('1', mockResponse);
+      expect(resp).toBe(undefined);
+    });
+  });
+  describe('find_by_Id', () => {
+    it('should be return void', async () => {
+      try {
+        jest.spyOn(findservice, 'Get_Client_Id').mockImplementation(() => {
+          throw new Error();
+        });
+        await controller.find_by_Id('1', mockResponse);
+      } catch (err) {
+        if (err instanceof Error) {
+          expect(err).toBeInstanceOf(HttpException);
+        }
+      }
+    });
+  });
+
+  describe('clientAllData', () => {
+    it('should be return void', async () => {
+      const resp = await controller.clientAllData(
+        'gato',
+        'gordo',
+        req,
+        mockResponse,
+      );
+      expect(resp).toBe(undefined);
+    });
+  });
+});

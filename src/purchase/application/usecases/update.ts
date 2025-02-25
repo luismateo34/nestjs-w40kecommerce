@@ -3,12 +3,11 @@ import {
   updateDriving,
   findDriven,
 } from 'src/purchase/domain/adapter/driving';
-import { UpdateOrder } from 'src/purchase/domain/port/driving/for-update';
 import { ormPurchase } from 'src/purchase/domain/entity/ormPurchase';
-import { orderCreate } from '@/purchase/domain/usecase/usecases';
-import { OrderWithoutDate } from 'src/purchase/application/validate/order';
+import { orderCreate } from 'src/purchase/domain/usecase/usecases';
+import { OrderPurchase } from 'src/purchase/domain/entity/entityInterfaceOrder';
 
-export class updateMethod implements UpdateOrder {
+export class updateMethod {
   private service: updateDriving;
   constructor(readonly database: ormPurchase) {
     this.service = new updateDriving(
@@ -20,9 +19,7 @@ export class updateMethod implements UpdateOrder {
   async update_Envoy(id: string): Promise<'success'> {
     return await this.service.update_Envoy(id);
   }
-  async update(order: OrderWithoutDate): Promise<'success'> {
-    const dayDate = new Date();
-    const orderUpdate: orderCreate = { ...order, date: dayDate, envoy: false };
-    return await this.service.update(orderUpdate);
+  async update(order: orderCreate): Promise<OrderPurchase> {
+    return await this.service.update(order);
   }
 }

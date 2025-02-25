@@ -5,8 +5,8 @@ import {
   findSearchEnum,
   subRoutes,
 } from 'src/cashflow/application/routes/routes';
-import { string_month_spanish } from '@/cashflow/application/month/month';
-import { JwtAuthGuard } from '@/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
+import { string_month_spanish } from 'src/cashflow/application/month/month';
+import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
 import { BalanceDayMethod } from './method/balanceDayMethod';
 import { BalanceMonthMethod } from './method/balanceMonthMethod';
 import { ExpenseDayMethod } from './method/expenseDayMethod';

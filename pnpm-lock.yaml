@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@nestjs/class-transformer':
+        specifier: ^0.4.0
+        version: 0.4.0
       '@nestjs/common':
         specifier: ^10.0.0
         version: 10.4.1(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
@@ -47,6 +50,12 @@ importers:
       cookie-parser:
         specifier: ^1.4.7
         version: 1.4.7
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
+      mercadopago:
+        specifier: ^2.1.0
+        version: 2.1.0
       nestjs-seeder:
         specifier: 0.3.2
         version: 0.3.2(@faker-js/faker@8.4.1)
@@ -527,6 +536,9 @@ packages:
 
   '@microsoft/tsdoc@0.15.1':
     resolution: {integrity: sha512-4aErSrCR/On/e5G2hDP0wjooqDdauzEbIq8hIkIe5pXV0rtWJZvdCEKL0ykZxex+IxIwBp0eGeV48hQN07dXtw==}
+
+  '@nestjs/class-transformer@0.4.0':
+    resolution: {integrity: sha512-aHKhqPVixFCo8m7n2iP1uGgfyF0eYlAgGJKfW27l0BvRCTPBjmoL4956Cf9xVu6WNJzVsp//SOcpIavdnNHYZg==}
 
   '@nestjs/cli@10.4.4':
     resolution: {integrity: sha512-WKERbSZJGof0+9XeeMmWnb/9FpNxogcB5eTJTHjc9no0ymdTw3jTzT+KZL9iC/hGqBpuomDLaNFCYbAOt29nBw==}
@@ -1505,6 +1517,10 @@ packages:
     resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
     engines: {node: '>=12'}
 
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+    engines: {node: '>=12'}
+
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
@@ -2451,6 +2467,9 @@ packages:
   memfs@3.5.3:
     resolution: {integrity: sha512-UERzLsxzllchadvbPs5aolHh65ISpKpM+ccLbOJ8/vvpBKmAWf+la7dXFy7Mr0ySHbdHrFv5kGFCUHHe6GFEmw==}
     engines: {node: '>= 4.0.0'}
+
+  mercadopago@2.1.0:
+    resolution: {integrity: sha512-3Kx5AAPWEPnO9aSHhbAYPIYpKjM2QtyUJ/mEuBA0AeD19Mt8KViAN3vKqaZCxtEFgeiw+388m0HeBTOEGxU/7w==}
 
   merge-descriptors@1.0.1:
     resolution: {integrity: sha512-cCi6g3/Zr1iqQi6ySbseM1Xvooa98N0w31jzUYrXPX2xqObmFGHJ0tQ5u74H3mVh7wLouTseZyYIq39g8cNp1w==}
@@ -4110,6 +4129,8 @@ snapshots:
 
   '@microsoft/tsdoc@0.15.1': {}
 
+  '@nestjs/class-transformer@0.4.0': {}
+
   '@nestjs/cli@10.4.4':
     dependencies:
       '@angular-devkit/core': 17.3.8(chokidar@3.6.0)
@@ -5233,6 +5254,8 @@ snapshots:
   dotenv-expand@10.0.0: {}
 
   dotenv@16.4.5: {}
+
+  dotenv@16.4.7: {}
 
   eastasianwidth@0.2.0: {}
 
@@ -6403,6 +6426,13 @@ snapshots:
     dependencies:
       fs-monkey: 1.0.6
 
+  mercadopago@2.1.0:
+    dependencies:
+      node-fetch: 2.7.0
+      uuid: 9.0.1
+    transitivePeerDependencies:
+      - encoding
+
   merge-descriptors@1.0.1: {}
 
   merge-stream@2.0.0: {}
@@ -7239,7 +7269,7 @@ snapshots:
       cli-highlight: 2.1.11
       dayjs: 1.11.13
       debug: 4.3.6
-      dotenv: 16.4.5
+      dotenv: 16.4.7
       glob: 10.4.2
       mkdirp: 2.1.6
       reflect-metadata: 0.2.2

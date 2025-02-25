@@ -1,12 +1,12 @@
 export { AdminByEmail } from './AdminByEmail';
-export { UpadatePhone } from './updatePhone';
+export { UpdatePhone } from './updatePhone';
 export { Authorized } from './authorization';
 export { Delete } from './delete';
 export { AllAdmin } from './AllAdmin';
 export { AdminByName } from './AdminByName';
-export { UpadatePassword } from './updatepassword';
+export { UpdatePassword } from './updatepassword';
 export { Login } from './login';
 export { register, responsefind } from './response';
 export { Register } from './register';
-export { UpadatePermissions } from './updatePermissions';
-export { UpadateEmail } from './updateEmail';
+export { UpdatePermissions } from './updatePermissions';
+export { UpdateEmail } from './updateEmail';

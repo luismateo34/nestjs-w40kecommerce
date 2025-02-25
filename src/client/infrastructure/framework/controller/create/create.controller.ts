@@ -7,7 +7,9 @@ import {
   Post,
   UsePipes,
   ValidationPipe,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { subroutes } from 'src/client/application/routes/clientRoutes';
 import { CreateMethod } from 'src/client/application/usecase/create';
@@ -29,7 +31,7 @@ export class CreateController {
   })
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
-  async create(@Body() name_lastname: client_createDto) {
+  async create(@Body() name_lastname: client_createDto, @Res() res: Response) {
     try {
       const { email, lastname, name, password } = name_lastname;
       const resp = await this.Method.Create_Client(
@@ -39,7 +41,7 @@ export class CreateController {
         email,
       );
       if (resp === 'success') {
-        return;
+         res.status(HttpStatus.CREATED);
       }
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {

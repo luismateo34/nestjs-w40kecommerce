@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
+import { resolve } from 'node:path';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
 import { RouterModule } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 /*constroller*/
 import { AppController } from './app.controller';
 /*service*/
 import { AppService } from './app.service';
-/*typeorm options*/
-import { TypeOrmoptions } from 'src/database/typeorm';
 /*Modules*/
 import { AdminModule } from 'src/administrator/infrastructure/framework/admin.module';
 import { MainCashflowModule } from 'src/cashflow/infrastructure/framework/main-cashflow.module';
@@ -24,16 +23,27 @@ import { purchaseRoute } from 'src/purchase/application/routes/purchaseRoutes';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({ ...TypeOrmoptions }),
-    ConfigModule.forRoot({
-      envFilePath: '../.env',
-    }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env'] }),
     EventEmitterModule.forRoot(),
     AdminModule,
     MainCashflowModule,
     PurchaseModule,
     ProductModule,
     ClientModule,
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
+      //entities: [resolve(__dirname + '/../**/*.entity{.ts,.js}')],
+      entities: ['dist/**/*.entity{.ts,.js}'],
+      migrations: [resolve(__dirname + '/../../migrations/*{.ts,.js}')],
+      synchronize: false,
+      migrationsRun: true,
+      logging: true,
+    }),
     RouterModule.register([
       {
         path: `${routes.admin}`,

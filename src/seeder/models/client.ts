@@ -1,4 +1,5 @@
 import { client } from 'src/client/domain/entity/entityInterfaceClient';
+import { purchase as OrderPurchase } from 'src/client/domain/type/purchase';
 import { Factory } from 'nestjs-seeder';
 
 export class clientSeed implements client {
@@ -15,7 +16,7 @@ export class clientSeed implements client {
   password: string;
 
   @Factory((faker) => [faker.string.uuid()])
-  purchase_order: string[];
+  purchase_order: OrderPurchase[];
 
   @Factory(new Date())
   createdAt: Date;

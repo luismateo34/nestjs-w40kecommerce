@@ -12,16 +12,24 @@ import {
 } from '@nestjs/common';
 import { subRoutes } from 'src/product/application/routes/productRoute';
 import { updateMethod } from 'src/product/application/usecase/update';
+import { findMethod } from 'src/product/application/usecase/find';
+//-----
 import { updateDto } from 'src/product/application/validate/create';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 /*---*/
+import { OnEvent } from '@nestjs/event-emitter';
+import { Productpurchase } from 'src/evenpayload/updateProduct.dto';
+/*---*/
 
 @ApiTags(subRoutes.update)
 @Controller(subRoutes.update)
 export class UpdateController {
-  constructor(@Inject() private readonly update: updateMethod) {}
+  constructor(
+    @Inject() private readonly update: updateMethod,
+    @Inject() private readonly find: findMethod,
+  ) {}
   @Put()
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiResponse({
@@ -31,9 +39,9 @@ export class UpdateController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'bad request' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
-    description: 'Forbidden.',
+    description: 'Forbidden',
   })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard) // solo administrador puede realizar esta accion
   async updateProduct(@Body() updateObj: updateDto, @Res() res: Response) {
     try {
       const { id } = updateObj;
@@ -44,6 +52,53 @@ export class UpdateController {
         throw new HttpException(`error:${e.message}`, HttpStatus.BAD_REQUEST);
       }
       throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+  /*---*/
+  @UsePipes(new ValidationPipe({ transform: true }))
+  @OnEvent('product_purchase', { async: true })
+  async evenUodate(@Body() Dto: Productpurchase) {
+    try {
+      const { product } = Dto;
+      const fnMap = async () =>
+        await Promise.all(
+          product.map(async (el) => {
+            const obj = await this.find.find_Product_by_Id(el.id);
+            const newStock = obj.stock - el.quantity;
+            if (newStock < 0) {
+              throw new Error(`${obj.name} no tiene suficiente stock`);
+            }
+            const resp: typeof obj = {
+              category_product: obj.category_product,
+              franchise: obj.franchise,
+              gender: obj.gender,
+              id: obj.id,
+              name: obj.name,
+              percentaje_discount: obj.percentaje_discount,
+              price: obj.price,
+              status: obj.status,
+              stock: newStock,
+            };
+            return resp;
+          }),
+        );
+      const arr = await fnMap();
+      /*---*/
+      const result = async () =>
+        await Promise.all(
+          arr.map(async (el) => await this.update.update_Product(el.id, el)),
+        );
+      const ArrSucces = await result();
+      /*---*/
+      if (ArrSucces.length < product.length) {
+        return;
+      }
+      /*---*/
+    } catch (e) {
+      if (e instanceof Error && e.message.length !== 0) {
+        throw new HttpException(`error:${e.message}`, HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException(`error`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

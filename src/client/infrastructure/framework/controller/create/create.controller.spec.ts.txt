@@ -1,0 +1,38 @@
+import { CreateController } from './create.controller';
+import { CreateMethod } from 'src/client/application/usecase/create';
+import { ormMock } from 'src/client/infrastructure/mockDatabase';
+import { client_dto, clientObj } from './mock';
+import { HttpException, BadRequestException, HttpStatus } from '@nestjs/common';
+//-----
+describe('CreateController', () => {
+  let controller: CreateController;
+  let service: CreateMethod;
+  beforeEach(async () => {
+    service = new CreateMethod(new ormMock(clientObj));
+    controller = new CreateController(service);
+  });
+  describe('create', () => {
+    it('should be defined', async () => {
+      expect(controller).toBeDefined();
+    });
+    it('should be create', async () => {
+      jest
+        .spyOn(service, 'Create_Client')
+        .mockImplementation(() => Promise.resolve('success'));
+      const resp = await controller.create(client_dto);
+      expect(resp).toBe(undefined);
+    });
+    it('should be error', async () => {
+      jest.spyOn(service, 'Create_Client').mockImplementation(() => {
+        throw new Error();
+      });
+      try {
+        await controller.create(client_dto);
+      } catch (err) {
+        if (err instanceof Error) {
+          expect(err).toBeInstanceOf(HttpException);
+        }
+      }
+    });
+  });
+});

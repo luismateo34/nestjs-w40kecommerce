@@ -15,13 +15,15 @@ import {
   subroutes,
   updateroutes,
 } from 'src/client/application/routes/clientRoutes';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+//----
 import { UpdateMethod } from 'src/client/application/usecase/update';
 import { email_update_Dto } from 'src/client/application/validate/email';
+//---
 import { nameDto } from 'src/client/application/validate/updateName';
 import { nameDto as passwordDto } from 'src/client/application/validate/name';
-import { permissions } from 'src/client/infrastructure/framework/permission/permission';
-import { clientJwt } from 'src/client/application/type/clientJtw';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+//---
+import { admincheck } from './aux/admincheck';
 
 /*---*/
 @ApiTags(subroutes.update)
@@ -29,7 +31,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 export class UpdateController {
   constructor(
     @Inject('UpdateMethod') private readonly update: UpdateMethod,
-    private readonly permin: permissions,
+    private readonly admcheck: admincheck,
   ) {}
   /*---*/
   @Put(updateroutes.email)
@@ -43,23 +45,18 @@ export class UpdateController {
     description: 'Forbidden.',
   })
   @UsePipes(new ValidationPipe({ transform: true }))
+  //----
   async updateEmail(
     @Body() email: email_update_Dto,
     @Req() req: Request,
     @Res() res: Response,
   ) {
     try {
-      const adminAuth = await this.permin.adminAuth(req);
-      let client: clientJwt;
-      if (!adminAuth) {
-        client = await this.permin.clientPayload(req);
-      }
-      if (
-        (!adminAuth && client.lastname !== email.lastname) ||
-        client.name !== email.name
-      ) {
-        throw new HttpException('not permited', HttpStatus.FORBIDDEN);
-      }
+      await this.admcheck.checkAdmin_Name_lastname(
+        req,
+        email.name,
+        email.lastname,
+      );
       /*---*/
       const resp = await this.update.Update_Client_Email(
         email.name,
@@ -92,17 +89,11 @@ export class UpdateController {
     @Res() res: Response,
   ) {
     try {
-      const adminAuth = await this.permin.adminAuth(req);
-      let client: clientJwt;
-      if (!adminAuth) {
-        client = await this.permin.clientPayload(req);
-      }
-      if (
-        (!adminAuth && client.lastname !== nameUpdate.lastname) ||
-        client.name !== nameUpdate.name
-      ) {
-        throw new HttpException('not permited', HttpStatus.FORBIDDEN);
-      }
+      await this.admcheck.checkAdmin_Name_lastname(
+        req,
+        nameUpdate.name,
+        nameUpdate.lastname,
+      );
       /*----*/
       const resp = await this.update.Update_Client_Name(
         nameUpdate.name,
@@ -134,17 +125,11 @@ export class UpdateController {
     @Res() res: Response,
   ) {
     try {
-      const adminAuth = await this.permin.adminAuth(req);
-      let client: clientJwt;
-      if (!adminAuth) {
-        client = await this.permin.clientPayload(req);
-      }
-      if (
-        (!adminAuth && client.lastname !== passw.lastname) ||
-        client.name !== passw.name
-      ) {
-        throw new HttpException('not permited', HttpStatus.FORBIDDEN);
-      }
+      await this.admcheck.checkAdmin_Name_lastname(
+        req,
+        passw.name,
+        passw.lastname,
+      );
       /*----*/
       const { name, lastname, password } = passw;
       const resp = await this.update.Update_Client_Password(

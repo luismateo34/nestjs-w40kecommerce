@@ -4,12 +4,18 @@ import {
   IsNumber,
   IsArray,
   IsUUID,
+  ValidateNested,
+  IsOptional,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import {
   createProduct,
   productget,
-} from '@/product/domain/entity/entityInterfaceProduct';
+} from 'src/product/domain/entity/entityInterfaceProduct';
+import { OrderPurchase } from 'src/purchase/domain/entity/entityInterfaceOrder';
+import { OrderCompleteDto } from 'src/purchase/application/validate/orderCreate';
 
+// dto para crear producto
 export class createDto implements createProduct {
   @IsNotEmpty()
   @IsString()
@@ -23,7 +29,8 @@ export class createDto implements createProduct {
   @IsNotEmpty()
   @IsString()
   gender: string;
-
+  @IsOptional() // no existe orden de compra cuando el producto se crea
+  OrderPurchase: null;
   @IsNotEmpty()
   @IsNumber()
   percentaje_discount: number;
@@ -69,4 +76,8 @@ export class updateDto implements productget {
   @IsNotEmpty()
   @IsNumber()
   stock: number;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => OrderCompleteDto)
+  OrderPurchase: OrderPurchase[];
 }

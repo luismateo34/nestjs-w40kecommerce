@@ -1,6 +1,7 @@
 import {
   createProduct,
   productget,
+  product,
 } from 'src/product/domain/entity/entityInterfaceProduct';
 
 export interface ormProduct {
@@ -17,4 +18,5 @@ export interface ormProduct {
   set_Price_Product_update: (id: string, price: number) => Promise<void>;
   set_Stock_Product_update: (id: string, stock: number) => Promise<void>;
   update_Product: (id: string, product: createProduct) => Promise<void>;
+  find_Product_All_Id: (id: string) => Promise<product>;
 }

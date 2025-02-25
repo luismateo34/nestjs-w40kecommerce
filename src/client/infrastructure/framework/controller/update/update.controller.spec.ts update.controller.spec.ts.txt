@@ -1,0 +1,191 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { UpdateController } from './update.controller';
+import { Request, Response } from 'express';
+import { HttpException } from '@nestjs/common';
+//----
+import { UpdateMethod } from 'src/client/application/usecase/update';
+import { admincheck } from './aux/admincheck';
+//---
+import { email_update_Dto } from 'src/client/application/validate/email';
+import { nameDto } from 'src/client/application/validate/updateName';
+import { mockcheq, updateMock } from './mock/mocks';
+import { nameDto as passwordDto } from 'src/client/application/validate/name';
+//----
+const mockResponseFn = () => {
+  const res = {} as Response;
+  res.status = jest.fn().mockReturnValue(res);
+  res.json = jest.fn().mockReturnValue(res);
+  return res as Response;
+};
+
+describe('UpdateController', () => {
+  let controller: UpdateController;
+  let update: UpdateMethod;
+  let check: admincheck;
+  const req = {} as Request;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [UpdateController],
+      providers: [
+        {
+          provide: 'UpdateMethod',
+          useClass: updateMock,
+        },
+        {
+          provide: admincheck,
+          useClass: mockcheq,
+        },
+      ],
+    }).compile();
+
+    controller = module.get<UpdateController>(UpdateController);
+    update = module.get<UpdateMethod>('UpdateMethod');
+    check = module.get<admincheck>(admincheck);
+  });
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
+  describe('updateEmail', () => {
+    it('should update email, return void', async () => {
+      const emailObj: email_update_Dto = {
+        email: 'gatogordo@gmail.com',
+        lastname: 'gordo',
+        name: 'gato',
+      };
+      const resp = await controller.updateEmail(
+        emailObj,
+        req,
+        mockResponseFn(),
+      );
+      expect(resp).toBe(undefined);
+    });
+    it('should not update email, throw error check', async () => {
+      const emailObj: email_update_Dto = {
+        email: 'gatogordo@gmail.com',
+        lastname: 'gordo',
+        name: 'gato',
+      };
+      try {
+        jest.spyOn(check, 'checkAdmin_Name_lastname').mockImplementation(() => {
+          throw new Error();
+        });
+        await controller.updateEmail(emailObj, req, mockResponseFn());
+      } catch (err) {
+        if (err instanceof Error) {
+          expect(err).toBeInstanceOf(HttpException);
+        }
+      }
+    });
+    it('should not update email, throw error update', async () => {
+      const emailObj: email_update_Dto = {
+        email: 'gatogordo@gmail.com',
+        lastname: 'gordo',
+        name: 'gato',
+      };
+      try {
+        jest.spyOn(update, 'Update_Client_Email').mockImplementation(() => {
+          throw new Error();
+        });
+        await controller.updateEmail(emailObj, req, mockResponseFn());
+      } catch (err) {
+        if (err instanceof Error) {
+          expect(err).toBeInstanceOf(HttpException);
+        }
+      }
+    });
+  });
+  describe('updateName', () => {
+    it('should update name, return void', async () => {
+      const nameUpdate: nameDto = {
+        name: 'gato',
+        lastname: 'gordo',
+      };
+      const resp = await controller.updateName(
+        nameUpdate,
+        req,
+        mockResponseFn(),
+      );
+      expect(resp).toBe(undefined);
+    });
+    it('should not update name, throw error check', async () => {
+      const nameUpdate: nameDto = {
+        name: 'gato',
+        lastname: 'gordo',
+      };
+      try {
+        jest.spyOn(check, 'checkAdmin_Name_lastname').mockImplementation(() => {
+          throw new Error();
+        });
+        await controller.updateName(nameUpdate, req, mockResponseFn());
+      } catch (err) {
+        if (err instanceof Error) {
+          expect(err).toBeInstanceOf(HttpException);
+        }
+      }
+    });
+    it('should not update name, throw error update', async () => {
+      const nameUpdate: nameDto = {
+        name: 'gato',
+        lastname: 'gordo',
+      };
+      try {
+        jest.spyOn(update, 'Update_Client_Name').mockImplementation(() => {
+          throw new Error();
+        });
+        await controller.updateName(nameUpdate, req, mockResponseFn());
+      } catch (err) {
+        if (err instanceof Error) {
+          expect(err).toBeInstanceOf(HttpException);
+        }
+      }
+    });
+  });
+  describe('update password', () => {
+    it('should update password, return void', async () => {
+      const passw: passwordDto = {
+        lastname: 'gordo',
+        name: 'gato',
+        password: '123gatogordo',
+      };
+      expect(
+        await controller.updatePassword(passw, req, mockResponseFn()),
+      ).toBe(undefined);
+    });
+    it('should not update password, throw error check', async () => {
+      const passw: passwordDto = {
+        lastname: 'gordo',
+        name: 'gato',
+        password: '123gatogordo',
+      };
+      try {
+        jest.spyOn(check, 'checkAdmin_Name_lastname').mockImplementation(() => {
+          throw new Error();
+        });
+        await controller.updatePassword(passw, req, mockResponseFn());
+      } catch (err) {
+        if (err instanceof Error) {
+          expect(err).toBeInstanceOf(HttpException);
+        }
+      }
+    });
+    it('should not update password, throw error update', async () => {
+      const passw: passwordDto = {
+        lastname: 'gordo',
+        name: 'gato',
+        password: '123gatogordo',
+      };
+      try {
+        jest.spyOn(update, 'Update_Client_Password').mockImplementation(() => {
+          throw new Error();
+        });
+        await controller.updatePassword(passw, req, mockResponseFn());
+      } catch (err) {
+        if (err instanceof Error) {
+          expect(err).toBeInstanceOf(HttpException);
+        }
+      }
+    });
+  });
+});

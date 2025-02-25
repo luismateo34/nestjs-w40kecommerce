@@ -1,4 +1,4 @@
-import { FindMethod } from '@/client/application/usecase/find';
+import { FindMethod } from 'src/client/application/usecase/find';
 import {
   Injectable,
   Inject,
@@ -12,7 +12,6 @@ import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 /*---*/
 import { clientJwt } from 'src/client/application/type/clientJtw';
-import { cipher } from 'src/administrator/application/encripted/encripted';
 import { tokenClient } from 'src/client/infrastructure/framework/enum/token';
 /*-----*/
 @Injectable()
@@ -26,7 +25,7 @@ export class RefreshClientService {
   /*----------*/
   private async validateUser(token: clientJwt): Promise<clientJwt> {
     const user = await this.findMethod.Get_Client_Id(token.id);
-    if (token.name !== user[0] || token.lastname !== user[0]) {
+    if (token.name !== user.name || token.lastname !== user.lastname) {
       throw new Error();
     }
     return token;
@@ -48,13 +47,15 @@ export class RefreshClientService {
     return date;
   }
   /*----------*/
-  async Init_Service_Refresh_Token(body: clientJwt, @Res() res: Response) {
+  async Init_Service_Refresh_Token(
+    body: clientJwt,
+    @Res() res: Response,
+  ): Promise<void> {
     try {
       const validate = await this.validateUser(body);
       const jwt = await this.Create_refresh_token(validate);
-      const criptedCookie = cipher.encrypted(jwt.refresh_token);
       res
-        .cookie(tokenClient.refresh_token_client, criptedCookie, {
+        .cookie(tokenClient.refresh_token_client, jwt.refresh_token, {
           httpOnly: true,
           secure: this.configService.get('NODE_ENV') === 'production',
           expires: this.addHours(new Date(), 1),
@@ -66,7 +67,10 @@ export class RefreshClientService {
   }
   /*----------*/
   // recibe un refresh_token y devuelve un access_token-client y un access_token_client
-  async RefreshLoggin(@Req() req: Request, @Res() res: Response) {
+  async RefreshLoggin(
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
     try {
       const cookie = req.cookies.cookies.refresh_token as string;
       const payload: clientJwt = this.jwtService.decode(cookie);
@@ -74,9 +78,8 @@ export class RefreshClientService {
       await this.Init_Service_Refresh_Token(validate, res);
       //
       const jwt = await this.Create_refresh_token(payload);
-      const criptedCookie = cipher.encrypted(jwt.refresh_token);
       res
-        .cookie(tokenClient.access_token_client, criptedCookie, {
+        .cookie(tokenClient.access_token_client, jwt.refresh_token, {
           httpOnly: true,
           secure: this.configService.get('NODE_ENV') === 'production',
           expires: this.addHours(new Date(), 1),

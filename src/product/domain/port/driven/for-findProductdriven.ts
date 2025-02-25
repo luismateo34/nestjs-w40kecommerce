@@ -1,4 +1,4 @@
-import { usecases } from '@/product/domain/usecases/usecases';
+import { usecases } from 'src/product/domain/usecases/usecases';
 
 export type findProductdriven = Pick<
   usecases,
@@ -9,4 +9,5 @@ export type findProductdriven = Pick<
   | 'find_Products_Category'
   | 'find_Products_Gender'
   | 'find_Products_Franchise'
+  | 'find_Product_All_Id'
 >;

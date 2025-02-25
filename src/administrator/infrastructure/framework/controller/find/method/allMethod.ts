@@ -1,4 +1,4 @@
-import { AllAdmin } from '@/administrator/application/usecase';
+import { AllAdmin } from 'src/administrator/application/usecase';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Response } from 'express';
 

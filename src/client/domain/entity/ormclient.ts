@@ -1,4 +1,5 @@
 import { client } from 'src/client/domain/entity/entityInterfaceClient';
+import { purchase as OrderPurchase } from 'src/client/domain/type/purchase';
 
 export interface ormclient {
   save: (
@@ -21,5 +22,5 @@ export interface ormclient {
     lastname: string,
     password: string,
   ): Promise<void>;
-  update_purchase_orders(id: string, order: string[]): Promise<void>;
+  update_purchase_orders(id: string, order: OrderPurchase[]): Promise<void>;
 }

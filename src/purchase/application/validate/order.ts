@@ -6,14 +6,22 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { orderCreate } from '@/purchase/domain/usecase/usecases';
-import { client } from '@/client/domain/entity/entityInterfaceClient';
+import { Type } from 'class-transformer';
+import { orderCreate } from 'src/purchase/domain/usecase/usecases';
+import { client } from 'src/client/domain/entity/entityInterfaceClient';
 
-type createBodydto = Omit<orderCreate, 'envoy' | 'id'>;
+type createBodydto = Omit<orderCreate, 'envoy' | 'id' | 'products'>;
 export type createtype = Omit<orderCreate, 'envoy'>;
 
-export class createBodyDto implements createBodydto {
+export  class productDto {
+  @IsString()
+  @IsUUID()
+  id: string;
+  @IsNumber()
+  quantity: number;
+}
 
+export class createmethodDto implements createBodydto {
   @IsNotEmpty()
   @ValidateNested()
   client: client;
@@ -27,7 +35,8 @@ export class createBodyDto implements createBodydto {
   @IsUUID()
   clientId: string;
   @IsNotEmpty()
-  @IsArray({ each: true })
-  products: string[];
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => productDto)
+  productsId: productDto[];
 }
-

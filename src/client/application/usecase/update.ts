@@ -5,6 +5,7 @@ import {
 } from 'src/client/domain/adapter/driving';
 import { ormclient } from 'src/client/domain/entity/ormclient';
 import { updateClientDriving } from 'src/client/domain/port/driving/for-update';
+import { purchase as OrderPurchase } from 'src/client/domain/type/purchase';
 
 export class UpdateMethod implements updateClientDriving {
   private service: updateDriving;
@@ -31,7 +32,10 @@ export class UpdateMethod implements updateClientDriving {
   ): Promise<'success'> {
     return await this.service.Update_Client_Password(name, lastname, password);
   }
-  async Update_Purchase_orders(id: string, order: string[]): Promise<void> {
+  async Update_Purchase_orders(
+    id: string,
+    order: OrderPurchase,
+  ): Promise<void> {
     await this.service.Update_Purchase_orders(id, order);
   }
 }

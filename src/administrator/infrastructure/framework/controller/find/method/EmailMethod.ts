@@ -5,7 +5,7 @@ import { Response } from 'express';
 @Injectable()
 export class Emailmethod {
   constructor(
-    @Inject('AdminByEmail') private readonly adminByEmail: AdminByEmail,
+    @Inject('adminByEmail') private readonly adminByEmail: AdminByEmail,
   ) {}
   async find_Email(email: string, res: Response) {
     if (email === undefined || email.length === 0) {

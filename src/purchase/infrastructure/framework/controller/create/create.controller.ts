@@ -13,14 +13,16 @@ import {
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { subRoutes } from 'src/purchase/application/routes/purchaseRoutes';
-/*---*/
+//-------------------------------------------------------------------------
 import { createMethod } from 'src/purchase/application/usecases/create';
-/*---*/
-import { createBodyDto } from 'src/purchase/application/validate/order';
+//------------------------------------------------------------------------
+import { createmethodDto } from 'src/purchase/application/validate/order';
 import { JwtAuthGuard } from 'src/client/infrastructure/framework/guard/jwtGuard';
 import { Request } from 'express';
-/*---*/
-/*---*/
+//--------------------------------------------------------------------------------
+import { findyIdService } from 'src/purchase/infrastructure/framework/service/Find';
+import { orderCreateDto } from 'src/purchase/application/validate/orderCreate';
+//----------------------------------------------------------------------------------
 
 @ApiTags(subRoutes.create)
 @Controller(subRoutes.create)
@@ -28,6 +30,8 @@ export class CreateController {
   constructor(
     @Inject('createMethod') private readonly Method: createMethod,
     private eventEmitter: EventEmitter2,
+    //private findById: FindbyIdService,
+    private findById: findyIdService,
   ) {}
 
   @Post()
@@ -42,18 +46,23 @@ export class CreateController {
   })
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
-  async create(@Body() Order: createBodyDto, @Req() req: Request) {
+  async create(@Body() Order: createmethodDto, @Req() req: Request) {
     try {
-      const obj = await this.Method.create(Order);
-      if (obj === 'success') {
-        //this.eventEmitter.emit('purchase_update', {
-          //purchaseId: PurchaseId,
-          //payload: req,
-        //});
-	//this.eventEmitter('product_update',{
-	  //payload: Order.products
-	//})
-      }
+      const arrProduct = await this.findById.arrProductFn(Order);
+      const PurchaseObj: orderCreateDto = {
+        amount: Order.amount,
+        client: Order.client,
+        envoy: false,
+        products: arrProduct,
+      };
+      const createPurchase = await this.Method.create(PurchaseObj);
+      this.eventEmitter.emit('purchase_update', {
+        req: req,
+        payload: createPurchase,
+      });
+      this.eventEmitter.emit('product_purchase', {
+        product: Order.productsId,
+      });
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {
         throw new HttpException(`error:${e.message}`, HttpStatus.BAD_REQUEST);

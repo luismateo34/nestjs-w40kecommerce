@@ -3,7 +3,7 @@ import { Update as updateResponse } from 'src/administrator/application/usecase/
 import { DrivenUpdate, Update } from 'src/administrator/domain/adapter/driving';
 import { adminOrm } from 'src/administrator/domain/entity/orm_method.interface';
 
-export class UpadatePermissions {
+export class UpdatePermissions {
   private method: Update;
   constructor(readonly service: adminOrm) {
     this.method = new Update(new DrivenUpdate(service));

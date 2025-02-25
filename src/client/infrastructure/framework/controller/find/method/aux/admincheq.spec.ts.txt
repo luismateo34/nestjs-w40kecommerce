@@ -1,0 +1,57 @@
+import { Controller, Get, HttpException } from '@nestjs/common';
+import type { Request } from 'express';
+import { Admincheq } from './admincheq';
+import { clientJwt } from 'src/client/application/type/clientJtw';
+import { permissions } from 'src/client/infrastructure/framework/permission/permission';
+
+const obj: clientJwt = {
+  id: '1',
+  lastname: 'gordo',
+  name: 'gato',
+};
+
+@Controller()
+class Mock {
+  constructor(private readonly admincheq: Admincheq) {}
+  @Get()
+  async test(req: Request, name: string, lastname: string) {
+    await this.admincheq.cheq(req, name, lastname);
+  }
+}
+class permMock {
+  async adminAuth(req: Request) {
+    if (req !== null) {
+      return true;
+    }
+  }
+  async clientPayload(req: Request) {
+    if (req !== null) {
+      return obj;
+    }
+  }
+}
+describe('admincheq', () => {
+  let controller: Mock;
+  let service: Admincheq;
+  let req: Request;
+  beforeEach(() => {
+    service = new Admincheq(new permMock() as permissions);
+    controller = new Mock(service);
+  });
+  describe('admincheq test', () => {
+    it('if not admin', async () => {
+      expect(await controller.test(req, obj.name, obj.lastname)).toBe(
+        undefined,
+      );
+    });
+    it('if error', async () => {
+      try {
+        await controller.test(req, 'michi', 'muygordo');
+      } catch (err) {
+        if (err instanceof Error) {
+          expect(err).toBeInstanceOf(HttpException);
+        }
+      }
+    });
+  });
+});

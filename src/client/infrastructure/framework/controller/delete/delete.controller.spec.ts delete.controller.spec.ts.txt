@@ -1,0 +1,45 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { DeleteController } from './delete.controller';
+import { deleteMethod } from 'src/client/application/usecase/delete';
+import { nameDto } from 'src/client/application/validate/name';
+import { HttpException } from '@nestjs/common';
+
+describe('DeleteController', () => {
+  let controller: DeleteController;
+  let service: deleteMethod;
+  const deleteDto: nameDto = {
+    lastname: 'gordo',
+    name: 'gato',
+    password: 'gatogordo123',
+  };
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [DeleteController],
+      providers: [deleteMethod],
+    }).compile();
+
+    controller = module.get<DeleteController>(DeleteController);
+    service = module.get<deleteMethod>(deleteMethod);
+  });
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
+  it('should be deletele client', async () => {
+    jest.spyOn(service, 'Delete_Client').mockImplementation(undefined);
+    expect(await controller.delete_client(deleteDto)).toBe(undefined);
+  });
+  it('should be error', async () => {
+    jest.spyOn(service, 'Delete_Client').mockImplementation(() => {
+      throw new Error();
+    });
+    try {
+      await controller.delete_client(deleteDto);
+    } catch (err) {
+      if (err instanceof Error) {
+        expect(err).toBeInstanceOf(HttpException);
+      }
+    }
+  });
+});

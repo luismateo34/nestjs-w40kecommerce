@@ -32,9 +32,9 @@ export class FindController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
-  async findRoutes(@Query('name') name: string, @Res() res: Response) {
+  async find_by_Name(@Query('name') name: string, @Res() res: Response) {
     try {
-      const resp = await this.methodFind.find_Product_by_Name(name);
+      const resp = await this.methodFind.find_by_Name(name);
       res.status(HttpStatus.OK).json(resp);
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {
@@ -140,7 +140,7 @@ export class FindController {
     }
   }
   /*---*/
-  @Get(`${findRoutes.stockproductnameId}/:id`)
+  @Get(`${findRoutes.stockbyId}/:id`)
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'The record has been successfully created.',
@@ -163,7 +163,7 @@ export class FindController {
   }
 
   //id
-  @Get(`${findRoutes.stockproductbyId}/:id`)
+  @Get(`${findRoutes.productbyId}/:id`)
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'The record has been successfully created.',
@@ -175,7 +175,7 @@ export class FindController {
   })
   async product_by_Id(@Param('id') id: string, @Res() res: Response) {
     try {
-      const resp = await this.methodFind.find_Stock_Product_by_Id(id);
+      const resp = await this.methodFind.find_Product_by_Id(id);
       res.status(HttpStatus.OK).json(resp);
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {

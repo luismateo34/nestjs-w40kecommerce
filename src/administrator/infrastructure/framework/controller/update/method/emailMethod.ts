@@ -1,10 +1,10 @@
-import { UpadateEmail } from 'src/administrator/application/usecase';
+import { UpdateEmail } from 'src/administrator/application/usecase';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { EmailDto } from 'src/administrator/application/validation/email';
 @Injectable()
-export class EmailMethod {
+export class EmailMethodUpdate {
   constructor(
-    @Inject('UpadateEmail') private readonly updateEmail: UpadateEmail,
+    @Inject('UpdateEmail') private readonly updateEmail: UpdateEmail,
   ) {}
   async email(emailDto: EmailDto) {
     try {

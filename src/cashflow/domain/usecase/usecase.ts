@@ -25,7 +25,7 @@ export interface usecase {
     day: number,
   ): Promise<void>;
   /*--update--*/
-  update_Balance_Month(year: number, month: number, day: number): Promise<void>;
+  update_Balance_Month(year: number, month: number): Promise<void>;
   update_Balance_Day(year: number, month: number, day: number): Promise<void>;
   /*-------*/
   update_Revenue_Day(
@@ -34,7 +34,7 @@ export interface usecase {
     day: number,
     revenue: number,
   ): Promise<void>;
-  update_Revenue_Month(year: number, month: number, day: number): Promise<void>;
+  update_Revenue_Month(year: number, month: number): Promise<void>;
   /*-------*/
   update_Expense_Day(
     year: number,
@@ -42,5 +42,5 @@ export interface usecase {
     day: number,
     expenses: number,
   ): Promise<void>;
-  update_Expense_Month(year: number, month: number, day: number): Promise<void>;
+  update_Expense_Month(year: number, month: number): Promise<void>;
 }

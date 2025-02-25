@@ -1,4 +1,4 @@
-import { usecase } from '@/client/domain/usecase/usecase';
+import { usecase } from 'src/client/domain/usecase/usecase';
 
 export type getclient = Pick<
   usecase,

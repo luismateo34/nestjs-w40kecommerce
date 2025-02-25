@@ -1,4 +1,4 @@
-import { OrderPurchase } from 'src/purchase/domain/entity/entityInterfaceOrder';
+import { purchase as OrderPurchase } from 'src/client/domain/type/purchase';
 export interface client {
   name: string;
   lastname: string;

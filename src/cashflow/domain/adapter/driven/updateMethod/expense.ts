@@ -18,12 +18,8 @@ export class method_expense implements methodType {
     const dayDate = new Date(year, month, day, 0, 0, 0);
     await this.service.update_Day_expense(dayDate, expenses);
   }
-  async update_Expense_Month(
-    year: number,
-    month: number,
-    day: number,
-  ): Promise<void> {
-    const dayDate = new Date(year, month, day, 0, 0, 0);
+  async update_Expense_Month(year: number, month: number): Promise<void> {
+    const dayDate = new Date(year, month, 0, 0, 0, 0);
     const monthly_expense = await this.service.find_month_range(
       new Date(year, month, 1, 0, 0, 0),
       dayDate,

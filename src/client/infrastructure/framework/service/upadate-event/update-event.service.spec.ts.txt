@@ -1,0 +1,92 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { Request } from 'express';
+import { UpdateEventService } from './update-event.service';
+//------
+import { UpdateClientService } from 'src/client/infrastructure/framework/service/update-client/update-client.service';
+import { FindClientIdService } from 'src/client/infrastructure/framework/service/find-client-id/find-client-id.service';
+import { permissions } from 'src/client/infrastructure/framework/permission/permission';
+import { clientJwt } from 'src/client/application/type/clientJtw';
+import { check } from 'src/client/infrastructure/framework/service/find-client-id/find-client-id.service';
+import { purchase } from 'src/client/domain/type/purchase';
+import { HttpException } from '@nestjs/common';
+//------
+const obj: clientJwt = {
+  id: '1',
+  lastname: 'gordo',
+  name: 'gato',
+};
+const objcheck: check = {
+  find: true,
+  id: '1',
+  lastname: 'gordo',
+  mesagge: 'gatogordo',
+  name: 'gato',
+};
+
+class mockPemission {
+  async adminAuth(req: Request): Promise<boolean> {
+    if (req !== null) {
+      return false;
+    }
+  }
+  async clientPayload(req: Request): Promise<clientJwt> {
+    if (req !== null) {
+      return obj;
+    }
+  }
+}
+class findMock {
+  async check_name_by_id(id: string): Promise<check> {
+    if (typeof id === 'string') {
+      return objcheck;
+    }
+  }
+}
+class updateMock {
+  async clientUpdate_Purchase(id: string, order: purchase): Promise<void> {
+    if (typeof id === 'string' && typeof order === 'object') {
+      return;
+    }
+  }
+}
+const req = {} as Request;
+const objPurchase = {} as purchase;
+//---
+describe('UpadateEventService', () => {
+  let service: UpdateEventService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        {
+          provide: UpdateEventService,
+          useValue: new UpdateEventService(
+            new updateMock() as UpdateClientService,
+            new findMock() as FindClientIdService,
+            new mockPemission() as permissions,
+          ),
+        },
+      ],
+    }).compile();
+
+    service = module.get<UpdateEventService>(UpdateEventService);
+  });
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+  it('should be return void', async () => {
+    expect(await service.Update_order_by_Client(req, objPurchase)).toBe(
+      undefined,
+    );
+  });
+  it('should be error', async () => {
+    try {
+      const reqObj = {} as Request;
+      await service.Update_order_by_Client(reqObj, objPurchase);
+    } catch (err) {
+      if (err instanceof Error) {
+        expect(err).toBeInstanceOf(HttpException);
+      }
+    }
+  });
+});

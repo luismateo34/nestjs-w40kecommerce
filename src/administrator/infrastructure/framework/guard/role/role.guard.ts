@@ -14,7 +14,7 @@ import { AdminByName } from 'src/administrator/application/usecase';
 @Injectable()
 export class RoleGuard implements CanActivate {
   constructor(
-    @Inject('AdminByName') private readonly adminByName: AdminByName,
+    @Inject('adminByName') private readonly adminByName: AdminByName,
     private readonly reflector: Reflector,
   ) {}
   private async authenticate(payload: PayloadJwt): Promise<boolean> {

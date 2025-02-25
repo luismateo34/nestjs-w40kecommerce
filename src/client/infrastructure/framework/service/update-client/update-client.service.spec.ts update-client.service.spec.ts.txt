@@ -1,0 +1,70 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { UpdateClientService } from './update-client.service';
+import { purchase } from 'src/client/domain/type/purchase';
+import { UpdateMethod } from 'src/client/application/usecase/update';
+//----
+class UpdateClientmock {
+  async Update_Purchase_orders(id: string, order: purchase): Promise<void> {
+    if (typeof id === 'string' && typeof order === 'object') {
+      return;
+    }
+  }
+  async Update_Client_Name(name: string, lastname: string): Promise<'success'> {
+    if (typeof name === 'string' && typeof lastname === 'string') {
+      return 'success';
+    }
+  }
+  async Update_Client_Password(
+    name: string,
+    lastname: string,
+    password: string,
+  ): Promise<'success'> {
+    if (
+      typeof name === 'string' &&
+      typeof lastname === 'string' &&
+      typeof password === 'string'
+    ) {
+      return 'success';
+    }
+  }
+  async Update_Client_Email(
+    name: string,
+    lastname: string,
+    email: string,
+  ): Promise<'success'> {
+    if (
+      typeof name === 'string' &&
+      typeof lastname === 'string' &&
+      typeof email === 'string'
+    ) {
+      return 'success';
+    }
+  }
+}
+
+describe('UpdateClientService', () => {
+  let service: UpdateClientService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        {
+          provide: UpdateClientService,
+          useValue: new UpdateClientService(
+            new UpdateClientmock() as UpdateMethod,
+          ),
+        },
+      ],
+    }).compile();
+
+    service = module.get<UpdateClientService>(UpdateClientService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+  it('should be return void', async () => {
+    const obj = {} as purchase;
+    expect(await service.clientUpdate_Purchase('gato', obj)).toBe(undefined);
+  });
+});

@@ -1,0 +1,67 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { configMock } from '../../mock/configMock';
+import { jwtmock } from 'src/client/infrastructure/framework/mock/jwtmock';
+import { JwtClientService } from './jwt-client.service';
+import { JwtService } from '@nestjs/jwt';
+import { Response } from 'express';
+import { clientJwt } from 'src/client/application/type/clientJtw';
+import { UnauthorizedException } from '@nestjs/common';
+//-----//---
+const payloadMock: clientJwt = {
+  id: '1',
+  lastname: 'gordo',
+  name: 'gato',
+};
+const mockResponseFn = () => {
+  const res = {} as Response;
+  res.status = jest.fn().mockReturnValue(res);
+  res.cookie = jest.fn().mockReturnValue(res);
+  res.json = jest.fn().mockReturnValue(res);
+  return res as Response;
+};
+
+const customEnvVars = {
+  JWT_SECRET: 'gato_gordo_secret',
+  NODE_ENV: 'production',
+};
+
+process.env = { ...process.env, ...customEnvVars };
+//-----
+describe('JwtClientService', () => {
+  let service: JwtClientService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        {
+          provide: JwtClientService,
+          useValue: new JwtClientService(
+            new jwtmock() as JwtService,
+            new configMock(),
+          ),
+        },
+      ],
+    }).compile();
+
+    service = module.get<JwtClientService>(JwtClientService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+  it('should be return void', async () => {
+    jest.mock('src/administrator/application/encripted/encripted');
+    expect(await service.Login(payloadMock, mockResponseFn())).toBe(undefined);
+  });
+  it('should be return error', async () => {
+    jest.mock('src/administrator/application/encripted/encripted');
+    try {
+      const res = {} as Response;
+      await service.Login(payloadMock, res);
+    } catch (err) {
+      if (err instanceof Error) {
+        expect(err).toBeInstanceOf(UnauthorizedException);
+      }
+    }
+  });
+});

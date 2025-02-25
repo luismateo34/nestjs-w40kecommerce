@@ -1,4 +1,4 @@
-import { createProduct } from '@/product/domain/entity/entityInterfaceProduct';
+import { createProduct } from 'src/product/domain/entity/entityInterfaceProduct';
 import {
   UpdateDriven,
   UpdateProduct,

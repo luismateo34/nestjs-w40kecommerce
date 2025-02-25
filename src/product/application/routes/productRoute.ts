@@ -10,12 +10,12 @@ export enum subRoutes {
 }
 export enum findRoutes {
   stockproductname = 'stockproductname',
-  stockproductnameId = 'stockproductnameId',
+  stockbyId = 'stock_by_Id',
   productbyname = 'productbyname',
   productsCategory = 'productsCategory',
   productsFranchise = 'productsFranchise',
   productsGender = 'productsGender',
-  stockproductbyId = 'stockproductbyId',
+  productbyId = 'product_by_Id',
 }
 export enum settingRoutes {
   discountproduct = 'discountproduct',

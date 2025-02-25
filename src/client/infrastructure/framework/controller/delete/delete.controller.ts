@@ -8,7 +8,9 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { deleteMethod } from 'src/client/application/usecase/delete';
 import { subroutes } from 'src/client/application/routes/clientRoutes';
 import { nameDto } from 'src/client/application/validate/name';
@@ -32,9 +34,16 @@ export class DeleteController {
   })
   @UsePipes(new ValidationPipe({ transform: true }))
   @UseGuards(JwtAuthGuard)
-  async delete_client(@Body() name: nameDto) {
+  async delete_client(@Body() name: nameDto, @Res() res: Response) {
     try {
-      await this.Method.Delete_Client(name.name, name.lastname, name.password);
+      const resp = await this.Method.Delete_Client(
+        name.name,
+        name.lastname,
+        name.password,
+      );
+      if (resp === 'success') {
+        res.status(HttpStatus.ACCEPTED);
+      }
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {
         throw new HttpException(

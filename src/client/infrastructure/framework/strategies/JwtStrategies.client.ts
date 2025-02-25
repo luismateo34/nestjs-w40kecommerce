@@ -4,8 +4,7 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
 import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
-import { Login } from '@/administrator/application/usecase';
-import { cipher } from 'src/administrator/application/encripted/encripted';
+import { Login } from 'src/administrator/application/usecase';
 import { FindMethod } from 'src/client/application/usecase/find';
 import { clientJwt } from 'src/client/application/type/clientJtw';
 
@@ -13,18 +12,18 @@ import { clientJwt } from 'src/client/application/type/clientJtw';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     configService: ConfigService,
-    @Inject('Login') private logginJwt: Login,
+    @Inject('LOGIN') private logginJwt: Login,
     @Inject('FindMethod') private findMethod: FindMethod,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
-        (req: Request) => {
-          const tokenadmin = req?.cookies.access_token_admin;
-          const tokenclient = req?.cookies.access_token_client;
-          if (tokenadmin !== undefined) {
-            return cipher.decrypted(tokenadmin);
-          } else if (tokenadmin === undefined) {
-            return cipher.decrypted(tokenclient);
+        (request: Request) => {
+          const adm = request.cookies?.access_token_admin;
+          const tokenclient = request.cookies?.access_token_client;
+          if (adm !== undefined) {
+            return adm;
+          } else if (tokenclient !== undefined) {
+            return tokenclient;
           }
         },
       ]),

@@ -1,0 +1,49 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { Request } from 'express';
+import { JwtService } from '@nestjs/jwt';
+import { permissions } from './permission';
+import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
+import { Login } from 'src/administrator/application/usecase';
+import { jwtmock } from 'src/client/infrastructure/framework/mock/jwtmock';
+//------
+
+class loginmock {
+  async loginToken(payload: PayloadJwt) {
+    return payload;
+  }
+}
+
+const cookieobj = { cookies: { access_token_admin: 'hola' } };
+
+const req = {} as Request;
+req.cookies = cookieobj;
+
+describe('permissionService', () => {
+  let service: permissions;
+  //const req = {} as Request;
+  const rel = new jwtmock() as JwtService;
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        {
+          provide: permissions,
+          useValue: new permissions(rel, new loginmock() as Login),
+        },
+      ],
+    }).compile();
+
+    service = module.get<permissions>(permissions);
+  });
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+  it('should be adminAuth return true', async () => {
+    const adminAuth = await service.adminAuth(req);
+    expect(adminAuth).toBe(true);
+  });
+  it('should be adminAuth return false', async () => {
+    const ref = {} as Request;
+    const adminAuth = await service.adminAuth(ref);
+    expect(adminAuth).toBe(false);
+  });
+});

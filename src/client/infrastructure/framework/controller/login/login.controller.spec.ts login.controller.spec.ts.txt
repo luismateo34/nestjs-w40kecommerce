@@ -1,0 +1,88 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { LoginController } from './login.controller';
+import { Request, Response } from 'express';
+//--service
+import { JwtClientService } from 'src/client/infrastructure/framework/service/jwt-client/jwt-client.service';
+import { RefreshClientService } from 'src/client/infrastructure/framework/service/refresh-client/refresh-client.service';
+//--
+import { clientJwt } from 'src/client/application/type/clientJtw';
+//---
+const mockResponseFn = () => {
+  const res = {} as Response;
+  res.status = jest.fn();
+  res.json = jest.fn();
+  res.clearCookie = jest.fn();
+  res.redirect = jest.fn();
+  return res as Response;
+};
+
+class jwtMock {
+  async Login(client: clientJwt, res: Response) {
+    if (client !== null && res !== null) {
+      return;
+    }
+  }
+}
+class refreshMock {
+  async Init_Service_Refresh_Token(client: clientJwt, res: Response) {
+    if (client !== null && res !== null) {
+      return;
+    }
+  }
+  async RefreshLoggin(req: Request, res: Response) {
+    if (req !== null && res !== null) {
+      return;
+    }
+  }
+}
+
+describe('LoginController', () => {
+  let controller: LoginController;
+  const req = {} as Request;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [LoginController],
+      providers: [
+        {
+          provide: 'FindMethod',
+          useValue: {
+            Get_Client_Id: jest.fn().mockResolvedValue(undefined),
+          },
+        },
+        {
+          provide: JwtClientService,
+          useClass: jwtMock,
+        },
+        {
+          provide: RefreshClientService,
+          useClass: refreshMock,
+        },
+      ],
+    }).compile();
+
+    controller = module.get<LoginController>(LoginController);
+  });
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
+  describe('login', () => {
+    it('should be login, return void', async () => {
+      const resp = await controller.login(req, mockResponseFn());
+      expect(resp).toBe(undefined);
+    });
+  });
+  describe('logout', () => {
+    it('should be loggout, return void', async () => {
+      const resp = await controller.login(req, mockResponseFn());
+      expect(resp).toBe(undefined);
+    });
+  });
+  describe('refresh', () => {
+    it('should be refresh, return void', async () => {
+      const resp = await controller.login(req, mockResponseFn());
+      expect(resp).toBe(undefined);
+    });
+  });
+});

@@ -15,12 +15,11 @@ import {
 } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { token } from 'src/administrator/infrastructure/framework/enum/token';
-import { cipher } from 'src/administrator/application/encripted/encripted';
 
 @Injectable()
 export class RefreshMethod {
   constructor(
-    @Inject('Login') private readonly login: Login,
+    @Inject('LOGIN') private readonly login: Login,
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}
@@ -54,10 +53,9 @@ export class RefreshMethod {
     try {
       const validate = await this.validateUser(req_user);
       const jwt = await this.create_refresh_token_method(validate);
-      const criptedCookie = cipher.encrypted(jwt.refresh_token);
       /*---*/
-      res
-        .cookie(token.refresh_token, criptedCookie, {
+      return res
+        .cookie(token.refresh_token, jwt.refresh_token, {
           httpOnly: true,
           secure: this.configService.get('NODE_ENV') === 'production',
           expires: this.addHours(new Date(), 1),
@@ -80,10 +78,9 @@ export class RefreshMethod {
       /*----*/
       const validate = await this.validateUser(payload);
       const jwt = await this.create_refresh_token_method(validate);
-      const criptedCookie = cipher.encrypted(jwt.refresh_token);
       // refresca el jwt
       res
-        .cookie(token.access_token_admin, criptedCookie, {
+        .cookie(token.access_token_admin, jwt.refresh_token, {
           httpOnly: true,
           secure: this.configService.get('NODE_ENV') === 'production',
           expires: this.addHours(new Date(), 1),

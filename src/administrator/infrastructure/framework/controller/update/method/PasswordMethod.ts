@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { PasswordDto } from 'src/administrator/application/validation/password';
-import { UpadatePassword } from 'src/administrator/application/usecase';
+import { UpdatePassword } from 'src/administrator/application/usecase';
 
 @Injectable()
 export class PassMethod {
   constructor(
-    @Inject('UpadatePassword') private readonly updatePassword: UpadatePassword,
+    @Inject('UpdatePassword') private readonly updatePassword: UpdatePassword,
   ) {}
   async password(passwordDto: PasswordDto) {
     try {
