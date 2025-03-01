@@ -12,28 +12,30 @@ import {
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { subRoutes } from 'src/purchase/application/routes/purchaseRoutes';
+import { Request } from 'express';
+//------------------------------------------------------------------------------
+import {
+  subRoutes,
+  purchaseRoute,
+} from 'src/purchase/application/routes/purchaseRoutes';
 //-------------------------------------------------------------------------
 import { createMethod } from 'src/purchase/application/usecases/create';
 //------------------------------------------------------------------------
 import { createmethodDto } from 'src/purchase/application/validate/order';
 import { JwtAuthGuard } from 'src/client/infrastructure/framework/guard/jwtGuard';
-import { Request } from 'express';
-//--------------------------------------------------------------------------------
-import { findyIdService } from 'src/purchase/infrastructure/framework/service/Find';
 import { orderCreateDto } from 'src/purchase/application/validate/orderCreate';
+import { findyIdService } from 'src/product/infrastructure/framework/services/findby-id/findyid';
 //----------------------------------------------------------------------------------
-
-@ApiTags(subRoutes.create)
+//----------------------------------------------------------------------------------
+@ApiTags(`${purchaseRoute.purchase}-${subRoutes.create}`)
 @Controller(subRoutes.create)
 export class CreateController {
   constructor(
     @Inject('createMethod') private readonly Method: createMethod,
     private eventEmitter: EventEmitter2,
-    //private findById: FindbyIdService,
     private findById: findyIdService,
   ) {}
-
+  //-----------------CREATE---------------------------------------------------------
   @Post()
   @ApiResponse({
     status: HttpStatus.OK,
@@ -46,6 +48,7 @@ export class CreateController {
   })
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
+  //----------------------------------------------------------------------------
   async create(@Body() Order: createmethodDto, @Req() req: Request) {
     try {
       const arrProduct = await this.findById.arrProductFn(Order);

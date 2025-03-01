@@ -1,42 +1,36 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  Inject,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
+import { Reflector } from '@nestjs/core';
+import { Request } from 'express';
+import { JwtService } from '@nestjs/jwt';
+//---------------------------------------------------------------------------------------
 import { ROLES_KEY } from 'src/administrator/infrastructure/framework/decorator/roleDecorator';
 import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
-import { Reflector } from '@nestjs/core';
 import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
-import { AdminByName } from 'src/administrator/application/usecase';
-
+import { AdminDto } from 'src/administrator/domain/validate/admin';
+//---------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 @Injectable()
 export class RoleGuard implements CanActivate {
   constructor(
-    @Inject('adminByName') private readonly adminByName: AdminByName,
     private readonly reflector: Reflector,
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
   ) {}
-  private async authenticate(payload: PayloadJwt): Promise<boolean> {
+  //---------------------------------------------------------------------------------------
+  private authenticate(cookie: string, role: permissions[]): boolean {
     try {
-      const resp = await this.adminByName.findBy_name_lastname(
-        payload.name,
-        payload.lastname,
-      );
-      if (
-        resp.id === payload.id &&
-        resp.name === payload.name &&
-        resp.lastname === payload.lastname &&
-        resp.permission === payload.role
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+      const secret = this.configService.get('JWT_SECRET');
+      const payload: PayloadJwt = this.jwtService.decode(cookie, secret);
+      const roletoken = payload.role;
+      const rolePerm = role.some((el) => el === roletoken);
+      return rolePerm;
     } catch {
       return false;
     }
   }
+  //---------------------------------------------------------------------------------------
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -47,15 +41,17 @@ export class RoleGuard implements CanActivate {
     if (requiredRoles === null || requiredRoles.length === 0) {
       return false;
     }
-    const { user } = context.switchToHttp().getRequest();
-    const userObj: PayloadJwt = user;
-    const tokenInclude = requiredRoles.some((role) =>
-      userObj?.role?.includes(role),
+    const req: Request = context.switchToHttp().getRequest();
+    const body: AdminDto = req.body;
+    const cookie: string = req.cookies.access_token;
+    const tokenInclude = requiredRoles.some(
+      (role) => body.permissions === role,
     );
     if (!tokenInclude) {
       return false;
     } else if (tokenInclude) {
-      return this.authenticate(userObj);
+      const resp = this.authenticate(cookie, requiredRoles);
+      return resp;
     }
   }
 }

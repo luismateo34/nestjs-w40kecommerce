@@ -4,8 +4,14 @@ import { ormPurchase } from 'src/purchase/domain/entity/ormPurchase';
 
 export class Find implements findType {
   constructor(private method: ormPurchase) {}
+  //---------------------------------------------------------------------
   async find_by_Id(id: string): Promise<OrderPurchase> {
     const resp = await this.method.find_Id(id);
+    return resp;
+  }
+  //--------------------------------------------------------------------
+  async find_by_clientId(id: string): Promise<OrderPurchase[]> {
+    const resp = await this.method.find_by_clientId(id);
     return resp;
   }
   /*----*/

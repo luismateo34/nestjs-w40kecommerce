@@ -12,18 +12,21 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+//---------------------------------------------------------------------------------------
 import {
   subRoutes,
   updateRoutes,
+  purchaseRoute,
 } from 'src/purchase/application/routes/purchaseRoutes';
 import { updateMethod } from 'src/purchase/application/usecases/update';
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { orderCreateDto } from 'src/purchase/application/validate/orderCreate';
-import { Request } from 'express';
-/*---*/
+//---------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 
-@ApiTags(subRoutes.update)
+@ApiTags(`${purchaseRoute.purchase}-${subRoutes.update}`)
 @Controller(subRoutes.update)
 export class UpdateController {
   constructor(
@@ -31,6 +34,7 @@ export class UpdateController {
     private eventEmitter: EventEmitter2,
   ) {}
   /*----*/
+  //---------------------------------------------------------------------------------------
   @Put(updateRoutes.order)
   @ApiResponse({
     status: HttpStatus.OK,
@@ -43,6 +47,7 @@ export class UpdateController {
   })
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe({ transform: true }))
+  //---------------------------------------------------------------------------------------
   async order(@Body() order: orderCreateDto, @Req() req: Request) {
     try {
       const resp = await this.service.update(order);
@@ -61,6 +66,7 @@ export class UpdateController {
       throw new HttpException(`error`, HttpStatus.BAD_REQUEST);
     }
   }
+  //---------------------------------------------------------------------------------------
   /*-----*/
   @Put(':id')
   @ApiResponse({
@@ -72,6 +78,7 @@ export class UpdateController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden',
   })
+  //---------------------------------------------------------------------------------------
   async enovoy_id(@Param('id') id: string) {
     try {
       const resp = await this.service.update_Envoy(id);

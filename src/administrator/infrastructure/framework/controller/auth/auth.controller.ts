@@ -7,27 +7,30 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { token } from 'src/administrator/infrastructure/framework/enum/token';
 import {
   type Response as ResponseExpress,
   type Request as RequestExpress,
 } from 'express';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+//--------------------------------------------------------------------------------------
+import { token } from 'src/administrator/infrastructure/framework/enum/token';
 import { routes, auth } from 'src/administrator/application/router/router';
+import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
+//----------------guard-and--service--------------------------------------------------------
 import { LocalAuthGuard } from 'src/administrator/infrastructure/framework/guard/local/local-auth.guard';
 import { JwtMethod } from 'src/administrator/infrastructure/framework/service/jwt/jwt.service';
 import { RefreshMethod } from 'src/administrator/infrastructure/framework/service/refresh/refresh.service';
 import { refreshGuard } from 'src/administrator/infrastructure/framework/guard/refresh/refresh.guard';
-import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-
-@ApiTags(routes.auth)
+//--------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------
+@ApiTags(`admin-${routes.auth}`)
 @Controller(routes.auth)
 export class AuthController {
   constructor(
     private authServiceJWT: JwtMethod,
     private refreshJwt: RefreshMethod,
   ) {}
-  /*-----*/
+  //-------------LOGIN--------------------------------------------------------
   @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
@@ -43,6 +46,7 @@ export class AuthController {
     description: 'error en el servidor',
   })
   @Post(auth.login)
+  //--------------------------------------------------------------------------------------
   async login(
     @Response() res: ResponseExpress,
     @Request() req: RequestExpress,
@@ -50,7 +54,7 @@ export class AuthController {
     await this.authServiceJWT.Login(req.user as PayloadJwt, res);
     await this.refreshJwt.RefreshToken(req.user as PayloadJwt, res);
   }
-  /*-----*/
+  //-----------LOGOUT---------------------------------------------------------------------
   @UseGuards(LocalAuthGuard)
   @Post(auth.logaut)
   @ApiResponse({
@@ -62,6 +66,7 @@ export class AuthController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'error en el servidor',
   })
+  //--------------------------------------------------------------------------------------
   async logout(@Request() req: any, @Response() res: ResponseExpress) {
     res
       .json({
@@ -72,8 +77,7 @@ export class AuthController {
       .redirect('/api');
     return req.logout();
   }
-
-  /*-----*/
+  //----------------REFRESH--------------------------------------------------------
   @UseGuards(refreshGuard)
   @Post(auth.refresh)
   @ApiResponse({
@@ -85,6 +89,7 @@ export class AuthController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'internal server error',
   })
+  //--------------------------------------------------------------------------------------
   async refresh(
     @Response() res: ResponseExpress,
     @Request() req: RequestExpress,

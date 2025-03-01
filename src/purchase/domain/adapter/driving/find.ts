@@ -4,15 +4,23 @@ import { findType } from 'src/purchase/domain/port/driven/for-find-diven';
 
 export class Find implements find {
   constructor(readonly findService: findType) {}
-
-  async find_by_Id(id: string): Promise<OrderPurchase> {
+  //-------------------------------------------------------------------------------
+  async find_by_Id(id: string): Promise<OrderPurchase | null> {
     const resp = await this.findService.find_by_Id(id);
     if (resp.id === undefined) {
       throw new Error('dato no encontrado');
     }
     return resp;
   }
-  /*---*/
+  //-------------------------------------------------------------------------------
+  async find_by_ClientId(id: string): Promise<OrderPurchase[] | []> {
+    const resp = await this.findService.find_by_clientId(id);
+    if (resp.length === 0) {
+      throw new Error('dato no encontrado');
+    }
+    return resp;
+  }
+  //-------------------------------------------------------------------------------
   async find_Orders_Month(
     year: number,
     month: number,
@@ -23,7 +31,7 @@ export class Find implements find {
     }
     return resp;
   }
-
+  //-------------------------------------------------------------------------------
   async find_Orders_Date(
     year: number,
     month: number,

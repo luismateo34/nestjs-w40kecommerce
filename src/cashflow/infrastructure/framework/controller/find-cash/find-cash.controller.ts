@@ -1,5 +1,14 @@
-import { Controller, Get, HttpStatus, Query, Response, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Query,
+  Response,
+  UseGuards,
+} from '@nestjs/common';
 import type { Response as expressResponse } from 'express';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+//--------------------------------------------------------------------------------------
 import {
   findEnum,
   findSearchEnum,
@@ -7,16 +16,16 @@ import {
 } from 'src/cashflow/application/routes/routes';
 import { string_month_spanish } from 'src/cashflow/application/month/month';
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
+//-------method-----------------------------------------------------------------
 import { BalanceDayMethod } from './method/balanceDayMethod';
 import { BalanceMonthMethod } from './method/balanceMonthMethod';
 import { ExpenseDayMethod } from './method/expenseDayMethod';
 import { ExpenseMonthMethod } from './method/expenseMonth';
 import { RevenueDayMethod } from './method/revenueDayMethod';
 import { RevenueMonthMethod } from './method/revenueMonthMethod';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-
-/*---*/
-@ApiTags(subRoutes.find)
+//--------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------
+@ApiTags(`admin-${subRoutes.find}`)
 @Controller(subRoutes.find)
 export class FindCashController {
   constructor(
@@ -27,7 +36,7 @@ export class FindCashController {
     private readonly revenueday: RevenueDayMethod,
     private readonly revenueMonth: RevenueMonthMethod,
   ) {}
-  /*----*/
+  //--------------------------------------------------------------------------------------
   @Get(`${findEnum.findBalance}_${findSearchEnum.day}`)
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
@@ -39,6 +48,7 @@ export class FindCashController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
+  //--------------------------------------------------------------------------------------
   async balanceday(
     @Query('year') year: number,
     @Query('year') month: string_month_spanish,
@@ -47,7 +57,7 @@ export class FindCashController {
   ) {
     return await this.balance.balanceday(year, month, day, res);
   }
-  /*----*/
+  //--------------------------------------------------------------------------------------
   @Get(`${findEnum.findBalance}_${findSearchEnum.month}`)
   @UseGuards(JwtAuthGuard)
   async balancemonth(
@@ -57,7 +67,7 @@ export class FindCashController {
   ) {
     return await this.balanceMonth.balancemonth(year, month, res);
   }
-  /*----*/
+  //--------------------------------------------------------------------------------------
   @Get(`${findEnum.findexpense}_${findSearchEnum.day}`)
   @UseGuards(JwtAuthGuard)
   async expense_day(
@@ -68,7 +78,7 @@ export class FindCashController {
   ) {
     await this.expenseday.expenseday(year, month, day, res);
   }
-  /*----*/
+  //--------------------------------------------------------------------------------------
   @Get(`${findEnum.findexpense}_${findSearchEnum.month}`)
   @UseGuards(JwtAuthGuard)
   async expense_Month(
@@ -78,7 +88,7 @@ export class FindCashController {
   ) {
     return await this.expenseMonth.expense_Month(year, month, res);
   }
-  /*----*/
+  //--------------------------------------------------------------------------------------
   @Get(`${findEnum.findRevenue}_${findSearchEnum.day}`)
   @UseGuards(JwtAuthGuard)
   async revenue_Day(
@@ -89,7 +99,7 @@ export class FindCashController {
   ) {
     return await this.revenueday.revenueDay(year, month, day, res);
   }
-  /*----*/
+  //--------------------------------------------------------------------------------------
   @Get(`${findEnum.findRevenue}_${findSearchEnum.month}`)
   @UseGuards(JwtAuthGuard)
   async revenue_Month(

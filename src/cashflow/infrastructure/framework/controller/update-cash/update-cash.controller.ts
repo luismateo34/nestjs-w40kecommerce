@@ -10,6 +10,8 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+//--------------------------------------------------------------------------------------
 import { UpdateMethod } from 'src/cashflow/application/usacases/update';
 import { subRoutes, updateEnum } from 'src/cashflow/application/routes/routes';
 import {
@@ -19,12 +21,13 @@ import {
 } from 'src/cashflow/application/validate/create';
 import { revenueDay } from 'src/cashflow/application/validate/create';
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-/*---*/
-@ApiTags(subRoutes.update)
+//--------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------
+@ApiTags(`admin-${subRoutes.update}`)
 @Controller(subRoutes.update)
 export class UpdateCashController {
   constructor(@Inject('UpdateMethod') private readonly update: UpdateMethod) {}
+  //--------------------------------------------------------------------------------------
   /*balance*/
   @HttpCode(HttpStatus.OK)
   @Put(updateEnum.Balance_Day)
@@ -39,6 +42,7 @@ export class UpdateCashController {
     description: 'Forbidden.',
   })
   @UsePipes(new ValidationPipe({ transform: true }))
+  //--------------------------------------------------------------------------------------
   async balanceday(@Body() Create: createcash) {
     try {
       const { day, month, year } = Create;
@@ -50,7 +54,7 @@ export class UpdateCashController {
       throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  /*------*/
+  //--------------------------------------------------------------------------------------
   @Put(updateEnum.Balance_Month)
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
@@ -64,6 +68,7 @@ export class UpdateCashController {
     description: 'Forbidden.',
   })
   @UsePipes(new ValidationPipe({ transform: true }))
+  //--------------------------------------------------------------------------------------
   async balanceMonth(@Body() Create: createcashMonth) {
     try {
       const { month, year } = Create;
@@ -75,8 +80,8 @@ export class UpdateCashController {
       throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  //--------------------------------------------------------------------------------------
   /*expense*/
-
   @HttpCode(HttpStatus.OK)
   @Put(updateEnum.Expense_Day)
   @UseGuards(JwtAuthGuard)
@@ -90,6 +95,7 @@ export class UpdateCashController {
     description: 'Forbidden.',
   })
   @UsePipes(new ValidationPipe({ transform: true }))
+  //--------------------------------------------------------------------------------------
   async expenseday(@Body() Create: expenseDay) {
     try {
       const { day, month, year, expenses } = Create;
@@ -101,8 +107,7 @@ export class UpdateCashController {
       throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  //---
-  //
+  //--------------------------------------------------------------------------------------
   @HttpCode(HttpStatus.OK)
   @Put(updateEnum.Expense_Month)
   @UseGuards(JwtAuthGuard)
@@ -116,6 +121,7 @@ export class UpdateCashController {
     description: 'Forbidden.',
   })
   @UsePipes(new ValidationPipe({ transform: true }))
+  //--------------------------------------------------------------------------------------
   async expensemonth(@Body() Create: createcashMonth) {
     try {
       const { month, year } = Create;
@@ -127,8 +133,8 @@ export class UpdateCashController {
       throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  //--------------------------------------------------------------------------------------
   /*revenue*/
-
   @HttpCode(HttpStatus.OK)
   @Put(updateEnum.Revenue_Month)
   @UseGuards(JwtAuthGuard)
@@ -142,6 +148,7 @@ export class UpdateCashController {
     description: 'Forbidden.',
   })
   @UsePipes(new ValidationPipe({ transform: true }))
+  //--------------------------------------------------------------------------------------
   async revenueMonth(@Body() Create: createcashMonth) {
     try {
       const { month, year } = Create;
@@ -153,8 +160,7 @@ export class UpdateCashController {
       throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  /*----*/
-
+  //--------------------------------------------------------------------------------------
   @HttpCode(HttpStatus.OK)
   @Put(updateEnum.Revenue_Day)
   @UseGuards(JwtAuthGuard)
@@ -168,6 +174,7 @@ export class UpdateCashController {
     description: 'Forbidden.',
   })
   @UsePipes(new ValidationPipe({ transform: true }))
+  //--------------------------------------------------------------------------------------
   async revenueday(@Body() Create: revenueDay) {
     try {
       const { day, month, year, revenue } = Create;

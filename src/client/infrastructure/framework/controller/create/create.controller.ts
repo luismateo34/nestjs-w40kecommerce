@@ -11,15 +11,20 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { subroutes } from 'src/client/application/routes/clientRoutes';
+//----------------------------------------------------------------------------------------
+import {
+  subroutes,
+  clientRoute,
+} from 'src/client/application/routes/clientRoutes';
 import { CreateMethod } from 'src/client/application/usecase/create';
 import { client_createDto } from 'src/client/application/validate/name';
-
-/*----*/
-@ApiTags(subroutes.create)
+//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+@ApiTags(`${clientRoute.client}-${subroutes.create}`)
 @Controller(subroutes.create)
 export class CreateController {
   constructor(@Inject('CreateMethod') private readonly Method: CreateMethod) {}
+  //----------------------------------------------------------------------------------------
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'The record has been successfully created.',
@@ -31,6 +36,7 @@ export class CreateController {
   })
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
+  //----------------------------------------------------------------------------------------
   async create(@Body() name_lastname: client_createDto, @Res() res: Response) {
     try {
       const { email, lastname, name, password } = name_lastname;
@@ -41,7 +47,7 @@ export class CreateController {
         email,
       );
       if (resp === 'success') {
-         res.status(HttpStatus.CREATED);
+        res.status(HttpStatus.CREATED);
       }
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {

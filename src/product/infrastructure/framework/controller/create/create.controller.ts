@@ -9,21 +9,30 @@ import {
   HttpException,
   UseGuards,
 } from '@nestjs/common';
-import { CreateMethod } from 'src/product/application/usecase/create';
-import { subRoutes } from 'src/product/application/routes/productRoute';
-import { createDto } from 'src/product/application/validate/create';
 import { Response } from 'express';
-import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-/*---*/
-
-@ApiTags(subRoutes.create)
+//---------------------------------------------------------------------------------------
+import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
+import { Roles } from 'src/administrator/infrastructure/framework/decorator/roleDecorator';
+import { RoleGuard } from 'src/administrator/infrastructure/framework/guard/role/role.guard';
+//---------------------------------------------------------------------------------------
+import { CreateMethod } from 'src/product/application/usecase/create';
+import {
+  subRoutes,
+  productRoute,
+} from 'src/product/application/routes/productRoute';
+import { createDto } from 'src/product/application/validate/create';
+import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
+//---------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+@ApiTags(`${productRoute}-${subRoutes.create}`)
 @Controller(subRoutes.create)
 export class CreateController {
   constructor(@Inject('CreateMethod') private readonly create: CreateMethod) {}
-
+  //-------------------------------------------------------------------------------------
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @Roles(permissions.SUPERADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'The record has been successfully created.',
@@ -34,6 +43,7 @@ export class CreateController {
     description: 'Forbidden.',
   })
   @UsePipes(new ValidationPipe({ transform: true }))
+  //-------------------------------------------------------------------------------------
   async create_Product(createDto: createDto, @Res() res: Response) {
     try {
       const resp = await this.create.create_Product(createDto);

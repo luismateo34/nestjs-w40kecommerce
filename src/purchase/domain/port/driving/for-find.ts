@@ -7,5 +7,6 @@ export interface find {
     day: number,
   ): Promise<OrderPurchase[]>;
   find_Orders_Month(year: number, month: number): Promise<OrderPurchase[]>;
-  find_by_Id(id: string): Promise<OrderPurchase>;
+  find_by_Id(id: string): Promise<OrderPurchase | null>;
+  find_by_ClientId(id: string): Promise<OrderPurchase[] | []>;
 }

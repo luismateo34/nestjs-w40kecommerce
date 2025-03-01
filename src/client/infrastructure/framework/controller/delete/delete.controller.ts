@@ -11,17 +11,22 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+//----------------------------------------------------------------------------------------
 import { deleteMethod } from 'src/client/application/usecase/delete';
-import { subroutes } from 'src/client/application/routes/clientRoutes';
+import {
+  subroutes,
+  clientRoute,
+} from 'src/client/application/routes/clientRoutes';
 import { nameDto } from 'src/client/application/validate/name';
 import { JwtAuthGuard } from 'src/client/infrastructure/framework/guard/jwtGuard';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-
-/*----*/
-@ApiTags(subroutes.delete)
+//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+@ApiTags(`${clientRoute.client}-${subroutes.delete}`)
 @Controller(subroutes.delete)
 export class DeleteController {
-  constructor(@Inject(deleteMethod) private readonly Method: deleteMethod) {}
+  constructor(@Inject('deleteMethod') private readonly Method: deleteMethod) {}
+  //----------------------------------------------------------------------------------------
   @Delete()
   @ApiResponse({
     status: HttpStatus.OK,
@@ -34,6 +39,7 @@ export class DeleteController {
   })
   @UsePipes(new ValidationPipe({ transform: true }))
   @UseGuards(JwtAuthGuard)
+  //----------------------------------------------------------------------------------------
   async delete_client(@Body() name: nameDto, @Res() res: Response) {
     try {
       const resp = await this.Method.Delete_Client(

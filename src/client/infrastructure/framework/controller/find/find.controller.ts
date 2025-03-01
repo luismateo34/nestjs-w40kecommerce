@@ -10,21 +10,24 @@ import {
   UseGuards,
   Param,
 } from '@nestjs/common';
+import { Response, Request } from 'express';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+//--------------------------------------------------------------------------------------
 import {
   subroutes,
   findroutes,
+  clientRoute,
 } from 'src/client/application/routes/clientRoutes';
-import { Response, Request } from 'express';
 import { JwtAuthGuard } from 'src/client/infrastructure/framework/guard/jwtGuard';
-//---
+//---method----------------------------------------------------------------------------
 import { FindMethod } from 'src/client/application/usecase/find';
 import { OrderpurchaseMethod } from './method/orderPurchaseMethod';
 import { ClientAllDataMehtod } from './method/clientAllDataMethod';
-/*guard*/
+/*-----guard---------------------------------------------------------------------------*/
 import { JwtAuthGuard as guardAdmin } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-/*---*/
-@ApiTags(subroutes.find)
+//--------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------
+@ApiTags(`${clientRoute.client}-${subroutes.find}`)
 @Controller(subroutes.find)
 export class FindController {
   constructor(
@@ -32,7 +35,7 @@ export class FindController {
     private readonly orderPurchaseMethod: OrderpurchaseMethod,
     private readonly clientAllDataMethod: ClientAllDataMehtod,
   ) {}
-  /*----*/
+  //--------------------------------------------------------------------------------------
   @Get(findroutes.orderPurchase)
   @ApiResponse({
     status: HttpStatus.OK,
@@ -44,6 +47,7 @@ export class FindController {
     description: 'Forbidden.',
   })
   @UseGuards(JwtAuthGuard)
+  //--------------------------------------------------------------------------------------
   async orderPurchase(
     @Query('id') id: string,
     @Req() req: Request,
@@ -51,7 +55,7 @@ export class FindController {
   ) {
     return await this.orderPurchaseMethod.orderPurchase(id, req, res);
   }
-  /*-----*/
+  //--------------------------------------------------------------------------------------
   @Get(findroutes.clientAllData)
   @ApiResponse({
     status: HttpStatus.OK,
@@ -63,6 +67,7 @@ export class FindController {
     description: 'Forbidden.',
   })
   @UseGuards(JwtAuthGuard)
+  //--------------------------------------------------------------------------------------
   async clientAllData(
     @Query('name') name: string,
     @Query('lastname') lastname: string,
@@ -76,6 +81,7 @@ export class FindController {
       res,
     );
   }
+  //--------------------------------------------------------------------------------------
   // solo para administrador
   @UseGuards(guardAdmin)
   @ApiResponse({
@@ -88,6 +94,7 @@ export class FindController {
     description: 'Forbidden.',
   })
   @Get(':id')
+  //--------------------------------------------------------------------------------------
   async find_by_Id(@Param('id') id: string, @Res() res: Response) {
     try {
       const resp = await this.service.Get_Client_Id(id);

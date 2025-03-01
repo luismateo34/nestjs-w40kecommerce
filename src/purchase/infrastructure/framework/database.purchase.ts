@@ -1,28 +1,35 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Between } from 'typeorm';
+//------------------------------------------------------------------------------------
 import { ormPurchase } from 'src/purchase/domain/entity/ormPurchase';
 import { OrderPurchase } from 'src/purchase/domain/entity/entityInterfaceOrder';
 import { orderCreate } from 'src/purchase/domain/usecase/usecases';
-import { Between } from 'typeorm';
 import { OrderEntity } from './PurchaseOrder.entity';
-
+//-------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
 export class Order implements ormPurchase {
   constructor(
     @InjectRepository(OrderEntity)
     private adminInject: Repository<OrderEntity>,
   ) {}
+  //----------------------------------------------------------------------------------
   async delete(id: string): Promise<void> {
     await this.adminInject.delete({ id: id });
   }
+  //------------------------------------------------------------------------------------
   async find_by_clientId(clientId: string): Promise<OrderPurchase[]> {
     return await this.adminInject.findBy({ clientId: clientId });
   }
+  //-----------------------------------------------------------------------------------
   async update_Envoy(id: string, envoy: boolean): Promise<void> {
     await this.adminInject.update({ id: id }, { envoy: envoy });
   }
+  //-----------------------------------------------------------------------------------
   async find_Id(id: string): Promise<OrderPurchase> {
     return await this.adminInject.findOneBy({ id: id });
   }
+  //-----------------------------------------------------------------------------------
   async find_orders_by_day(day: Date, nextDay: Date): Promise<OrderPurchase[]> {
     const resp = await this.adminInject.findBy({
       createdAt: Between(day, nextDay),
@@ -41,7 +48,7 @@ export class Order implements ormPurchase {
     });
     return obj;
   }
-
+  //---------------------------------------------------------------------------------
   async find_orders_by_month(
     month: Date,
     nextMonth: Date,
@@ -63,7 +70,7 @@ export class Order implements ormPurchase {
     });
     return obj;
   }
-
+  //---------------------------------------------------------------------------------
   async find_Orders_Date(
     year: number,
     month: number,
@@ -88,6 +95,7 @@ export class Order implements ormPurchase {
     });
     return resp;
   }
+  //----------------------------------------------------------------------------------
   async save(order: orderCreate): Promise<OrderEntity> {
     return await this.adminInject.save(order);
   }

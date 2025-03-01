@@ -4,10 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { RouterModule } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-/*constroller*/
-import { AppController } from './app.controller';
-/*service*/
-import { AppService } from './app.service';
 /*Modules*/
 import { AdminModule } from 'src/administrator/infrastructure/framework/admin.module';
 import { MainCashflowModule } from 'src/cashflow/infrastructure/framework/main-cashflow.module';
@@ -67,7 +63,5 @@ import { purchaseRoute } from 'src/purchase/application/routes/purchaseRoutes';
       },
     ]),
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}

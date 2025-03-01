@@ -8,20 +8,29 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { subRoutes } from 'src/product/application/routes/productRoute';
-import { deleteMethod } from 'src/product/application/usecase/delete';
-import { Response } from 'express';
-import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-/*--*/
+import { Response } from 'express';
+//---------------------------------------------------------------------------------------
+import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
+import { Roles } from 'src/administrator/infrastructure/framework/decorator/roleDecorator';
+//---------------------------------------------------------------------------------------
+import {
+  subRoutes,
+  productRoute,
+} from 'src/product/application/routes/productRoute';
+import { deleteMethod } from 'src/product/application/usecase/delete';
+import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
+import { RoleGuard } from 'src/administrator/infrastructure/framework/guard/role/role.guard';
+//---------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
 
-@ApiTags(subRoutes.delete)
+@ApiTags(`${productRoute.product}-${subRoutes.delete}`)
 @Controller(subRoutes.delete)
 export class DeleteController {
   constructor(
-    @Inject('DeleteMethod') private readonly methodDelete: deleteMethod,
+    @Inject('deleteMethod') private readonly methodDelete: deleteMethod,
   ) {}
-
+  //-------------DELETE------------------------------------------------------------------
   @Delete(':id')
   @ApiResponse({
     status: HttpStatus.OK,
@@ -32,7 +41,9 @@ export class DeleteController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
-  @UseGuards(JwtAuthGuard)
+  @Roles(permissions.SUPERADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  //---------------------------------------------------------------------------------------
   async delete_Product(@Param('id') id: string, @Res() res: Response) {
     try {
       const resp = await this.methodDelete.delete_ProductId(id);

@@ -12,11 +12,15 @@ export class FindMethod implements dateFind {
   constructor(readonly database: ormPurchase) {
     this.service = new findDriving(new findDriven(database));
   }
-  /*----*/
-  async find_by_Id(id: string): Promise<OrderPurchase> {
+  //--------------------------------------------------------------------------------
+  async find_by_ClientId(id: string): Promise<OrderPurchase[] | []> {
+    return await this.service.find_by_ClientId(id);
+  }
+  //--------------------------------------------------------------------------------
+  async find_by_Id(id: string): Promise<OrderPurchase | null> {
     return await this.service.find_by_Id(id);
   }
-  /*----*/
+  //--------------------------------------------------------------------------------
   async find_Orders_Date(
     day: number,
     year: number,
@@ -25,7 +29,7 @@ export class FindMethod implements dateFind {
     const monthNum = NumberMonth(month);
     return await this.service.find_Orders_Date(year, monthNum, day);
   }
-  /*----*/
+  //--------------------------------------------------------------------------------
   async find_Orders_Month(
     month: string_month_spanish,
     year: number,

@@ -42,7 +42,10 @@ export const LoginFactory = {
 };
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ClientEntity, AdminEntity]), SetConfigModule],
+  imports: [
+    TypeOrmModule.forFeature([ClientEntity, AdminEntity]),
+    SetConfigModule,
+  ],
   providers: [
     CreateMethodFactory,
     FindMethodFactory,

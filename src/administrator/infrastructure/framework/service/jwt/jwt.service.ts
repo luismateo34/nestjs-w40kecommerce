@@ -1,11 +1,13 @@
 import { Inject, Injectable, Res, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Login } from 'src/administrator/application/usecase/login';
-import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
 import { type Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+//-------------------------------------------------------------------------------
+import { Login } from 'src/administrator/application/usecase/login';
+import { PayloadJwt } from 'src/administrator/application/types/jwtPayload';
 import { token } from 'src/administrator/infrastructure/framework/enum/token';
-
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
 @Injectable()
 export class JwtMethod {
   constructor(
@@ -13,7 +15,7 @@ export class JwtMethod {
     private configService: ConfigService,
     @Inject('LOGIN') private readonly usersService: Login,
   ) {}
-
+  //-------------------------------------------------------------------------------
   private async validateUser(token: PayloadJwt): Promise<PayloadJwt> {
     const user = await this.usersService.loginToken(token);
     if (user.id === undefined || user.id.length === 0) {
@@ -21,7 +23,7 @@ export class JwtMethod {
     }
     return user;
   }
-
+  //-------------------------------------------------------------------------------
   private async methodJwt(payloadAdmin: PayloadJwt) {
     return {
       access_token_admin: this.jwtService.sign(payloadAdmin, {
@@ -30,12 +32,12 @@ export class JwtMethod {
       }),
     };
   }
-
+  //-------------------------------------------------------------------------------
   private addHours(date: Date, hours: number): Date {
     date.setTime(date.getTime() + hours * 60 * 60 * 1000);
     return date;
   }
-
+  //-------------------------------------------------------------------------------
   async Login(req_user: PayloadJwt, @Res() res: Response) {
     try {
       const validate = await this.validateUser(req_user);

@@ -3,24 +3,28 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Inject,
   Param,
   Query,
   Res,
 } from '@nestjs/common';
+import { Response } from 'express';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+//---------------------------------------------------------------------------------------
 import {
   findRoutes,
   subRoutes,
+  productRoute,
 } from 'src/product/application/routes/productRoute';
 import { findMethod } from 'src/product/application/usecase/find';
-import { Response } from 'express';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-/*---*/
-
-@ApiTags(subRoutes.find)
+//---------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------
+/*-public--*/
+@ApiTags(`${productRoute.product}-${subRoutes.find}`)
 @Controller(subRoutes.find)
 export class FindController {
-  constructor(private readonly methodFind: findMethod) {}
-
+  constructor(@Inject('findMethod') private readonly methodFind: findMethod) {}
+  //---------------------------------------------------------------------------------------
   /*---*/
   @Get(findRoutes.productbyname)
   @ApiResponse({
@@ -32,6 +36,7 @@ export class FindController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
+  //---------------------------------------------------------------------------------------
   async find_by_Name(@Query('name') name: string, @Res() res: Response) {
     try {
       const resp = await this.methodFind.find_by_Name(name);
@@ -43,7 +48,7 @@ export class FindController {
       throw new HttpException(`error`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
+  //---------------------------------------------------------------------------------------
   /*---*/
   @Get(findRoutes.stockproductname)
   @ApiResponse({
@@ -55,6 +60,7 @@ export class FindController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
+  //---------------------------------------------------------------------------------------
   async stock_product(@Query('name') name: string, @Res() res: Response) {
     try {
       const resp = await this.methodFind.find_Stock_productName(name);
@@ -66,7 +72,7 @@ export class FindController {
       throw new HttpException(`error`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
+  //---------------------------------------------------------------------------------------
   /*---*/
   @Get(findRoutes.productsGender)
   @ApiResponse({
@@ -78,6 +84,7 @@ export class FindController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
+  //---------------------------------------------------------------------------------------
   async productgender(@Query('gender') gender: string, @Res() res: Response) {
     try {
       const resp = await this.methodFind.find_Products_Gender(gender);
@@ -89,6 +96,7 @@ export class FindController {
       throw new HttpException(`error`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  //---------------------------------------------------------------------------------------
   /*---*/
   @Get(findRoutes.productsCategory)
   @ApiResponse({
@@ -100,6 +108,7 @@ export class FindController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
+  //---------------------------------------------------------------------------------------
   async products_category(
     @Query('category') category: string,
     @Res() res: Response,
@@ -114,6 +123,7 @@ export class FindController {
       throw new HttpException(`error`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  //---------------------------------------------------------------------------------------
   /*----*/
   @Get(findRoutes.productsFranchise)
   @ApiResponse({
@@ -125,6 +135,7 @@ export class FindController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
+  //---------------------------------------------------------------------------------------
   async Products_Franchise(
     @Query('franchise') franchise: string,
     @Res() res: Response,
@@ -139,6 +150,7 @@ export class FindController {
       throw new HttpException(`error`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  //---------------------------------------------------------------------------------------
   /*---*/
   @Get(`${findRoutes.stockbyId}/:id`)
   @ApiResponse({
@@ -150,6 +162,7 @@ export class FindController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
+  //---------------------------------------------------------------------------------------
   async stock_productNameId(@Param('id') id: string, @Res() res: Response) {
     try {
       const resp = await this.methodFind.find_Stock_productId(id);
@@ -161,7 +174,7 @@ export class FindController {
       throw new HttpException(`error`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
+  //---------------------------------------------------------------------------------------
   //id
   @Get(`${findRoutes.productbyId}/:id`)
   @ApiResponse({
@@ -173,6 +186,7 @@ export class FindController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
+  //---------------------------------------------------------------------------------------
   async product_by_Id(@Param('id') id: string, @Res() res: Response) {
     try {
       const resp = await this.methodFind.find_Product_by_Id(id);

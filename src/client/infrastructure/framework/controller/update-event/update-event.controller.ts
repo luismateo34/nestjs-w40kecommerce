@@ -6,14 +6,18 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+//--------------------------------------------------------------------------------------
 import { UpdateEventService } from 'src/client/infrastructure/framework/service/upadate-event/update-event.service';
 import { UpdateClientDto } from './dto/dto';
-
-@Controller('update-event')
+//--------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------
+@Controller('client/update-event')
 export class UpdateEventController {
   constructor(private readonly updateClientService: UpdateEventService) {}
+  //--------------------------------------------------------------------------------------
   @UsePipes(new ValidationPipe({ transform: true }))
   @OnEvent('purchase_update', { async: true })
+  //--------------------------------------------------------------------------------------
   async updateclientPurchase(updateclientdto: UpdateClientDto) {
     try {
       const { payload, req } = updateclientdto;

@@ -5,18 +5,20 @@ import {
   HttpStatus,
   HttpException,
 } from '@nestjs/common';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+//--------------------------------------------------------------------------------------
 import { CreateMethod } from 'src/cashflow/application/usacases/create';
 import { subRoutes } from 'src/cashflow/application/routes/routes';
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-
-/*--*/
-@ApiTags(subRoutes.create)
+//--------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------
+@ApiTags(`admin-${subRoutes.create}`)
 @Controller(subRoutes.create)
 export class CreateCashController {
   constructor(
     @Inject('CreateMethod') private readonly createMethod: CreateMethod,
   ) {}
+  //--------------------------------------------------------------------------------------
   @Post()
   @ApiResponse({
     status: HttpStatus.OK,
@@ -27,8 +29,8 @@ export class CreateCashController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
+  //--------------------------------------------------------------------------------------
   async create(request: VercelRequest, response: VercelResponse) {
-    //const authHeader = request.headers.get('authorization');
     const authHeader = request.headers.authorization;
     if (
       process.env.CRON_SECRET === undefined ||
@@ -41,7 +43,6 @@ export class CreateCashController {
       if (resp === 'success') {
         return;
       }
-
       return response.status(200).json({ success: true });
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {
@@ -50,7 +51,7 @@ export class CreateCashController {
       throw new HttpException('error server', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  /*---*/
+  //--------------------------------------------------------------------------------------
   @Post('dev')
   @ApiResponse({
     status: HttpStatus.OK,
@@ -61,6 +62,7 @@ export class CreateCashController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
+  //--------------------------------------------------------------------------------------
   async create_dev() {
     if (process.env.ENVIRONMENT !== 'dev') {
       throw new HttpException(

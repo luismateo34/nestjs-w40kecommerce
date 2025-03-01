@@ -1,6 +1,3 @@
-
-
-/*--*/
 export interface product {
   id: string;
   createdAt: Date;
@@ -15,10 +12,12 @@ export interface product {
   percentaje_discount: number;
   franchise: string | null;
 }
+//------------------------------------------------------
 export type createProduct = Omit<
   product,
   'createdAt' | 'updatedAt' | 'id' | 'deleted_at'
 >;
+//------------------------------------------------------
 export type productget = Omit<
   product,
   'createdAt' | 'updatedAt' | 'deleted_at'

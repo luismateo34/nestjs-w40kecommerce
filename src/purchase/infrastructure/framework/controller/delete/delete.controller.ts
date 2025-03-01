@@ -10,16 +10,20 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { subRoutes } from 'src/purchase/application/routes/purchaseRoutes';
+/*----------------------------------------------------------------------------------------------*/
+import {
+  subRoutes,
+  purchaseRoute,
+} from 'src/purchase/application/routes/purchaseRoutes';
 import { deleteMethod } from 'src/purchase/application/usecases/delete';
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
-/*---*/
-
-@ApiTags(subRoutes.delete)
+/*----------------------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------*/
+@ApiTags(`${purchaseRoute.purchase}-${subRoutes.delete}`)
 @Controller(subRoutes.delete)
 export class DeleteController {
-  constructor(@Inject('DeleteMethod') readonly Deletemethod: deleteMethod) {}
-  /*----*/
+  constructor(@Inject('deleteMethod') readonly Deletemethod: deleteMethod) {}
+  /*--------------------------------------------------------------------------------------------*/
   @Delete()
   @ApiResponse({
     status: HttpStatus.OK,
@@ -31,6 +35,7 @@ export class DeleteController {
     description: 'internal server error.',
   })
   @UseGuards(JwtAuthGuard)
+  /*--------------------------------------------------------------------------------------------*/
   async order(@Param('id') id: string, @Res() res: Response) {
     try {
       const resp = await this.Deletemethod.delete_Order(id);
@@ -39,7 +44,6 @@ export class DeleteController {
       if (e instanceof Error && e.message.length !== 0) {
         throw new HttpException(`error: ${e.message}`, HttpStatus.BAD_REQUEST);
       }
-
       throw new HttpException(`error`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

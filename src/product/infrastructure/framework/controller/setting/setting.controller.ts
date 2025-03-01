@@ -10,28 +10,35 @@ import {
   HttpException,
   UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+//---------------------------------------------------------------------------------------
+import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
+import { Roles } from 'src/administrator/infrastructure/framework/decorator/roleDecorator';
+import { RoleGuard } from 'src/administrator/infrastructure/framework/guard/role/role.guard';
+//----------------------------------------------------------------------------------------
 import { SettingMethod } from 'src/product/application/usecase/setting';
 import {
   subRoutes,
   settingRoutes,
+  productRoute,
 } from 'src/product/application/routes/productRoute';
 import {
   DiscountDto,
   PriceDto,
   StockDto,
 } from 'src/product/application/validate/Setting';
-import { Response } from 'express';
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-/*---*/
-
-@ApiTags(subRoutes.setting)
+//----------------------------------------------------------------------------------------
+/*----------------setting-controller----------------------------------------------------*/
+@ApiTags(`${productRoute.product}-${subRoutes.setting}`)
 @Controller(subRoutes.setting)
+//-----------------------------
 export class SettingController {
   constructor(
     @Inject('SettingMethod') private readonly usecase: SettingMethod,
   ) {}
-  /*---*/
+  //----------------------------------------------------------
   @Patch(settingRoutes.discountproduct)
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiResponse({
@@ -43,7 +50,9 @@ export class SettingController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
-  @UseGuards(JwtAuthGuard)
+  @Roles(permissions.SUPERADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  //-------------------------------------------------------
   async discont_product(
     @Body() discountObj: DiscountDto,
     @Res() res: Response,
@@ -59,7 +68,7 @@ export class SettingController {
       throw new HttpException(`error`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  /*---*/
+  //----------------------------------------------------
   @Patch(settingRoutes.priceproduct)
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiResponse({
@@ -71,7 +80,9 @@ export class SettingController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
-  @UseGuards(JwtAuthGuard)
+  @Roles(permissions.SUPERADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  //--------------------------------------------
   async price_product(@Body() priceObj: PriceDto, @Res() res: Response) {
     try {
       const { id, price } = priceObj;
@@ -84,7 +95,7 @@ export class SettingController {
       throw new HttpException(`error`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  /*---*/
+  //------------------------------------------------
   @Patch(settingRoutes.stockproduct)
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiResponse({
@@ -96,7 +107,9 @@ export class SettingController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden.',
   })
-  @UseGuards(JwtAuthGuard)
+  @Roles(permissions.SUPERADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  //-------------------------------------------------
   async stock_product(@Body() stockobj: StockDto, @Res() res: Response) {
     try {
       const { id, stock } = stockobj;

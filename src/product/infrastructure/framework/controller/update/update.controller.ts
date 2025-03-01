@@ -10,26 +10,36 @@ import {
   HttpException,
   UseGuards,
 } from '@nestjs/common';
-import { subRoutes } from 'src/product/application/routes/productRoute';
+import { OnEvent } from '@nestjs/event-emitter';
+import { Response } from 'express';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+//---------------------------------------------------------------------------------------
+import { permissions } from 'src/administrator/domain/entity/entityAdminInterface';
+import { Roles } from 'src/administrator/infrastructure/framework/decorator/roleDecorator';
+import { RoleGuard } from 'src/administrator/infrastructure/framework/guard/role/role.guard';
+//---------------------------------------------------------------------------------------
+import {
+  subRoutes,
+  productRoute,
+} from 'src/product/application/routes/productRoute';
+//------------method----------------------------------------------------------------------
 import { updateMethod } from 'src/product/application/usecase/update';
 import { findMethod } from 'src/product/application/usecase/find';
-//-----
 import { updateDto } from 'src/product/application/validate/create';
-import { Response } from 'express';
 import { JwtAuthGuard } from 'src/administrator/infrastructure/framework/guard/jwt/jwt-auth.guard';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-/*---*/
-import { OnEvent } from '@nestjs/event-emitter';
+//---------------------------------------------------------------------------------------
 import { Productpurchase } from 'src/evenpayload/updateProduct.dto';
-/*---*/
-
-@ApiTags(subRoutes.update)
+//---------------------------------------------------------------------------------------
+//--------------UPDATE-CONTROLLER--------------------------------------------------------
+@ApiTags(`${productRoute.product}-${subRoutes.update}`)
 @Controller(subRoutes.update)
+//------------------------------
 export class UpdateController {
   constructor(
-    @Inject() private readonly update: updateMethod,
-    @Inject() private readonly find: findMethod,
+    @Inject('updateMethod') private readonly update: updateMethod,
+    @Inject('findMethod') private readonly find: findMethod,
   ) {}
+  //----------------------------------------------------------
   @Put()
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiResponse({
@@ -41,7 +51,9 @@ export class UpdateController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Forbidden',
   })
-  @UseGuards(JwtAuthGuard) // solo administrador puede realizar esta accion
+  @Roles(permissions.SUPERADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard) // solo administrador puede realizar esta accion
+  //----------------------------------------------------
   async updateProduct(@Body() updateObj: updateDto, @Res() res: Response) {
     try {
       const { id } = updateObj;
@@ -54,7 +66,7 @@ export class UpdateController {
       throw new HttpException('error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  /*---*/
+  //----------------------------------------------
   @UsePipes(new ValidationPipe({ transform: true }))
   @OnEvent('product_purchase', { async: true })
   async evenUodate(@Body() Dto: Productpurchase) {
@@ -83,17 +95,17 @@ export class UpdateController {
           }),
         );
       const arr = await fnMap();
-      /*---*/
+      //-------------------------------------------------------------------
       const result = async () =>
         await Promise.all(
           arr.map(async (el) => await this.update.update_Product(el.id, el)),
         );
       const ArrSucces = await result();
-      /*---*/
+      //--------------------------------------------------------------------
       if (ArrSucces.length < product.length) {
         return;
       }
-      /*---*/
+      //-----------------------------------------------------------------------
     } catch (e) {
       if (e instanceof Error && e.message.length !== 0) {
         throw new HttpException(`error:${e.message}`, HttpStatus.BAD_REQUEST);
