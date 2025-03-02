@@ -1,6 +1,6 @@
 const { MigrationInterface, QueryRunner } = require("typeorm");
 
-module.exports = class Migrate1739964909820 {
+module.exports = class Migrate1740899303311 {
 
     async up(queryRunner) {
     }
